@@ -38,6 +38,6 @@ int main () {
 // Look for Preferences: Open User Settings.
 // Look for gaac. settings to customize them.
 // Push local commits
-// Hit Ctrl + Shift + X (PC) / Cmd + Shift + X (Mac).
+    // Hit Ctrl + Shift + X (PC) / Cmd + Shift + X (Mac).
 
 // helloooooooo
