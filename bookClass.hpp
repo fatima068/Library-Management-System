@@ -9,12 +9,12 @@ class Book {
         string authorName;
         string genre;
         bool borrowed;
+        string dateBorrowed;
 
     public:
-        Book(string id) : bookID(id), bookName(""), authorName(""), genre(""), borrowed(false) {}
+        Book(string id) : bookID(id), bookName(""), authorName(""), genre(""), borrowed(false), dateBorrowed("") {}
 
-    Book(string id,string bookname, string authorname, string gen) : bookID(id), bookName(bookname), authorName(authorname), genre(gen) {
-        borrowed = false;
+    Book(string id,string bookname, string authorname, string gen, string dateBorrowed) : bookID(id), bookName(bookname), authorName(authorname), genre(gen), dateBorrowed(dateBorrowed), borrowed(false) {
         // yahin pe add this book to the file of its genre
         // also add book to allBooks text file
         // have 5 genres: mystery, classic, fiction, autobiography, fantasy
