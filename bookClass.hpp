@@ -23,19 +23,15 @@ class Book {
     string getBookID() const {
         return bookID;
     }
-
     string getBookName() const {
         return bookName;
     }
-    
     string getAuthorName() const {
         return authorName;
     }
-    
     string getGenre() const {
         return genre;
     }
-    
     bool getIsBorrowed() const {
         return borrowed;
     }
@@ -49,11 +45,11 @@ class Book {
 
 // main mei when book display karna ho, just cout it, no need to make display function.
 
-void operator<< (ostream& COUT, Book& book) {
-    COUT << "Book ID: " << book.getBookID() << ", Book Name: " << book.getBookName() << ", Author Name: " << book.getAuthorName() << ", Genre: " << book.getGenre() << ", Availability Status: ";
-    if (book.getIsBorrowed() == true ) {
-        cout << "notavailable" << endl;
-    }
-    else 
-        cout << "available " << endl;
-}
+// void operator<< (ostream& COUT, Book& book) {
+//     COUT << "Book ID: " << book.getBookID() << ", Book Name: " << book.getBookName() << ", Author Name: " << book.getAuthorName() << ", Genre: " << book.getGenre() << ", Availability Status: ";
+//     if (book.getIsBorrowed() == true ) {
+//         cout << "notavailable" << endl;
+//     }
+//     else 
+//         cout << "available " << endl;
+// }
