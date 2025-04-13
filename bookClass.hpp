@@ -16,6 +16,7 @@ class Book {
     Book(string id,string bookname, string authorname, string gen) : bookID(id), bookName(bookname), authorName(authorname), genre(gen) {
         borrowed = false;
         // yahin pe add this book to the file of its genre
+        // also add book to allBooks text file
         // have 5 genres: mystery, classic, fiction, autobiography, fantasy
     }
 
