@@ -8,7 +8,14 @@ using namespace std;
 
 int main () {
     LoginSystem system;
+    bool choice;
     system.login();
+    cout << "press 1 to logout, 0 to idk: ";
+    cin >> choice;
+    if (choice) {
+        system.logout();
+    }
+    cout << "heheheheeheeeeh";
 }
 
 // Add all edited files to Git and commit them

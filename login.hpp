@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <conio.h>
+#include <cstdlib>
 using namespace std;
 
 class LoginSystem {
@@ -92,7 +93,12 @@ class LoginSystem {
         return 0;
     }
     
-
+    void logout() {
+        userType = 'X';
+        loginStatus = 0;
+        cout << "logging out and exiting....";
+        exit(0);
+    }
 };
 
 // sign out function mei make login status 0 and usertype X again (isske liye login.hpp ko signout.hpp mei imclude karna parega)
