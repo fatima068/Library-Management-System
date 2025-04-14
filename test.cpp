@@ -1,34 +1,48 @@
 #include <iostream>
 #include <string>
-#include <conio.h>  
-
+#include <conio.h>     
 using namespace std;
 
-string getPassword() {
-    string password;
-    char ch;
-    
-    cout << "Enter password: ";
-    
-    while ((ch = _getch()) != '\r') { // '\r' is the Enter key
-    // jo input humne diya, usse getch se ch mei store kiya, then it checks ke enter key tou nai dabayi. if enter dabaya ho, exit loop. else check ke backspace tou press nai kiya. (if backpsapce, it takes it as inout so u need to handle it manually)
+// int compareDate(Date bookDue) {
+//     int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+//     int daysOverdue = 0;
+// }
 
-        if (ch == '\b') { // Handle backspace
-            if (!password.empty()) {
-                password.pop_back();
-                cout << "\b \b"; // Move cursor back, overwrite with space, move back again
-            }
-        } else {
-            password.push_back(ch);
-            cout << '*';
-        }
-    }
-    cout << endl;
-    return password;
-}
+//     // year is different 
+//     // Part A: Days remaining in due month
+//     int daysInDueMonth = daysInMonth[bookDue.mm - 1];
+//     if (bookDue.mm == 2 && isLeapYear(bookDue.yy)) {
+//         daysInDueMonth = 29;
+//     }
+//     daysOverdue = daysInDueMonth - bookDue.dd;
 
-int main() {
-    string password = getPassword();
-    cout << "Your password is: " << password << endl;
-    return 0;
-}
+//     // Part B: Remaining months in due year
+//     for (int month = bookDue.mm + 1; month <= 12; month++) {
+//         daysOverdue += daysInMonth[month - 1];
+//         if (month == 2 && isLeapYear(bookDue.yy)) {
+//             daysOverdue += 1;
+//         }
+//     }
+
+//     // Part C: Full years between due year and current year
+//     for (int year = bookDue.yy + 1; year < dateTodayVar.yy; year++) {
+//         if (isLeapYear(year)) {
+//             daysOverdue += 366;
+//         } else {
+//             daysOverdue += 365;
+//         }
+//     } 
+
+//     // Part D: Months in current year before current month
+//     for (int month = 1; month < dateTodayVar.mm; month++) {
+//         daysOverdue += daysInMonth[month - 1];
+//         if (month == 2 && isLeapYear(dateTodayVar.yy)) {
+//             daysOverdue += 1;
+//         }
+//     }
+
+//     // Part E: Days in current month
+//     daysOverdue += dateTodayVar.dd;
+
+//     return daysOverdue;
+// }

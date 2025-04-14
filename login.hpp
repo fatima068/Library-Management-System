@@ -25,13 +25,11 @@ class LoginSystem {
         
         cout << "Enter password: ";
         
-        while ((ch = _getch()) != '\r') { // '\r' is the Enter key
-        // jo input humne diya, usse getch se ch mei store kiya, then it checks ke enter key tou nai dabayi. if enter dabaya ho, exit loop. else check ke backspace tou press nai kiya. (if backpsapce, it takes it as inout so u need to handle it manually)
-    
-            if (ch == '\b') { // Handle backspace
+        while ((ch = _getch()) != '\r') {
+            if (ch == '\b') { 
                 if (!password.empty()) {
                     password.pop_back();
-                    cout << "\b \b"; // Move cursor back, overwrite with space, move back again
+                    cout << "\b \b"; 
                 }
             } else {
                 password.push_back(ch);
