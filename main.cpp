@@ -7,26 +7,8 @@ using namespace std;
 // when program runs give user the option to login to an existing account or create a new account 
 
 int main () {
-
     LoginSystem system;
     system.login();
-
-    // bool loginStatus = login(); 
-    // while (loginStatus == 1){
-    //     switch (userType) {
-    //         case 'L':
-    //             // librarian function
-    //             break;
-    //         case 'P':
-    //             // premium user function 
-    //             break;
-    //         case 'N':
-    //             // normal user function 
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
 }
 
 // Add all edited files to Git and commit them

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <conio.h>
 using namespace std;
 
 class LoginSystem {
@@ -15,6 +16,29 @@ class LoginSystem {
     }
     bool getLoginStatus() const {
         return loginStatus;
+    }
+
+    string getPassword() {
+        string password;
+        char ch;
+        
+        cout << "Enter password: ";
+        
+        while ((ch = _getch()) != '\r') { // '\r' is the Enter key
+        // jo input humne diya, usse getch se ch mei store kiya, then it checks ke enter key tou nai dabayi. if enter dabaya ho, exit loop. else check ke backspace tou press nai kiya. (if backpsapce, it takes it as inout so u need to handle it manually)
+    
+            if (ch == '\b') { // Handle backspace
+                if (!password.empty()) {
+                    password.pop_back();
+                    cout << "\b \b"; // Move cursor back, overwrite with space, move back again
+                }
+            } else {
+                password.push_back(ch);
+                cout << '*';
+            }
+        }
+        cout << endl;
+        return password;
     }
     
     void encode(string& password) {
@@ -49,8 +73,7 @@ class LoginSystem {
         string fileID, id, password, filePassword;
         cout << "enter id: ";
         cin >> id;
-        cout << "enter password: ";
-        cin >> password;
+        password = getPassword();
     
         while (loginFile >> fileID >> filePassword) {
             if (fileID == id) {
