@@ -8,6 +8,9 @@ using namespace std;
 
 int main () {
 
+    LoginSystem system;
+    system.login();
+
     // bool loginStatus = login(); 
     // while (loginStatus == 1){
     //     switch (userType) {

@@ -12,7 +12,7 @@ class Book {
         string dateBorrowed;
 
     public:
-        Book(string id) : bookID(id), bookName(""), authorName(""), genre(""), borrowed(false), dateBorrowed("") {}
+    Book(string id) : bookID(id), bookName(""), authorName(""), genre(""), borrowed(false), dateBorrowed("") {}
 
     Book(string id,string bookname, string authorname, string gen, string dateBorrowed) : bookID(id), bookName(bookname), authorName(authorname), genre(gen), dateBorrowed(dateBorrowed), borrowed(false) {
         // yahin pe add this book to the file of its genre
