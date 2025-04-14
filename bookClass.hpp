@@ -135,8 +135,9 @@ class Book {
 
     void returnBook() {
         if (isBorrowed) {
-            isBorrowed = false;
+            isBorrowed = false; // fetch record from file and then check this variable 
             dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
+            // update book record in the file
             cout << title <<" returned successfully" << endl;
             return;
         }
@@ -144,6 +145,7 @@ class Book {
     }
 
     void borrowBook() {
+        // first fetch data for that book from text file ???? or are we making aarrays in system class
         if(isBorrowed) {
             cout << "book already borrowed by other user" << endl;
             return;
@@ -156,7 +158,9 @@ class Book {
 
         if (dueDay <= daysThisMonth) {
             dueDate = Date(dueDay, dueMonth, dueYear);
+            //update records in the file 
             cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+            return;
         }
 
         if (dueDay > daysThisMonth) {
@@ -169,8 +173,11 @@ class Book {
         }
 
         dueDate = Date(dueDay, dueMonth, dueYear);
+        // save data to file
         cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
     }
+
+    // or maybe what we can do is when program starts, fetch everything from file and store in arrays in system class or global arrays, then perform functions on those arrays, before ending, store everything to files 
 };
 
 // instead of making display function here, do operator<< overloading to display book in system class

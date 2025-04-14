@@ -99,8 +99,4 @@ class LoginSystem {
     }
 };
 
-// sign out function mei make login status 0 and usertype X again (isske liye login.hpp ko signout.hpp mei imclude karna parega)
-
-// password input karte huey try doing it in the form ***** or .....
-
 // login jab hojaye tou go to all users waali file, read uss user ka data from there and store it in object or pointer of user class, then call usske function waghera and logout karte huey update usska data in the file taake wo save hojaye kyunke object/pointer tou main band karne ke baad delete hojayega
