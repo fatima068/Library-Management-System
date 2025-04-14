@@ -7,6 +7,7 @@ struct Date {
     int dd, mm, yy; // date format is dd-mm-yyyy (01-02-2024)
 
     Date(int d, int m, int y) : dd(d), mm(m), yy(y) {}
+    Date() : dd(0), mm(0), yy(0) {}
 };
 
 Date dateTodayFunc() {
@@ -17,6 +18,7 @@ Date dateTodayFunc() {
  // in system class, store todays date in a variable until program ends 
 
 Date dateTodayVar = dateTodayFunc(); 
+int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 bool isLeapYear(int year) {
     if (year % 4 != 0) return false;       
@@ -27,7 +29,6 @@ bool isLeapYear(int year) {
 // in compare date check if year is leap year and use 29 instead of 28 for daysInMonth[1]                      
 
 int compareDate(Date bookDue) {
-    int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     // first compare year
     // then month
     // then day of the month
@@ -119,51 +120,57 @@ class Book {
     protected:
         const string bookID;
         const string ISBN;
-        string bookName;
-        string authorName;
+        string title;
+        string author;
         string genre;
-        bool borrowed;
-        string dateBorrowed;
+        bool isBorrowed;
+        Date dueDate;
 
     public:
-    Book(string id) : bookID(id), bookName(""), authorName(""), genre(""), borrowed(false), dateBorrowed("") {}
+    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate() {}
 
-    Book(string id,string bookname, string authorname, string gen, string dateBorrowed) : bookID(id), bookName(bookname), authorName(authorname), genre(gen), dateBorrowed(dateBorrowed), borrowed(false) {
-        // yahin pe add this book to the file of its genre
-        // also add book to allBooks text file
-        // have 5 genres: mystery, classic, fiction, autobiography, fantasy
+    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year) {
+        // add book to file here i think ? because new book object has been created and should be added to all books file and genre specific file too 
     }
 
-    string getBookID() const {
-        return bookID;
-    }
-    string getBookName() const {
-        return bookName;
-    }
-    string getAuthorName() const {
-        return authorName;
-    }
-    string getGenre() const {
-        return genre;
-    }
-    bool getIsBorrowed() const {
-        return borrowed;
+    void returnBook() {
+        if (isBorrowed) {
+            isBorrowed = false;
+            dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
+            cout << title <<" returned successfully" << endl;
+            return;
+        }
+        cout << "book is not borrowed" << endl; // fine will be calculated in user class ka return book 
     }
 
-    void toggleAvailability() {
-        borrowed = (!borrowed);
+    void borrowBook() {
+        if(isBorrowed) {
+            cout << "book already borrowed by other user" << endl;
+            return;
+        }
+        isBorrowed = true;
+        int dueDay = dateTodayVar.dd + 14; 
+        int dueMonth = dateTodayVar.mm; 
+        int dueYear = dateTodayVar.yy; 
+        int daysThisMonth = daysInMonth[dateTodayVar.mm-1];
+
+        if (dueDay <= daysThisMonth) {
+            dueDate = Date(dueDay, dueMonth, dueYear);
+            cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+        }
+
+        if (dueDay > daysThisMonth) {
+            dueDay = dueDay - daysThisMonth;
+            dueMonth++;
+        }
+        if (dueMonth > 12) {
+            dueMonth = 1;
+            dueYear++;
+        }
+
+        dueDate = Date(dueDay, dueMonth, dueYear);
+        cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
     }
 };
 
-// after leraning friend function, try doing overloading fing inside class to avoid making getters
-
-// main mei when book display karna ho, just cout it, no need to make display function.
-
-// void operator<< (ostream& COUT, Book& book) {
-//     COUT << "Book ID: " << book.getBookID() << ", Book Name: " << book.getBookName() << ", Author Name: " << book.getAuthorName() << ", Genre: " << book.getGenre() << ", Availability Status: ";
-//     if (book.getIsBorrowed() == true ) {
-//         cout << "notavailable" << endl;
-//     }
-//     else 
-//         cout << "available " << endl;
-// }
+// instead of making display function here, do operator<< overloading to display book in system class

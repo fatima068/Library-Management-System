@@ -4,33 +4,54 @@
 #include "userClasses.hpp"
 using namespace std;
 
-// when program runs give user the option to login to an existing account or create a new account 
+int main() {
+    cout << "=== Testing Library Management System ===\n\n";
 
-int main () {
-    LoginSystem system;
-    bool choice;
-    system.login();
-    cout << "press 1 to logout, 0 to idk: ";
-    cin >> choice;
-    if (choice) {
-        system.logout();
+    // 1. Test Book functionality
+    cout << "1. Testing Book Class:\n";
+    Book testBook("B001", "9783161484100", "Sample Book", "Test Author", "Fiction", false, 0, 0, 0);
+    
+    cout << "- Trying to borrow book:\n";
+    testBook.borrowBook();  // Should succeed
+    
+    cout << "- Trying to borrow again:\n";
+    testBook.borrowBook();  // Should fail (already borrowed)
+    
+    cout << "- Returning book:\n";
+    testBook.returnBook();  // Should succeed
+    
+    cout << "- Trying to return again:\n";
+    testBook.returnBook();  // Should fail (not borrowed)
+    
+    // 2. Test Date comparison
+    cout << "\n2. Testing Date Comparison:\n";
+    Date today = dateTodayFunc();
+    Date pastDate(today.dd-2, today.mm, today.yy); // 2 days ago
+    Date futureDate(today.dd+2, today.mm, today.yy); // 2 days in future
+    
+    cout << "- Comparing with past date: " 
+         << compareDate(pastDate) << " days overdue (should be 2)\n";
+    cout << "- Comparing with future date: " 
+         << compareDate(futureDate) << " days overdue (should be 0)\n";
+
+    // 3. Test Login System
+    cout << "\n3. Testing Login System:\n";
+    LoginSystem login;
+    
+    cout << "Attempting login (enter test credentials):\n";
+    if (login.login()) {
+        cout << "- Login successful! User type: " << login.getUserType() << endl;
+        cout << "- Testing logout (will exit program):\n";
+        login.logout(); // This will exit
+    } else {
+        cout << "- Login failed (as expected for invalid credentials)\n";
     }
-    cout << "heheheheeheeeeh";
+
+    cout << "\nAll tests completed!\n";
+    return 0;
 }
 
-// Add all edited files to Git and commit them
-    // Hit Ctrl + Shift + A (PC) / Cmd + Shift + A (Mac).
-    // Enter the commit message.
-    // Press ENTER.
-// Add ONLY the current file to Git and commit it
-    // Hit Ctrl + Shift + Z (PC) / Cmd + Shift + Z (Mac).
-    // Enter the commit message.
-    // Press ENTER.
-// Setup the auto-prefill for commit messages
-    // Hit Ctrl + Shift + P (PC) / Cmd + Shift + P (Mac).
-// Look for Preferences: Open User Settings.
-// Look for gaac. settings to customize them.
-// Push local commits
-    // Hit Ctrl + Shift + X (PC) / Cmd + Shift + X (Mac).
-
-// helloooooooo
+// // Add all edited files to Git and commit them
+//     // Hit Ctrl + Shift + A (PC) / Cmd + Shift + A (Mac).
+// // Push local commits
+//     // Hit Ctrl + Shift + X (PC) / Cmd + Shift + X (Mac).
