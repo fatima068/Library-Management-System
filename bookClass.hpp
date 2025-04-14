@@ -28,93 +28,6 @@ bool isLeapYear(int year) {
 
 // in compare date check if year is leap year and use 29 instead of 28 for daysInMonth[1]                      
 
-int compareDate(Date bookDue) {
-    // first compare year
-    // then month
-    // then day of the month
-    if (bookDue.yy > dateTodayVar.yy) {
-        return 0;
-    }
-    if (bookDue.yy == dateTodayVar.yy && bookDue.mm > dateTodayVar.mm) {
-        return 0;
-    }
-
-    if (bookDue.yy == dateTodayVar.yy && bookDue.mm == dateTodayVar.mm && bookDue.dd > dateTodayVar.dd) {
-        return 0;
-    }
-
-    if (bookDue.yy == dateTodayVar.yy && bookDue.mm == dateTodayVar.mm && bookDue.dd == dateTodayVar.dd) {
-        return 0; 
-    }
-    // now all the cases have been covered where book has been returned on or before the due date
-    // this means now we need to check ke book kitne din overdue hogai hai
-
-    int daysOverdue, daysInDueMonth;
-
-    if (bookDue.yy == dateTodayVar.yy && bookDue.mm == dateTodayVar.mm) {
-        daysOverdue = dateTodayVar.dd - bookDue.dd;
-        return daysOverdue;
-    }
-
-    // next condition will be when year is same but month is different
-    if (bookDue.yy == dateTodayVar.yy) { 
-        daysInDueMonth = daysInMonth[bookDue.mm - 1];
-        if (bookDue.mm == 2 && isLeapYear(bookDue.yy)) { 
-            daysInDueMonth = 29;
-        }
-        // Days remaining in due month after due date
-        daysOverdue = daysInDueMonth - bookDue.dd;     
-        // Add all full months between due month and current month
-        for (int month = bookDue.mm + 1; month < dateTodayVar.mm; month++) {
-            daysOverdue += daysInMonth[month - 1];
-            if (month == 2 && isLeapYear(bookDue.yy)) {
-                daysOverdue += 1; // Add extra day for leap February
-            }
-        }      
-        // Add days passed in current month
-        daysOverdue += dateTodayVar.dd;     
-        return daysOverdue;
-    }
-
-    // now check when year is different too 
-    // year is different 
-    // Part A: Days remaining in due month
-    daysInDueMonth = daysInMonth[bookDue.mm - 1];
-    if (bookDue.mm == 2 && isLeapYear(bookDue.yy)) {
-        daysInDueMonth = 29;
-    }
-    daysOverdue = daysInDueMonth - bookDue.dd;
-
-    // Part B: Remaining months in due year
-    for (int month = bookDue.mm + 1; month <= 12; month++) {
-        daysOverdue += daysInMonth[month - 1];
-        if (month == 2 && isLeapYear(bookDue.yy)) {
-            daysOverdue += 1;
-        }
-    }
-    
-    // Part C: Full years between due year and current year
-    for (int year = bookDue.yy + 1; year < dateTodayVar.yy; year++) {
-        if (isLeapYear(year)) {
-            daysOverdue += 366;
-        } else {
-            daysOverdue += 365;
-        }
-    } 
-
-    // Part D: Months in current year before current month
-    for (int month = 1; month < dateTodayVar.mm; month++) {
-        daysOverdue += daysInMonth[month - 1];
-        if (month == 2 && isLeapYear(dateTodayVar.yy)) {
-            daysOverdue += 1;
-        }
-    }
-
-    // Part E: Days in current month
-    daysOverdue += dateTodayVar.dd;
-    return daysOverdue;
-}
-    // if due date hasnt passed return 0, else return how many days have passed since due date, then in some other function apply fine according to user type
 
 class Book {
     protected:
@@ -133,22 +46,111 @@ class Book {
         // add book to file here i think ? because new book object has been created and should be added to all books file and genre specific file too 
     }
 
-    void returnBook() {
-        if (isBorrowed) {
-            isBorrowed = false; // fetch record from file and then check this variable 
-            dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
-            // update book record in the file
-            cout << title <<" returned successfully" << endl;
-            return;
+    int getDaysOverdue() {
+        // first compare year
+        // then month
+        // then day of the month
+        if (dueDate.yy > dateTodayVar.yy) {
+            return 0;
         }
-        cout << "book is not borrowed" << endl; // fine will be calculated in user class ka return book 
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm > dateTodayVar.mm) {
+            return 0;
+        }
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd > dateTodayVar.dd) {
+            return 0;
+        }
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd == dateTodayVar.dd) {
+            return 0; 
+        }
+        // now all the cases have been covered where book has been returned on or before the due date
+        // this means now we need to check ke book kitne din overdue hogai hai
+    
+        int daysOverdue, daysInDueMonth;
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm) {
+            daysOverdue = dateTodayVar.dd - dueDate.dd;
+            return daysOverdue;
+        }
+    
+        // next condition will be when year is same but month is different
+        if (dueDate.yy == dateTodayVar.yy) { 
+            daysInDueMonth = daysInMonth[dueDate.mm - 1];
+            if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) { 
+                daysInDueMonth = 29;
+            }
+            // Days remaining in due month after due date
+            daysOverdue = daysInDueMonth - dueDate.dd;     
+            // Add all full months between due month and current month
+            for (int month = dueDate.mm + 1; month < dateTodayVar.mm; month++) {
+                daysOverdue += daysInMonth[month - 1];
+                if (month == 2 && isLeapYear(dueDate.yy)) {
+                    daysOverdue += 1; // Add extra day for leap February
+                }
+            }      
+            // Add days passed in current month
+            daysOverdue += dateTodayVar.dd;     
+            return daysOverdue;
+        }
+    
+        // now check when year is different too 
+        // year is different 
+        // Part A: Days remaining in due month
+        daysInDueMonth = daysInMonth[dueDate.mm - 1];
+        if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) {
+            daysInDueMonth = 29;
+        }
+        daysOverdue = daysInDueMonth - dueDate.dd;
+    
+        // Part B: Remaining months in due year
+        for (int month = dueDate.mm + 1; month <= 12; month++) {
+            daysOverdue += daysInMonth[month - 1];
+            if (month == 2 && isLeapYear(dueDate.yy)) {
+                daysOverdue += 1;
+            }
+        }
+        
+        // Part C: Full years between due year and current year
+        for (int year = dueDate.yy + 1; year < dateTodayVar.yy; year++) {
+            if (isLeapYear(year)) {
+                daysOverdue += 366;
+            } else {
+                daysOverdue += 365;
+            }
+        } 
+    
+        // Part D: Months in current year before current month
+        for (int month = 1; month < dateTodayVar.mm; month++) {
+            daysOverdue += daysInMonth[month - 1];
+            if (month == 2 && isLeapYear(dateTodayVar.yy)) {
+                daysOverdue += 1;
+            }
+        }
+    
+        // Part E: Days in current month
+        daysOverdue += dateTodayVar.dd;
+        return daysOverdue;
+    }
+        // if due date hasnt passed return 0, else return how many days have passed since due date, then in some other function apply fine according to user type
+    
+
+    bool returnBook() {
+        if (isBorrowed) {
+            isBorrowed = false; 
+            dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
+            cout << bookID <<" returned successfully" << endl;
+            return true;
+        }
+        cout << "book is not borrowed" << endl; 
+        return false; // fine will be calculated in user class ka return book 
     }
 
-    void borrowBook() {
+    bool borrowBook() {
         // first fetch data for that book from text file ???? or are we making aarrays in system class
         if(isBorrowed) {
             cout << "book already borrowed by other user" << endl;
-            return;
+            return false;
         }
         isBorrowed = true;
         int dueDay = dateTodayVar.dd + 14; 
@@ -159,8 +161,8 @@ class Book {
         if (dueDay <= daysThisMonth) {
             dueDate = Date(dueDay, dueMonth, dueYear);
             //update records in the file 
-            cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
-            return;
+            cout << "book " << bookID << " borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+            return true;
         }
 
         if (dueDay > daysThisMonth) {
@@ -175,8 +177,11 @@ class Book {
         dueDate = Date(dueDay, dueMonth, dueYear);
         // save data to file
         cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+        return true;
     }
 
+    friend class PremiumUser;
+    friend class NormalUser;
     // or maybe what we can do is when program starts, fetch everything from file and store in arrays in system class or global arrays, then perform functions on those arrays, before ending, store everything to files 
 };
 
