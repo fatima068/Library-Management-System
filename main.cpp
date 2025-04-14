@@ -1,11 +1,12 @@
 #include <iostream>
 #include "login.hpp"
 #include "bookClass.hpp"
+#include "userClasses.hpp"
 using namespace std;
 
+// when program runs give user the option to login to an existing account or create a new account 
+
 int main () {
-    Book b1 = Book("B001", "percy jackson", "rick", "mythology");
-    cout << b1;
 
     // bool loginStatus = login(); 
     // while (loginStatus == 1){

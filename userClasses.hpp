@@ -15,7 +15,7 @@ class User {
 class PremiumUser: public User {
     protected:
     vector<Book*> borrowedBooks; // can borrow unlimited number of books. maybe only store isbn or book id of borrowed book here ? 
-    const float finePerMonth;
+    const float finePerWeek;
 };
 
 class NormalUser: public User {
