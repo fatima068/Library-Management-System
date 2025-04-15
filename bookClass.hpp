@@ -54,12 +54,57 @@ class Book {
         allBooksFile << title << endl;
         allBooksFile <<  author << endl;
         allBooksFile << genre << endl; 
-        // allBooksFile << isBorrowed << endl;
+        if (isBorrowed) allBooksFile << "true\n";
+        else allBooksFile << "false\n";
         allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
         allBooksFile.close();
-        // now also add book to genre specific file 
 
-        
+        // now also add book to genre specific file 
+        if (genre == "classic"){
+            ofstream genreFile("textFiles/classicBooks.txt", ios::app);
+            if (!genreFile) {
+                cerr << "cannot open file" << endl;
+            }
+            genreFile << bookID << endl;
+            genreFile << ISBN << endl;
+            genreFile << title << endl;
+            genreFile <<  author << endl;
+            genreFile << genre << endl; 
+            if (isBorrowed) genreFile << "true\n";
+            else genreFile << "false\n";
+            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            genreFile.close();
+        }
+        if (genre == "fantasy"){
+            ofstream genreFile("textFiles/fantasyBooks.txt", ios::app);
+            if (!genreFile) {
+                cerr << "cannot open file" << endl;
+            }
+            genreFile << bookID << endl;
+            genreFile << ISBN << endl;
+            genreFile << title << endl;
+            genreFile <<  author << endl;
+            genreFile << genre << endl; 
+            if (isBorrowed) genreFile << "true\n";
+            else genreFile << "false\n";
+            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            genreFile.close();
+        }
+        if (genre == "mystery"){
+            ofstream genreFile("textFiles/mysteryBooks.txt", ios::app);
+            if (!genreFile) {
+                cerr << "cannot open file" << endl;
+            }
+            genreFile << bookID << endl;
+            genreFile << ISBN << endl;
+            genreFile << title << endl;
+            genreFile <<  author << endl;
+            genreFile << genre << endl; 
+            if (isBorrowed) genreFile << "true\n";
+            else genreFile << "false\n";
+            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            genreFile.close();
+        }
         // ifstream allBooks;
         // allBooks.open("allBooks.txt");
         // if (!allBooks) {
