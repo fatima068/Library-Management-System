@@ -51,7 +51,7 @@ int main() {
     cout << "\n4. Testing User Classes:\n";
     
     // Create test books
-    Book* book1 = new Book("B001", "1111111111111", "Book 1", "Author 1", "Fiction", false, 0, 0, 0);
+    Book* book1 = new Book("B001", "1111111111111", "Book 1", "Author 1", "Fiction", false, 0, 0, 0); 
     Book* book2 = new Book("B002", "2222222222222", "Book 2", "Author 2", "Non-Fiction", false, 0, 0, 0);
     Book* book3 = new Book("B003", "3333333333333", "Book 3", "Author 3", "Science", false, 0, 0, 0);
     Book* book4 = new Book("B004", "4444444444444", "Book 4", "Author 4", "History", false, 0, 0, 0);

@@ -1,6 +1,7 @@
-#include <iostream>
 #include <string>
 #include <ctime>
+#include <vector>
+#include <fstream>
 using namespace std;
 
 struct Date {
@@ -43,7 +44,38 @@ class Book {
     Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate() {}
 
     Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year) {
-        // add book to file here i think ? because new book object has been created and should be added to all books file and genre specific file too 
+        ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
+        if (!allBooksFile) {
+            cerr << "Error in opening the output file" << endl;
+        }
+
+        allBooksFile << bookID << endl;
+        allBooksFile << ISBN << endl;
+        allBooksFile << title << endl;
+        allBooksFile <<  author << endl;
+        allBooksFile << genre << endl; 
+        // allBooksFile << isBorrowed << endl;
+        allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+        allBooksFile.close();
+        // now also add book to genre specific file 
+
+        
+        // ifstream allBooks;
+        // allBooks.open("allBooks.txt");
+        // if (!allBooks) {
+        //     cerr << "Error in opening the file" << endl;
+        // }
+
+        // vector<Book> fileBooks;
+        // Book temp;
+        // while (allBooks >> temp.bookID >> temp.ISBN >> temp.title >> temp.author >> temp.genre >> temp.isBorrowed >> temp.dueDate) {
+        //     fileBooks.push_back(temp);
+        // }
+
+        // // now print the information you read in
+        // for (const auto& b1 : allBooks) {
+        //     cout << b1.bookID << b1.ISBN << b1.title << b1.author << b1.genre << b1.isBorrowed << b1.dueDate << endl;
+        // }
     }
 
     int getDaysOverdue() {

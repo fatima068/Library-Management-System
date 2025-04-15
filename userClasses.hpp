@@ -22,12 +22,12 @@ class User {
         contactNum = c;
     }
 
-    virtual void borrowBook(Book* b1) {}
-    virtual void returnBook(Book* b1) {}
-    virtual void editUserInfo(User* u1) {}
-    virtual void setNewFine(float amt) {}
-    virtual bool addNewBook(Book b1) {}
-    virtual bool removeBook(Book b1) {}
+    virtual void borrowBook(Book* b1) = 0;
+    virtual void returnBook(Book* b1) = 0;
+    virtual void editUserInfo(User* u1) = 0;
+    virtual void setNewFine(float amt) = 0;
+    virtual bool addNewBook(Book b1) = 0;
+    virtual bool removeBook(Book b1) = 0;
 };
 
 class PremiumUser: public User {
