@@ -1,3 +1,6 @@
+#ifndef BOOKCLASS_HPP
+#define BOOKCLASS_HPP
+
 #include <string>
 #include <ctime>
 #include <vector>
@@ -263,3 +266,5 @@ class Book {
 };
 
 // instead of making display function here, do operator<< overloading to display book in system class
+
+#endif

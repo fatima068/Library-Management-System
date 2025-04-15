@@ -1,3 +1,6 @@
+#ifndef USERCLASSES_HPP
+#define USERCLASSES_HPP
+
 #include <iostream>
 #include <vector>
 #include <cstdlib>
@@ -235,3 +238,5 @@ class Librarian : public User {
         }
     }
 };
+
+#endif

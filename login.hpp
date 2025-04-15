@@ -1,3 +1,6 @@
+#ifndef LOGIN_HPP
+#define LOGIN_HPP
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -100,3 +103,5 @@ class LoginSystem {
 };
 
 // login jab hojaye tou go to all users waali file, read uss user ka data from there and store it in object or pointer of user class, then call usske function waghera and logout karte huey update usska data in the file taake wo save hojaye kyunke object/pointer tou main band karne ke baad delete hojayega
+
+#endif
