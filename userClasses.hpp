@@ -31,6 +31,7 @@ class User {
     virtual void setNewFine(float amt) = 0;
     virtual bool addNewBook(Book b1) = 0;
     virtual bool removeBook(Book b1) = 0;
+    virtual void renewBook(Book* b1) = 0;
 };
 
 class PremiumUser: public User {
@@ -184,6 +185,10 @@ class Librarian : public User {
 
     void returnBook(Book* b1) override {
         cout << "librarian cant borrow/return books" << endl;
+    }
+
+    void renewBook(Book* b1) override {
+        cout << "action cannot be performed by librarian " << endl;
     }
 
     void setNewFine(float amt) override {}

@@ -260,6 +260,10 @@ class Book {
         return true;
     }
 
+    bool renewBook() {
+
+    }
+
     friend class PremiumUser;
     friend class NormalUser;
     // or maybe what we can do is when program starts, fetch everything from file and store in arrays in system class or global arrays, then perform functions on those arrays, before ending, store everything to files 
