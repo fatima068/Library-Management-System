@@ -32,6 +32,10 @@ class User {
     virtual bool addNewBook(Book b1) = 0;
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
+
+    virtual ~User() = default;
+
+    friend class System;
 };
 
 class PremiumUser: public User {
@@ -108,6 +112,8 @@ class PremiumUser: public User {
         cout << "user cannot remove book" << endl;
         return false;
     }
+
+    friend class System;
 };
 
 class NormalUser: public User {
@@ -184,6 +190,8 @@ class NormalUser: public User {
         cout << "user cannot remove book" << endl;
         return false;
     }
+
+    friend class System;
 };
 
 class Librarian : public User {
@@ -258,6 +266,8 @@ class Librarian : public User {
             break;
         }
     }
+
+    friend class System;
 };
 
 #endif

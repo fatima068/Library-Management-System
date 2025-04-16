@@ -5,6 +5,8 @@
 #include <ctime>
 #include <vector>
 #include <fstream>
+#include "system.hpp"   
+#include "userClasses.hpp" 
 using namespace std;
 
 struct Date {
@@ -33,7 +35,7 @@ bool isLeapYear(int year) {
 // in compare date check if year is leap year and use 29 instead of 28 for daysInMonth[1]                      
 
 
-class Book {
+class Book { 
     protected:
         const string bookID;
         const string ISBN;
@@ -50,7 +52,7 @@ class Book {
     Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(0) {
         ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
         if (!allBooksFile) {
-            cerr << "Error in opening the output file" << endl;
+            cerr << "Error in opening all books file" << endl;
         }
 
         allBooksFile << bookID << endl;
@@ -63,72 +65,6 @@ class Book {
         allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
         allBooksFile << timesRenewed << endl;
         allBooksFile.close();
-
-        // now also add book to genre specific file 
-        if (genre == "classic"){
-            ofstream genreFile("textFiles/classicBooks.txt", ios::app);
-            if (!genreFile) {
-                cerr << "cannot open file" << endl;
-            }
-            genreFile << bookID << endl;
-            genreFile << ISBN << endl;
-            genreFile << title << endl;
-            genreFile <<  author << endl;
-            genreFile << genre << endl; 
-            if (isBorrowed) genreFile << "true\n";
-            else genreFile << "false\n";
-            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
-            allBooksFile << timesRenewed << endl;
-            genreFile.close();
-        }
-        if (genre == "fantasy"){
-            ofstream genreFile("textFiles/fantasyBooks.txt", ios::app);
-            if (!genreFile) {
-                cerr << "cannot open file" << endl;
-            }
-            genreFile << bookID << endl;
-            genreFile << ISBN << endl;
-            genreFile << title << endl;
-            genreFile <<  author << endl;
-            genreFile << genre << endl; 
-            if (isBorrowed) genreFile << "true\n";
-            else genreFile << "false\n";
-            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
-            allBooksFile << timesRenewed << endl;
-            genreFile.close();
-        }
-        if (genre == "mystery"){
-            ofstream genreFile("textFiles/mysteryBooks.txt", ios::app);
-            if (!genreFile) {
-                cerr << "cannot open file" << endl;
-            }
-            genreFile << bookID << endl;
-            genreFile << ISBN << endl;
-            genreFile << title << endl;
-            genreFile <<  author << endl;
-            genreFile << genre << endl; 
-            if (isBorrowed) genreFile << "true\n";
-            else genreFile << "false\n";
-            genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
-            allBooksFile << timesRenewed << endl;
-            genreFile.close();
-        }
-        // ifstream allBooks;
-        // allBooks.open("allBooks.txt");
-        // if (!allBooks) {
-        //     cerr << "Error in opening the file" << endl;
-        // }
-
-        // vector<Book> fileBooks;
-        // Book temp;
-        // while (allBooks >> temp.bookID >> temp.ISBN >> temp.title >> temp.author >> temp.genre >> temp.isBorrowed >> temp.dueDate) {
-        //     fileBooks.push_back(temp);
-        // }
-
-        // // now print the information you read in
-        // for (const auto& b1 : allBooks) {
-        //     cout << b1.bookID << b1.ISBN << b1.title << b1.author << b1.genre << b1.isBorrowed << b1.dueDate << endl;
-        // }
     }
 
     int getDaysOverdue() {
@@ -301,9 +237,22 @@ class Book {
         return true;
     }
 
+    friend ostream& operator<< (ostream& out, Book &b1) {
+        out << "Book ID: " << b1.bookID << endl << "Book title: " << b1.title << endl << "Author: " << b1.author << endl << "Genre: " << b1.genre << "ISBN: " << b1.ISBN << endl;
+        if (b1.isBorrowed) {
+            out << "Status: Unavailable" << endl;
+            out << "Due Date: " << b1.dueDate.dd << "." << b1.dueDate.mm << "." << b1.dueDate.yy << endl;
+            out << "Times Renewed: " << b1.timesRenewed << endl;
+        } 
+        else {
+            out << "Status: Available" << endl;
+        }
+        return out;
+    }
+
     friend class PremiumUser;
     friend class NormalUser;
-    // or maybe what we can do is when program starts, fetch everything from file and store in arrays in system class or global arrays, then perform functions on those arrays, before ending, store everything to files 
+    friend class System;
 };
 
 // instead of making display function here, do operator<< overloading to display book in system class

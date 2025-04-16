@@ -1,16 +1,55 @@
 #include <iostream>
-#include "login.hpp"
-#include "bookClass.hpp"
-#include "userClasses.hpp"
+#include "system.hpp"
 using namespace std;
 
-bool isLibrarian();
-bool isPremiumUser();
-bool isNormalUser();
-
-LoginSystem loginSession;
-
 int main() {
+    System librarySystem;
+    
+    // Load initial data
+    librarySystem.loadBooks();
+    // librarySystem.loadUsers(); // Uncomment when implemented
+    
+    // Test book search functionalities
+    cout << "=== Testing Book Search ===" << endl;
+    librarySystem.searchBookName();
+    librarySystem.searchAuthorName();
+    librarySystem.searchBookId();
+    
+    // Test user search functionalities
+    cout << "\n=== Testing User Search ===" << endl;
+    librarySystem.searchUserName();
+    librarySystem.searchUserId();
+    
+    // Test librarian menu
+    cout << "\n=== Testing Librarian Menu ===" << endl;
+    librarySystem.LibrarianMenu();
+    
+    // Test user menu
+    cout << "\n=== Testing User Menu ===" << endl;
+    librarySystem.userMenu();
+    
+    // Save data before exiting
+    // librarySystem.saveUsers(); // Uncomment when implemented
+    librarySystem.saveBooks();
+    
+    return 0;
+}
+
+
+// #include <iostream>
+// #include "login.hpp"
+// #include "bookClass.hpp"
+// #include "userClasses.hpp"
+// #include "system.hpp"
+// using namespace std;
+
+// bool isLibrarian();
+// bool isPremiumUser();
+// bool isNormalUser();
+
+// LoginSystem loginSession;
+
+// int main() {
 
 //     cout << "=== Testing Library Management System ===\n\n";
 
@@ -41,20 +80,18 @@ int main() {
 //     cout << "- Comparing with future date: " 
 //          << testBook.getDaysOverdue() << " days overdue (should be 0)\n";
 
-    // 3. Test Login System
-    // cout << "\n3. Testing Login System:\n";
-    // LoginSystem login;
+//     cout << "\n3. Testing Login System:\n";
+//     LoginSystem login;
     
-    // cout << "Attempting login (enter test credentials):\n";
-    // if (login.login()) {
-    //     cout << "- Login successful! User type: " << login.getUserType() << endl;
-    //     cout << "- Testing logout (will exit program):\n";
-    //     login.logout(); // This will exit
-    // } else {
-    //     cout << "- Login failed (as expected for invalid credentials)\n";
-    // } 
+//     cout << "Attempting login (enter test credentials):\n";
+//     if (login.login()) {
+//         cout << "- Login successful! User type: " << login.getUserType() << endl;
+//         cout << "- Testing logout (will exit program):\n";
+//         login.logout(); // This will exit
+//     } else {
+//         cout << "- Login failed (as expected for invalid credentials)\n";
+//     } 
 
-    // 4. Test User Classes
 //     cout << "\n4. Testing User Classes:\n";
     
 //     // Create test books
@@ -105,19 +142,19 @@ int main() {
 //     delete book2;
 //     delete book3;
 //     delete book4;
-//     return 0;
-}
+// //     return 0;
+// }
 
-bool isLibrarian() {
-     if (loginSession.getUserType() == 'l' || loginSession.getUserType() == 'L') {
-         return true;
-     }
-     return false;
- }
+// bool isLibrarian() {
+//      if (loginSession.getUserType() == 'l' || loginSession.getUserType() == 'L') {
+//          return true;
+//      }
+//      return false;
+//  }
 
- bool isUser() {
-     if (loginSession.getUserType() == 'p' || loginSession.getUserType() == 'P' || loginSession.getUserType() == 'n' || loginSession.getUserType() == 'N') {
-         return true;
-     }
-     return false;
-}
+//  bool isUser() {
+//      if (loginSession.getUserType() == 'p' || loginSession.getUserType() == 'P' || loginSession.getUserType() == 'n' || loginSession.getUserType() == 'N') {
+//          return true;
+//      }
+//      return false;
+// }
