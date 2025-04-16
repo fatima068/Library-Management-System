@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include "bookClass.hpp"
 using namespace std;
-// #include "bookClass.hpp"
 
 class User {
     protected:
@@ -87,6 +87,14 @@ class PremiumUser: public User {
         currentBooksBorrowed--;
     }
 
+    void renewBook(Book* b1) override {
+        if (b1->timesRenewed == 3) {
+            cout << "book cannot be renewed again! limit is reached" << endl;
+            return;
+        }
+        b1->renew();
+    }
+
     void editUserInfo(User* u1) override {
         cout << "User cant edit users info" << endl;
     }
@@ -153,6 +161,14 @@ class NormalUser: public User {
         }
         borrowedBooks.erase(borrowedBooks.begin() + index);
         currentBooksBorrowed--;
+    }
+
+    void renewBook(Book* b1) override {
+        if (b1->timesRenewed == 1) {
+            cout << "book cannot be renewed again! limit is reached" << endl;
+            return;
+        }
+        b1->renew();
     }
 
     void editUserInfo(User* u1) {

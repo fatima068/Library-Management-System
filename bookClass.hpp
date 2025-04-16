@@ -42,11 +42,12 @@ class Book {
         string genre;
         bool isBorrowed;
         Date dueDate;
+        int timesRenewed;
 
     public:
-    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate() {}
+    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {}
 
-    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year) {
+    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(0) {
         ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
         if (!allBooksFile) {
             cerr << "Error in opening the output file" << endl;
@@ -60,6 +61,7 @@ class Book {
         if (isBorrowed) allBooksFile << "true\n";
         else allBooksFile << "false\n";
         allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+        allBooksFile << timesRenewed << endl;
         allBooksFile.close();
 
         // now also add book to genre specific file 
@@ -76,6 +78,7 @@ class Book {
             if (isBorrowed) genreFile << "true\n";
             else genreFile << "false\n";
             genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            allBooksFile << timesRenewed << endl;
             genreFile.close();
         }
         if (genre == "fantasy"){
@@ -91,6 +94,7 @@ class Book {
             if (isBorrowed) genreFile << "true\n";
             else genreFile << "false\n";
             genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            allBooksFile << timesRenewed << endl;
             genreFile.close();
         }
         if (genre == "mystery"){
@@ -106,6 +110,7 @@ class Book {
             if (isBorrowed) genreFile << "true\n";
             else genreFile << "false\n";
             genreFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+            allBooksFile << timesRenewed << endl;
             genreFile.close();
         }
         // ifstream allBooks;
@@ -219,6 +224,7 @@ class Book {
         if (isBorrowed) {
             isBorrowed = false; 
             dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
+            timesRenewed = 0; 
             cout << bookID <<" returned successfully" << endl;
             return true;
         }
@@ -260,8 +266,39 @@ class Book {
         return true;
     }
 
-    bool renewBook() {
+    friend void PremiumUser::renewBook(Book* b1);
+    friend void NormalUser::renewBook(Book* b1);
 
+    bool renew() {
+        if (!isBorrowed) {
+            cout << "book is not borrowed" << endl; 
+            return false;
+        }
+
+        if (getDaysOverdue() > 0) {
+            cout << "book can not be renewed after passing of due date" << endl;
+            return false;
+        }
+
+        int dueDay = dueDate.dd + 14; 
+        int dueMonth = dueDate.mm; 
+        int dueYear = dueDate.yy; 
+        int daysThisMonth = daysInMonth[dueDate.mm-1];
+
+        if (dueDay > daysThisMonth) {
+            dueDay = dueDay - daysThisMonth;
+            dueMonth++;
+        }
+        if (dueMonth > 12) {
+            dueMonth = 1;
+            dueYear++;
+        }
+
+        dueDate = Date(dueDay, dueMonth, dueYear);
+        timesRenewed++;
+        // save data to file
+        cout << "book renewed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+        return true;
     }
 
     friend class PremiumUser;
