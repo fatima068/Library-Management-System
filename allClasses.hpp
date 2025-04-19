@@ -291,7 +291,6 @@ class User {
 
     virtual void borrowBook(Book* b1) = 0;
     virtual void returnBook(Book* b1) = 0;
-    virtual void editUserInfo(User* u1) = 0;
     virtual void setNewFine(float amt) = 0;
     virtual bool addNewBook(Book b1) = 0;
     virtual bool removeBook(Book b1) = 0;
@@ -361,10 +360,6 @@ class PremiumUser: public User {
             return;
         }
         b1->renew();
-    }
-
-    void editUserInfo(User* u1) override {
-        cout << "User cant edit users info" << endl;
     }
 
     bool addNewBook(Book b1) override {
@@ -454,10 +449,6 @@ class NormalUser: public User {
         b1->renew();
     }
 
-    void editUserInfo(User* u1) {
-        cout << "User cant edit users info" << endl;
-    }
-
     bool addNewBook(Book b1) override {
         cout << "User cannot add new book"<< endl;
         return false;
@@ -498,7 +489,7 @@ class Librarian : public User {
     }
 
     void returnBook(Book* b1) override {
-        cout << "librarian cant borrow/return books" << endl;
+        cout << "librarian cant borrow/return books" << endl;         
     }
 
     void renewBook(Book* b1) override {
@@ -518,44 +509,6 @@ class Librarian : public User {
     }
 
     // system class mei for user* object, call this function, if it returns true add book else user cannot add book
-
-    void editUserInfo(User* u1) override {
-        int choice;
-        cout << "Editing user info: " << endl;
-        cout << "1. name\n2. contact number\n3. pay user fine\n4. exit" << endl;
-        cin >> choice;
-
-        switch(choice) {
-            case 1:{
-                string newName;
-                cout << "enter new name: ";
-                getline(cin, newName);
-                u1->setName(newName);
-                break;
-            }
-
-            case 2:{
-                string newContact;
-                cout << "enter new contact: ";
-                getline(cin, newContact);
-                u1->setContact(newContact);
-                break;
-            }
-
-            case 3:{
-                float amountPaid;
-                cout << "enter fine paid by user: ";
-                cin >> amountPaid;
-                u1->setNewFine(amountPaid);
-                break;
-            }
-
-            case 4:
-            cout << "exiting edit user info " << endl;
-            exit(0);
-            break;
-        }
-    }
 
     friend ostream& operator<< (ostream& out, Librarian l1) {
         out << "User Type: Librarian" << endl; 

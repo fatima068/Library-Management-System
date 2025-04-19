@@ -11,6 +11,7 @@ class System {
     private:
     vector<User*> allUsers;
     vector<Book> allBooks;
+    User* loginedUser;
 
     public:
     void searchBookName() {
@@ -19,7 +20,7 @@ class System {
         getline(cin, nameToSearch);
         int numBooks = allBooks.size(); 
         bool flag = false;
-        for (int i = 0; i < numBooks; i++) {
+        for (int i = 0; i < numBooks; i++) { 
             if (allBooks[i].title == nameToSearch) {
                 cout << allBooks[i];
                 flag = true;
@@ -28,8 +29,8 @@ class System {
         if (!flag) {
             cout << "no book found" << endl;
         }
-    }
-
+    } 
+    
     void searchAuthorName() {
         string authorToSearch;
         cout << "enter author to search: ";
@@ -180,7 +181,7 @@ class System {
     void LibrarianMenu() {
         int choice = -1;
         while(choice != 8) {
-            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. edit user info\n8. exit\nenter your choice: ";
+            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. exit\nenter your choice: ";
             cin >> choice;
             switch (choice) {
                 case 1: { // search book
@@ -291,11 +292,7 @@ class System {
                     break;
                 }
 
-                case 7: { //edit user info
-                    break;
-                }
-
-                case 8: {
+                case 7: {
                     cout << "exiting menu..." << endl; // c later if program can be exited instead of break
                     break;
                 }
@@ -311,12 +308,11 @@ class System {
 
     void userMenu() {
         int choice = -1;
-        while(choice != 8) {
+        while(choice != 7) {
             cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. exit\nenter your choice: ";
             cin >> choice;
 
-            switch (choice)
-            {
+            switch (choice) {
             case 1: { // search book
                     int choice1; 
                     cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
