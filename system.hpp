@@ -6,8 +6,7 @@
 #include <iostream>
 #include "allClasses.hpp"
 using namespace std;
-// ello mic check no i am cool and very very amazing hehe do u agree?
-//answer) 
+
 class System {
     private:
     vector<User*> allUsers;
@@ -183,7 +182,7 @@ class System {
             cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. edit user info\n8. exit\nenter your choice: ";
             cin >> choice;
             switch (choice) {
-                case 1: {
+                case 1: { // search book
                     int choice; 
                     cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
                     cin >> choice;
@@ -207,7 +206,7 @@ class System {
                     break;
                 }
 
-                case 2: {
+                case 2: { // search user
                     int choice; 
                     cout << "1. by user name\n2. by book id\nenter your choice: ";
                     cin >> choice;
@@ -229,11 +228,11 @@ class System {
                     break;
                 }
 
-                case 3: {
+                case 3: { // delete use account
                     break;
                 }
 
-                case 4: {
+                case 4: { // view book list
                     int choice; 
                     cout << "1. view all books\n2. view borrowed books\n3. view available books\n4";
                     cin >> choice; 
@@ -258,15 +257,15 @@ class System {
                     break;
                 }
 
-                case 5: {
+                case 5: { // add new book to library
                     break;
                 }
 
-                case 6: {
+                case 6: { // remove a book
                     break;
                 }
 
-                case 7: {
+                case 7: { //edit user info
                     break;
                 }
 
