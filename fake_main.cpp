@@ -7,6 +7,8 @@
 #include <ctime>
 using namespace std;
 
+// elloooooooo
+
 class System;
 
 // Book class and related code
