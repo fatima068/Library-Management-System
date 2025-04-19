@@ -15,6 +15,9 @@ class System {
     vector<Book> allBooks;
 
     public:
+    void funcB() {
+        //ello mic test 1 2 3 ikrash here
+    }
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
