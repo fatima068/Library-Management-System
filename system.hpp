@@ -7,17 +7,12 @@
 #include "allClasses.hpp"
 using namespace std;
 
-// testing the git fing 
-
 class System {
     private:
     vector<User*> allUsers;
     vector<Book> allBooks;
 
     public:
-    void funcB() {
-        //ello mic test 1 2 3 ikrash here
-    }
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
