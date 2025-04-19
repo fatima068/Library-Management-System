@@ -258,10 +258,35 @@ class System {
                 }
 
                 case 5: { // add new book to library
+                    string id, isbn, title, author, genre;
+                    cout << "Enter book details of book to add" << endl;
+                    cout << "Book ID: "; // should i first check if its unique ? 
+                    getline(cin, id);
+                    cout << "ISBN: ";
+                    getline(cin, isbn);
+                    cout << "Title: ";
+                    getline(cin, title);
+                    cout << "Author: ";
+                    getline(cin, author);
+                    cout << "Genre: ";
+                    getline(cin, genre);
+                    Book b1 = Book(id, isbn, title, author, genre, false, 0, 0, 0);
+                    allBooks.push_back(b1);
                     break;
                 }
 
                 case 6: { // remove a book
+                    string idToRemove;
+                    cout << "enter book id of book to remove: ";
+                    getline(cin, idToRemove);
+                    for (int i = 0; i < allBooks.size(); i++) {
+                        if (allBooks[i].bookID == idToRemove) {
+                            allBooks.erase(allBooks.begin() + i);
+                            cout << "book " << idToRemove << " rempved successfully" << endl;
+                            return;
+                        }
+                        cout << "book not found" << endl;
+                    }
                     break;
                 }
 
