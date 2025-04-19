@@ -296,6 +296,9 @@ class User {
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
 
+    virtual void displayBooksBorrowed() {}
+    virtual bool isBookBorrowed(string id) {}
+
     virtual ~User() = default;
 
     friend class System;
@@ -354,6 +357,15 @@ class PremiumUser: public User {
         currentBooksBorrowed--;
     }
 
+    bool isBookBorrowed(string id) override {
+        for (int i = 0; i < borrowedBooks.size(); i ++) {
+            if (id == borrowedBooks[i]->bookID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void renewBook(Book* b1) override {
         if (b1->timesRenewed == 3) {
             cout << "book cannot be renewed again! limit is reached" << endl;
@@ -370,6 +382,13 @@ class PremiumUser: public User {
     bool removeBook(Book b1) override {
         cout << "user cannot remove book" << endl;
         return false;
+    }
+
+    void displayBooksBorrowed() override { 
+        cout << "List of Borrowed Books: " << endl; //um idk maybe change the wordings here
+            for (int i = 0; i < currentBooksBorrowed; i++) {
+                cout << i << ") " << borrowedBooks[i];
+            }
     }
 
     friend ostream& operator<< (ostream& out, PremiumUser p1) {
@@ -441,6 +460,15 @@ class NormalUser: public User {
         currentBooksBorrowed--;
     }
 
+    bool isBookBorrowed(string id) override {
+        for (int i = 0; i < borrowedBooks.size(); i ++) {
+            if (id == borrowedBooks[i]->bookID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void renewBook(Book* b1) override {
         if (b1->timesRenewed == 1) {
             cout << "book cannot be renewed again! limit is reached" << endl;
@@ -457,6 +485,13 @@ class NormalUser: public User {
     bool removeBook(Book b1) override {
         cout << "user cannot remove book" << endl;
         return false;
+    }
+
+    void displayBooksBorrowed() override { 
+        cout << "List of Borrowed Books: " << endl; //um idk maybe change the wordings here
+            for (int i = 0; i < currentBooksBorrowed; i++) {
+                cout << i << ") " << borrowedBooks[i];
+            }
     }
 
     friend ostream& operator<< (ostream& out, NormalUser n1) {

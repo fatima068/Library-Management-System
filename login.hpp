@@ -3,7 +3,7 @@
 #include <fstream>
 #include <conio.h>
 using namespace std;
-
+//hi fix this hpp pls include nai hua wa ye oki fanks
 class LoginSystem {
     private:
     char userType = 'X';
@@ -57,7 +57,7 @@ class LoginSystem {
         }
     }
     
-    bool login() {
+    bool login(string id) { //acha to what i have done is ke i pass the id from parameter and ask for password
         // open file 
         ifstream loginFile;
         loginFile.open("textFiles/login.txt", ios::in);
@@ -68,9 +68,7 @@ class LoginSystem {
     
         // first search if id exists in the file
         // if id exists, compare passwords
-        string fileID, id, password, filePassword;
-        cout << "enter id: ";
-        cin >> id;
+        string fileID,  password, filePassword; 
         password = getPassword();
     
         while (loginFile >> fileID >> filePassword) {

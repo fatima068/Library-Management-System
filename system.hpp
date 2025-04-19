@@ -14,6 +14,14 @@ class System {
     User* loginedUser;
 
     public:
+    void logAUser(string id) { // will this work lets hope it does lmao
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (id == allUsers[i]->userID) {
+                loginedUser = allUsers[i];
+            }
+        }
+    }
+
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
@@ -176,6 +184,33 @@ class System {
             if (!allBooks[i].isBorrowed)
                 cout << allBooks[i];
         }
+    }
+
+    void displayUserBorrowedBooks() {
+        //oke so we make a function for this in users 
+        loginedUser->displayBooksBorrowed();
+    }
+
+    void borrowBook() { 
+        string id;
+        cout << "enter Book ID of book you want to borrow: ";
+        cin >> id;
+        if (loginedUser->isBookBorrowed(id)) {
+            cout << "You have already borrowed the Book" << endl;
+            return;
+        }
+
+        for (int i = 0; i < allBooks.size(); i++) {
+            if (id == allBooks[i].bookID) {
+                allBooks[i].borrowBook();
+                return;
+            }
+        }
+        cout << "Book ID doesn't exist" << endl;
+    }
+
+    void returnBook() {
+
     }
 
     void LibrarianMenu() {
@@ -347,7 +382,7 @@ class System {
                             break;
                         }
                         case 2: {
-                            displayBorrowedBooks();
+                            displayUserBorrowedBooks();
                             break;
                         }
                         case 3: {
@@ -363,17 +398,17 @@ class System {
             }
 
             case 3: { //borrow book
-                
+                borrowBook();
                 break;
             }
 
             case 4: { //return book
-                
+                //returnBook();
                 break;
             }
 
             case 5: { //pay fine
-                
+                //this can be done yahin pe maybe
                 break;
             }
 
