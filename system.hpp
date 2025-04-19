@@ -159,6 +159,8 @@ class System {
         }
     }
 
+    
+
     void displayBorrowedBooks() {
         int numBooks = allBooks.size();
         for (int i = 0; i < numBooks; i++) {
@@ -167,7 +169,7 @@ class System {
         }
     }
 
-    void displayAvailBooks() {
+    void displayAvailableBooks() {
         int numBooks = allBooks.size();
         for (int i = 0; i < numBooks; i++) {
             if (!allBooks[i].isBorrowed)
@@ -276,9 +278,7 @@ class System {
         }
     }
 
-    void displayAllBooks() {}
-    void displayBorrowedBooks() {}
-    void displayAvailableBooks() {}
+    
 
     void userMenu() {
 
