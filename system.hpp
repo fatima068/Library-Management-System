@@ -1,12 +1,10 @@
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
 
-#include "userClasses.hpp"
-#include "login.hpp"
-#include "bookClass.hpp"
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "allClasses.hpp"
 using namespace std;
 
 class System {
@@ -18,7 +16,7 @@ class System {
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
-        cin >> nameToSearch;
+        getline(cin, nameToSearch);
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
@@ -35,11 +33,11 @@ class System {
     void searchAuthorName() {
         string authorToSearch;
         cout << "enter author to search: ";
-        cin >> authorToSearch;
+        getline(cin, authorToSearch);
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
-            if (allBooks[i].title == authorToSearch) {
+            if (allBooks[i].author == authorToSearch) {
                 cout << allBooks[i];
                 flag = true;
             }
@@ -50,13 +48,13 @@ class System {
     }
 
     void searchBookId() {
-        string is_default_constructible;
-        cout << "enter book id to search: ";
-        cin >> is_default_constructible;
+        string bookIDtoSearch;
+        cout << "enter book id to search: "; 
+        getline(cin, bookIDtoSearch);
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
-            if (allBooks[i].title == is_default_constructible) {
+            if (allBooks[i].bookID == bookIDtoSearch) {
                 cout << allBooks[i];
                 flag = true;
             }
@@ -69,7 +67,7 @@ class System {
     void searchUserName() {
         string nameToSearch;
         cout << "enter user name to search: ";
-        cin >> nameToSearch;
+        getline(cin, nameToSearch);
         int numUsers = allUsers.size(); 
         bool flag = false;
         for (int i = 0; i < numUsers; i++) {
@@ -86,7 +84,7 @@ class System {
     void searchUserId() {
         string idToSearch;
         cout << "enter user name to search: ";
-        cin >> idToSearch;
+        getline(cin, idToSearch);
         int numUsers = allUsers.size(); 
         bool flag = false;
         for (int i = 0; i < numUsers; i++) {
@@ -109,84 +107,38 @@ class System {
         return nullptr;
     }
 
-    // Pseudocode for loading users
-
-//         if (type == "Premium") {
-//             user = new PremiumUser(id, name, contact);
-//         } 
-//         else if (type == "Normal") {
-//             user = new NormalUser(id, name, contact);
-//         }
-//         else if (type == "Librarian") {
-//             float salary;
-//             userFile >> salary;
-//             user = new Librarian(id, name, contact, salary);
-//         }
-        
-//         if (user) {
-//             allUsers.push_back(user);
-//         }
-//     }
-//     userFile.close();
-// }
-
-    // void loadUsers() { // load all users from file to vector 
-    //     ifstream allUsersFile("textFiles/allUsers.txt");
-    //     if (!allUsersFile) {
-    //         cerr << "Error in opening all users file" << endl;
-    //         return;
-    //     }
-
-    //     allUsersFile.close();
-    // }
-
-    // void saveUsers() { // at the end of program, save back to file
-    //     ifstream allUsersFile("textFiles/allUsers.txt");
-    //     if (!allUsersFile) {
-    //         cerr << "Error in opening all users file" << endl;
-    //         return;
-    //     }
-
-    //     allUsersFile.close();
-    // }
-    
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
         if (!allBooksFile) {
             cerr << "Error in opening all books file" << endl;
             return;
         }
-
-        string bookData[10];  // Stores: bookid, isbn, title, author, genre, borrow, dd, mm, yy, timesRenewed
+    
+        string bookData[10]; 
         
         while (getline(allBooksFile, bookData[0])) {  // Read bookID
-            // Read remaining 9 fields
+            // Read the remaining 7 fields
             for (int i = 1; i < 10; i++) {
                 if (!getline(allBooksFile, bookData[i])) {
-                    cerr << "Error: Incomplete book data in file" << endl;
+                    cerr << "Incomplete book record" << endl;
                     return;
                 }
             }
+    
+            bool borrow = (bookData[5] == "true"); // convert string to bool
+            int dd = stoi(bookData[6]);
+            int mm = stoi(bookData[7]); 
+            int yy = stoi(bookData[8]); 
             
-            // Parse fields with error handling
-            bool borrow = (bookData[5] == "true");  // borrow status ("true"/"false")
-            
-            int dd = 0, mm = 0, yy = 0, timesRenewed = 0;
-            try {
-                dd = stoi(bookData[6]);    // Day
-                mm = stoi(bookData[7]);    // Month
-                yy = stoi(bookData[8]);    // Year
-                timesRenewed = stoi(bookData[9]); // timesRenewed
-            } catch (...) {
-                cerr << "Warning: Invalid number format in book entry. Using default values (0)." << endl;
-                // Default values (0) already set
-            }
-            
+            int timesRenewed = stoi(bookData[9]);  // convert string to int
+    
             // Create and store the book
-            Book temp = Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4], borrow, dd, mm, yy);
+            Book temp(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4], borrow, dd, mm, yy, timesRenewed);
             allBooks.push_back(temp);
         }
+        
         allBooksFile.close();
+        cout << "Loaded " << allBooks.size() << " books" << endl;
     }
 
     void saveBooks() {
@@ -197,6 +149,18 @@ class System {
         }
 
         allBooksFile.close();
+    }
+
+    void displayAllBooks() {
+
+    }
+
+    void displayBorrowedBooks() {
+
+    }
+
+    void displayAvailableBooks() {
+        
     }
 
     void LibrarianMenu() {
@@ -217,13 +181,13 @@ class System {
                         case 2: {
                             searchAuthorName();
                             break;
-                        }
-                        case 3: {
+                        } 
+                        case 3: { 
                             searchBookId();
                             break;
                         }
                         default:
-                            cout << "wrong input dumbass" << endl; // change this pls lmao
+                            cout << "wrong choice " << endl; 
                             break;
                     }
                     break;
@@ -243,8 +207,9 @@ class System {
                             searchUserId();
                             break;
                         }
+
                         default:
-                            cout << "wrong input dumbass" << endl; // change this pls lmao
+                            cout << "wrong choice" << endl; 
                             break;
                     }
                     break;
@@ -260,19 +225,20 @@ class System {
                     cin >> choice; 
                     switch (choice) {
                         case 1: {
-                            //displayAllBooks();
+                            displayAllBooks();
                             break;
                         }
-                        // case 1: {
-                        //     //displayBorrowedBooks();
-                        //     break;
-                        // }
-                        // case 1: {
-                        //     //displayAvailBooks(); 
-                        //     break;
-                        // }
+                        case 2: {
+                            displayBorrowedBooks();
+                            break;
+                        }
+                        case 3: {
+                            displayAvailableBooks(); 
+                            break;
+                        }
+
                         default:
-                            cout << "wrong input dumbass" << endl; // change this pls lmao
+                            cout << "invalid choice " << endl; 
                             break;
                     }
                     break;
@@ -298,6 +264,10 @@ class System {
         }
     }
 
+    void displayAllBooks() {}
+    void displayBorrowedBooks() {}
+    void displayAvailableBooks() {}
+
     void userMenu() {
 
     }
@@ -306,12 +276,13 @@ class System {
         for (User* user : allUsers) {
             delete user;
         }
+        
     }
 };
 
 // search user by id
-// search book by name 
-// search book by author
+// search book by name (done)
+// search book by author (done)
 // search book by genre 
 // search book by id 
 // create a new user 

@@ -1,0 +1,536 @@
+#ifndef ALLCLASSES_HPP
+#define ALLCLASSES_HPP
+
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <ctime>
+#include <vector>
+#include <fstream>
+#include "system.hpp"
+using namespace std;
+
+class User;
+class NormalUser;
+class PremiumUser;
+
+struct Date {
+    int dd, mm, yy; // date format is dd-mm-yyyy (01-02-2024)
+
+    Date(int d, int m, int y) : dd(d), mm(m), yy(y) {}
+    Date() : dd(0), mm(0), yy(0) {}
+};
+
+Date dateTodayFunc() {
+    time_t timeInSecondsToday = time(nullptr);
+    tm* now = localtime(&timeInSecondsToday);
+    return Date(now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
+} // this will return the date today
+ // in system class, store todays date in a variable until program ends 
+
+Date dateTodayVar = dateTodayFunc(); 
+int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+bool isLeapYear(int year) {
+    if (year % 4 != 0) return false;       
+    if (year % 100 != 0 || year % 400 == 0) return true;     
+    return false;                          
+}
+
+// in compare date check if year is leap year and use 29 instead of 28 for daysInMonth[1]
+
+class Book { 
+    protected:
+    const string bookID;
+    const string ISBN;
+    string title;
+    string author;
+    string genre;
+    bool isBorrowed;
+    Date dueDate;
+    int timesRenewed;
+
+    public:
+    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {}
+
+    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year, int timesRenewed) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(timesRenewed) {}
+
+    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(0) {}
+
+    void addBookToFile() {
+        ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
+        if (!allBooksFile) {
+            cerr << "Error in opening all books file" << endl;
+        }
+
+        allBooksFile << bookID << endl;
+        allBooksFile << ISBN << endl;
+        allBooksFile << title << endl;
+        allBooksFile <<  author << endl;
+        allBooksFile << genre << endl; 
+        if (isBorrowed) allBooksFile << "true\n";
+        else allBooksFile << "false\n";
+        allBooksFile << dueDate.dd << endl;
+        allBooksFile << dueDate.mm << endl;
+        allBooksFile << dueDate.yy << endl;
+        allBooksFile << timesRenewed << endl;
+        allBooksFile.close();
+    }
+
+    int getDaysOverdue() {
+        // first compare year
+        // then month
+        // then day of the month
+        if (dueDate.yy > dateTodayVar.yy) {
+            return 0;
+        }
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm > dateTodayVar.mm) {
+            return 0;
+        }
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd > dateTodayVar.dd) {
+            return 0;
+        }
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd == dateTodayVar.dd) {
+            return 0; 
+        }
+        // now all the cases have been covered where book has been returned on or before the due date
+        // this means now we need to check ke book kitne din overdue hogai hai
+    
+        int daysOverdue, daysInDueMonth;
+    
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm) {
+            daysOverdue = dateTodayVar.dd - dueDate.dd;
+            return daysOverdue;
+        }
+    
+        // next condition will be when year is same but month is different
+        if (dueDate.yy == dateTodayVar.yy) { 
+            daysInDueMonth = daysInMonth[dueDate.mm - 1];
+            if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) { 
+                daysInDueMonth = 29;
+            }
+            // Days remaining in due month after due date
+            daysOverdue = daysInDueMonth - dueDate.dd;     
+            // Add all full months between due month and current month
+            for (int month = dueDate.mm + 1; month < dateTodayVar.mm; month++) {
+                daysOverdue += daysInMonth[month - 1];
+                if (month == 2 && isLeapYear(dueDate.yy)) {
+                    daysOverdue += 1; // Add extra day for leap February
+                }
+            }      
+            // Add days passed in current month
+            daysOverdue += dateTodayVar.dd;     
+            return daysOverdue;
+        }
+    
+        // now check when year is different too 
+        // year is different 
+        // Part A: Days remaining in due month
+        daysInDueMonth = daysInMonth[dueDate.mm - 1];
+        if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) {
+            daysInDueMonth = 29;
+        }
+        daysOverdue = daysInDueMonth - dueDate.dd;
+    
+        // Part B: Remaining months in due year
+        for (int month = dueDate.mm + 1; month <= 12; month++) {
+            daysOverdue += daysInMonth[month - 1];
+            if (month == 2 && isLeapYear(dueDate.yy)) {
+                daysOverdue += 1;
+            }
+        }
+        
+        // Part C: Full years between due year and current year
+        for (int year = dueDate.yy + 1; year < dateTodayVar.yy; year++) {
+            if (isLeapYear(year)) {
+                daysOverdue += 366;
+            } else {
+                daysOverdue += 365;
+            }
+        } 
+    
+        // Part D: Months in current year before current month
+        for (int month = 1; month < dateTodayVar.mm; month++) {
+            daysOverdue += daysInMonth[month - 1];
+            if (month == 2 && isLeapYear(dateTodayVar.yy)) {
+                daysOverdue += 1;
+            }
+        }
+    
+        // Part E: Days in current month
+        daysOverdue += dateTodayVar.dd;
+        return daysOverdue;
+    }
+        // if due date hasnt passed return 0, else return how many days have passed since due date, then in some other function apply fine according to user type
+    
+
+    bool returnBook() {
+        if (isBorrowed) {
+            isBorrowed = false; 
+            dueDate.dd = 0; dueDate.mm = 0; dueDate.yy = 0;
+            timesRenewed = 0; 
+            cout << bookID <<" returned successfully" << endl;
+            return true;
+        }
+        cout << "book is not borrowed" << endl; 
+        return false; // fine will be calculated in user class ka return book 
+    }
+
+    bool borrowBook() {
+        // first fetch data for that book from text file ???? or are we making aarrays in system class
+        if(isBorrowed) {
+            cout << "book already borrowed by other user" << endl;
+            return false;
+        }
+        isBorrowed = true;
+        int dueDay = dateTodayVar.dd + 14; 
+        int dueMonth = dateTodayVar.mm; 
+        int dueYear = dateTodayVar.yy; 
+        int daysThisMonth = daysInMonth[dateTodayVar.mm-1];
+
+        if (dueDay <= daysThisMonth) {
+            dueDate = Date(dueDay, dueMonth, dueYear);
+            //update records in the file 
+            cout << "book " << bookID << " borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+            return true;
+        }
+
+        if (dueDay > daysThisMonth) {
+            dueDay = dueDay - daysThisMonth;
+            dueMonth++;
+        }
+        if (dueMonth > 12) {
+            dueMonth = 1;
+            dueYear++;
+        }
+
+        dueDate = Date(dueDay, dueMonth, dueYear);
+        // save data to file
+        cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+        return true;
+    }
+
+    // friend void PremiumUser::renewBook(Book* b1);
+    // friend void NormalUser::renewBook(Book* b1);
+
+    bool renew() {
+        if (!isBorrowed) {
+            cout << "book is not borrowed" << endl; 
+            return false;
+        }
+
+        if (getDaysOverdue() > 0) {
+            cout << "book can not be renewed after passing of due date" << endl;
+            return false;
+        }
+
+        int dueDay = dueDate.dd + 14; 
+        int dueMonth = dueDate.mm; 
+        int dueYear = dueDate.yy; 
+        int daysThisMonth = daysInMonth[dueDate.mm-1];
+
+        if (dueDay > daysThisMonth) {
+            dueDay = dueDay - daysThisMonth;
+            dueMonth++;
+        }
+        if (dueMonth > 12) {
+            dueMonth = 1;
+            dueYear++;
+        }
+
+        dueDate = Date(dueDay, dueMonth, dueYear);
+        timesRenewed++;
+        // save data to file
+        cout << "book renewed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
+        return true;
+    }
+
+    friend ostream& operator<< (ostream& out, Book &b1) {
+        out << "Book ID: " << b1.bookID << endl << "Book title: " << b1.title << endl << "Author: " << b1.author << endl << "Genre: " << b1.genre << "ISBN: " << b1.ISBN << endl;
+        if (b1.isBorrowed) {
+            out << "Status: Unavailable" << endl;
+            out << "Due Date: " << b1.dueDate.dd << "." << b1.dueDate.mm << "." << b1.dueDate.yy << endl;
+            out << "Times Renewed: " << b1.timesRenewed << endl;
+        } 
+        else {
+            out << "Status: Available" << endl;
+        }
+        return out;
+    }
+
+    friend class PremiumUser;
+    friend class NormalUser;
+    friend class System;
+};
+
+// instead of making display function here, do operator<< overloading to display book in system class
+
+
+
+//user wala hpp here
+
+class User {
+    protected:
+    const string userID;
+    string name;
+    string contactNum;
+
+    public:
+    User() : userID(""), name(""), contactNum("") {}
+
+    User(string userID, string name, string contactNum) : userID(userID), name(name), contactNum(contactNum) {}
+
+    void setName(string n) {
+        name = n;
+    }
+    void setContact(string c) {
+        contactNum = c;
+    }
+
+    virtual void borrowBook(Book* b1) = 0;
+    virtual void returnBook(Book* b1) = 0;
+    virtual void editUserInfo(User* u1) = 0;
+    virtual void setNewFine(float amt) = 0;
+    virtual bool addNewBook(Book b1) = 0;
+    virtual bool removeBook(Book b1) = 0;
+    virtual void renewBook(Book* b1) = 0;
+
+    virtual ~User() = default;
+
+    friend class System;
+};
+
+class PremiumUser: public User {
+    protected:
+    const int maxBooks = 10;
+    int currentBooksBorrowed;
+    vector<Book*> borrowedBooks; 
+    const float finePer15Days = 5.0;
+    float totalFines;
+
+    public:
+    PremiumUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+
+    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+
+    void setNewFine(float amt) override {
+        totalFines = totalFines - amt;
+    }
+
+    void borrowBook(Book* b1) override {
+        if (currentBooksBorrowed == maxBooks) {
+            cout << "max borrowing limit reached. return a book to borrow a new one" << endl;
+            return;
+        }
+        bool flag = b1->borrowBook();
+        if (flag == true) {
+            borrowedBooks.push_back(b1);
+            currentBooksBorrowed++;
+       }
+    }
+
+    void returnBook(Book* b1) override {
+        int index = -1;
+        for (int i = 0; i<currentBooksBorrowed; i++) {
+            if (borrowedBooks[i]->bookID == b1->bookID) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
+            return;
+        }
+        bool flag = b1->returnBook();
+        if (flag) {
+            int daysOverdue = b1->getDaysOverdue();
+            if (daysOverdue >= 15) {
+                float fine = (daysOverdue/15) * finePer15Days;
+                totalFines += fine;
+            }
+        }
+        borrowedBooks.erase(borrowedBooks.begin() + index);
+        currentBooksBorrowed--;
+    }
+
+    void renewBook(Book* b1) override {
+        if (b1->timesRenewed == 3) {
+            cout << "book cannot be renewed again! limit is reached" << endl;
+            return;
+        }
+        b1->renew();
+    }
+
+    void editUserInfo(User* u1) override {
+        cout << "User cant edit users info" << endl;
+    }
+
+    bool addNewBook(Book b1) override {
+        cout << "User cannot add new book"<< endl;
+        return false;
+    }
+
+    bool removeBook(Book b1) override {
+        cout << "user cannot remove book" << endl;
+        return false;
+    }
+
+    friend class System;
+};
+
+class NormalUser: public User {
+    protected:
+    const int maxBooks = 3;
+    vector<Book*> borrowedBooks; 
+    int currentBooksBorrowed;
+    const float finePerDay = 0.5;
+    float totalFines;
+
+    public:
+    NormalUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+
+    NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+
+    void setNewFine(float amt) override {
+        totalFines = totalFines - amt;
+    }
+
+    void borrowBook(Book* b1) override {
+        if (currentBooksBorrowed == maxBooks) {
+            cout << "max borrowing limit reached. return a book to borrow a new one" << endl;
+            return;
+        }
+        bool flag = b1->borrowBook();
+        if (flag == true) {
+            borrowedBooks.push_back(b1);
+            currentBooksBorrowed++;
+       }
+    }
+
+    void returnBook(Book* b1) override {
+        int index = -1;
+        for (int i = 0; i<currentBooksBorrowed; i++) {
+            if (borrowedBooks[i]->bookID == b1->bookID) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
+            return;
+        }
+        bool flag = b1->returnBook();
+        if (flag) {
+            int daysOverdue = b1->getDaysOverdue();
+            if (daysOverdue >= 15) {
+                float fine = daysOverdue * finePerDay;
+                totalFines += fine;
+            }
+        }
+        borrowedBooks.erase(borrowedBooks.begin() + index);
+        currentBooksBorrowed--;
+    }
+
+    void renewBook(Book* b1) override {
+        if (b1->timesRenewed == 1) {
+            cout << "book cannot be renewed again! limit is reached" << endl;
+            return;
+        }
+        b1->renew();
+    }
+
+    void editUserInfo(User* u1) {
+        cout << "User cant edit users info" << endl;
+    }
+
+    bool addNewBook(Book b1) override {
+        cout << "User cannot add new book"<< endl;
+        return false;
+    }
+
+    bool removeBook(Book b1) override {
+        cout << "user cannot remove book" << endl;
+        return false;
+    }
+
+    friend class System;
+};
+
+class Librarian : public User {
+    protected:
+    float monthlySalary;
+
+    public:
+    Librarian() : User(), monthlySalary(0.0) {}
+
+    Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {}
+
+    void borrowBook(Book* b1) override {
+        cout << "librarian cant borrow/return books" << endl;
+    }
+
+    void returnBook(Book* b1) override {
+        cout << "librarian cant borrow/return books" << endl;
+    }
+
+    void renewBook(Book* b1) override {
+        cout << "action cannot be performed by librarian " << endl;
+    }
+
+    void setNewFine(float amt) override {}
+
+    bool addNewBook(Book b1) {
+        cout << "Librarian " << userID << " attempting to add book" << endl;
+        return true;
+    }
+
+    bool removeBook(Book b1) {
+        cout << "Librarian " << userID << " attempting to add book" << endl;
+        return true;
+    }
+
+    // system class mei for user* object, call this function, if it returns true add book else user cannot add book
+
+    void editUserInfo(User* u1) override {
+        int choice;
+        cout << "Editing user info: " << endl;
+        cout << "1. name\n2. contact number\n3. pay user fine\n4. exit" << endl;
+        cin >> choice;
+
+        switch(choice) {
+            case 1:{
+                string newName;
+                cout << "enter new name: ";
+                getline(cin, newName);
+                u1->setName(newName);
+                break;
+            }
+
+            case 2:{
+                string newContact;
+                cout << "enter new contact: ";
+                getline(cin, newContact);
+                u1->setContact(newContact);
+                break;
+            }
+
+            case 3:{
+                float amountPaid;
+                cout << "enter fine paid by user: ";
+                cin >> amountPaid;
+                u1->setNewFine(amountPaid);
+                break;
+            }
+
+            case 4:
+            cout << "exiting edit user info " << endl;
+            exit(0);
+            break;
+        }
+    }
+
+    friend class System;
+};
+#endif
