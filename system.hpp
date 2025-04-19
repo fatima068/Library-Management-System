@@ -152,15 +152,26 @@ class System {
     }
 
     void displayAllBooks() {
-
+        int numBooks = allBooks.size();
+        for (int i = 0; i < numBooks; i++) {
+            cout << allBooks[i];
+        }
     }
 
     void displayBorrowedBooks() {
-
+        int numBooks = allBooks.size();
+        for (int i = 0; i < numBooks; i++) {
+            if (allBooks[i].isBorrowed)
+                cout << allBooks[i];
+        }
     }
 
-    void displayAvailableBooks() {
-        
+    void displayAvailBooks() {
+        int numBooks = allBooks.size();
+        for (int i = 0; i < numBooks; i++) {
+            if (!allBooks[i].isBorrowed)
+                cout << allBooks[i];
+        }
     }
 
     void LibrarianMenu() {

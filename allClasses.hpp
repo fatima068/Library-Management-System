@@ -377,6 +377,19 @@ class PremiumUser: public User {
         return false;
     }
 
+    friend ostream& operator<< (ostream& out, PremiumUser p1) {
+        out << "User Type: Premium User" << endl; 
+        out << "User ID: " << p1.userID<< endl << "Name: " << p1.name << endl << "Contact Number: " << p1.contactNum << endl << "Total Fine: " << p1.totalFines << endl << "Number of Books Currently Borrowed: " << p1.currentBooksBorrowed << endl;
+        if (p1.currentBooksBorrowed > 0) {
+            out << "List of Borrowed Books: " << endl;
+            for (int i = 0; i < p1.currentBooksBorrowed; i++) {
+                out << i << ") " << p1.borrowedBooks[i];
+                // ya to we do upar wali fing or i was finking ke yahan pe maybe lets only output the index number and the book name worr do u say
+            }
+        }
+        return out;
+    }
+
     friend class System;
 };
 
@@ -455,6 +468,19 @@ class NormalUser: public User {
         return false;
     }
 
+    friend ostream& operator<< (ostream& out, NormalUser n1) {
+        out << "User Type: Normal User" << endl; 
+        out << "User ID: " << n1.userID<< endl << "Name: " << n1.name << endl << "Contact Number: " << n1.contactNum << endl << "Total Fine: " << n1.totalFines << endl << "Number of Books Currently Borrowed: " << n1.currentBooksBorrowed << endl;
+        if (n1.currentBooksBorrowed > 0) {
+            out << "List of Borrowed Books: " << endl;
+            for (int i = 0; i < n1.currentBooksBorrowed; i++) {
+                out << i << ") " << n1.borrowedBooks[i];
+                // ya to we do upar wali fing or i was finking ke yahan pe maybe lets only output the index number and the book name worr do u say
+            }
+        }
+        return out;
+    }
+
     friend class System;
 };
 
@@ -529,6 +555,12 @@ class Librarian : public User {
             exit(0);
             break;
         }
+    }
+
+    friend ostream& operator<< (ostream& out, Librarian l1) {
+        out << "User Type: Librarian" << endl; 
+        out << "User ID: " << l1.userID << endl << "Name: " << l1.name << endl << "Contact Number: " << l1.contactNum << endl << "Monthly Salary: " << l1.monthlySalary <<  endl;
+        return out;
     }
 
     friend class System;
