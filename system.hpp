@@ -157,38 +157,33 @@ class System {
             return;
         }
 
-        string line, bookid, isbn, title, author, genre;
-        int dd, mm, yy, timesRenewed;
-        bool borrow;
-
-        while (getline(allBooksFile, line)) {  
-            bookid = line;
-                
-            getline(allBooksFile, line);  
-            isbn = line;
+        string bookData[10];  // Stores: bookid, isbn, title, author, genre, borrow, dd, mm, yy, timesRenewed
+        
+        while (getline(allBooksFile, bookData[0])) {  // Read bookID
+            // Read remaining 9 fields
+            for (int i = 1; i < 10; i++) {
+                if (!getline(allBooksFile, bookData[i])) {
+                    cerr << "Error: Incomplete book data in file" << endl;
+                    return;
+                }
+            }
             
-            getline(allBooksFile, line);  
-            title = line;
+            // Parse fields with error handling
+            bool borrow = (bookData[5] == "true");  // borrow status ("true"/"false")
             
-            getline(allBooksFile, line);  
-            author = line;
+            int dd = 0, mm = 0, yy = 0, timesRenewed = 0;
+            try {
+                dd = stoi(bookData[6]);    // Day
+                mm = stoi(bookData[7]);    // Month
+                yy = stoi(bookData[8]);    // Year
+                timesRenewed = stoi(bookData[9]); // timesRenewed
+            } catch (...) {
+                cerr << "Warning: Invalid number format in book entry. Using default values (0)." << endl;
+                // Default values (0) already set
+            }
             
-            getline(allBooksFile, line);  
-            genre = line;
-            
-            getline(allBooksFile, line);
-            borrow = (line == "true");
-            
-            getline(allBooksFile, line);
-
-            dd = stoi(line.substr(0, 2));
-            mm = stoi(line.substr(2, 2));
-            yy = stoi(line.substr(4, 4));
-            
-            getline(allBooksFile, line);  
-            timesRenewed = stoi(line);
-            
-            Book temp = Book(bookid, isbn, title, author, genre, borrow, dd, mm, yy);
+            // Create and store the book
+            Book temp = Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4], borrow, dd, mm, yy);
             allBooks.push_back(temp);
         }
         allBooksFile.close();

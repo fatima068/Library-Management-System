@@ -65,21 +65,23 @@ class Book {
     void setTimesRenewed(int times) { timesRenewed = times; }
 
     Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(0) {
-        ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
-        if (!allBooksFile) {
-            cerr << "Error in opening all books file" << endl;
-        }
+        // ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
+        // if (!allBooksFile) {
+        //     cerr << "Error in opening all books file" << endl;
+        // }
 
-        allBooksFile << bookID << endl;
-        allBooksFile << ISBN << endl;
-        allBooksFile << title << endl;
-        allBooksFile <<  author << endl;
-        allBooksFile << genre << endl; 
-        if (isBorrowed) allBooksFile << "true\n";
-        else allBooksFile << "false\n";
-        allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
-        allBooksFile << timesRenewed << endl;
-        allBooksFile.close();
+        // allBooksFile << bookID << endl;
+        // allBooksFile << ISBN << endl;
+        // allBooksFile << title << endl;
+        // allBooksFile <<  author << endl;
+        // allBooksFile << genre << endl; 
+        // if (isBorrowed) allBooksFile << "true\n";
+        // else allBooksFile << "false\n";
+        // allBooksFile << dueDate.dd << endl;
+        // allBooksFile << dueDate.mm << endl;
+        // allBooksFile << dueDate.yy << endl;
+        // allBooksFile << timesRenewed << endl;
+        // allBooksFile.close();
     }
 
     int getDaysOverdue() {
@@ -239,6 +241,8 @@ class Book {
         }
         return out;
     }
+
+    friend class System;
 };
 
 // User classes
@@ -585,6 +589,30 @@ class System {
     vector<Book> allBooks;
 
     public:
+    void display() {
+        cout << allBooks[0];
+    }
+
+    void addBookToFile(Book b1) {
+        ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
+        if (!allBooksFile) {
+            cerr << "Error in opening all books file" << endl;
+        }
+
+        allBooksFile << b1.bookID << endl;
+        allBooksFile << b1.ISBN << endl;
+        allBooksFile << b1.title << endl;
+        allBooksFile <<  b1.author << endl;
+        allBooksFile << b1.genre << endl; 
+        if (b1.isBorrowed) allBooksFile << "true\n";
+        else allBooksFile << "false\n";
+        allBooksFile << b1.dueDate.dd << endl;
+        allBooksFile << b1.dueDate.mm << endl;
+        allBooksFile << b1.dueDate.yy << endl;
+        allBooksFile << b1.timesRenewed << endl;
+        allBooksFile.close();
+    }
+
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
@@ -678,50 +706,101 @@ class System {
         }
         return nullptr;
     }
-    
+
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
         if (!allBooksFile) {
             cerr << "Error in opening all books file" << endl;
             return;
         }
+        bool success = true;
+        string bookData[10];  // Stores: bookid, isbn, title, author, genre, borrow, dd, mm, yy, timesRenewed
+        while (1) {
+            if (!getline(allBooksFile, bookData[0])) {
+                success = false;
+            }
 
-        string line, bookid, isbn, title, author, genre;
-        int dd, mm, yy, timesRenewed;
-        bool borrow;
-        cout << "hello world";
-        while (getline(allBooksFile, line)) {  
-            bookid = line;
+            if (success == false) {
+                cout << "all books read from file to vector" << endl;
+                return;
+            }
             
-            getline(allBooksFile, line);  
-            isbn = line;
-            
-            getline(allBooksFile, line);  
-            title = line;
-            
-            getline(allBooksFile, line);  
-            author = line;
-            
-            getline(allBooksFile, line);  
-            genre = line;
-            
-            getline(allBooksFile, line);
-            borrow = (line == "true");
-            
-            getline(allBooksFile, line);
-            
-            // dd = stoi(line.substr(0, 2));
-            // mm = stoi(line.substr(2, 2));
-            // yy = stoi(line.substr(4, 4));
-            
-            getline(allBooksFile, line);  
-            timesRenewed = stoi(line);
-            
-            Book temp = Book(bookid, isbn, title, author, genre, borrow, 0, 0, 0);
+            // Read all 9 fields for a single book
+            cout << "reading fields from file to vector" << endl;
+            for (int i = 1; i < 10; i++) {
+                if (getline(allBooksFile, bookData[i])) {
+                    success = false;
+                    break;
+                }
+            }
+    
+            // Parse fields with error handling
+            bool borrow = (bookData[5] == "true");  // borrow status ("true"/"false")
+    
+            int dd = 0, mm = 0, yy = 0, timesRenewed = 0;
+            try {
+                dd = stoi(bookData[6]);    // Day
+                mm = stoi(bookData[7]);    // Month
+                yy = stoi(bookData[8]);   // Year
+                timesRenewed = stoi(bookData[9]); // timesRenewed
+            } catch (...) {
+                cerr << "Warning: Invalid number format in book entry. Using default values (0)." << endl;
+                // Default values (0) already set
+            }
+    
+            // Create and store the book
+            Book temp = Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4], borrow, dd, mm, yy);
             allBooks.push_back(temp);
+            getline(allBooksFile, bookData[0]);
         }
         allBooksFile.close();
     }
+    
+    // void loadBooks() {
+    //     ifstream allBooksFile("textFiles/allBooks.txt");
+    //     if (!allBooksFile) {
+    //         cerr << "Error in opening all books file" << endl;
+    //         return;
+    //     }
+
+    //     string line, bookid, isbn, title, author, genre;
+    //     int dd, mm, yy, timesRenewed;
+    //     bool borrow;
+    //     while (getline(allBooksFile, line)) {  
+    //         bookid = line;
+            
+    //         getline(allBooksFile, line);  
+    //         isbn = line;
+            
+    //         getline(allBooksFile, line);  
+    //         title = line;
+            
+    //         getline(allBooksFile, line);  
+    //         author = line;
+            
+    //         getline(allBooksFile, line);  
+    //         genre = line;
+            
+    //         getline(allBooksFile, line);
+    //         borrow = (line == "true");
+            
+    //         getline(allBooksFile, line);
+    //         dd = stoi(line);
+            
+    //         getline(allBooksFile, line);
+    //         mm = stoi(line);
+            
+    //         getline(allBooksFile, line);
+    //         yy = stoi(line);
+
+    //         getline(allBooksFile, line);  
+    //         timesRenewed = stoi(line);
+            
+    //         Book temp = Book(bookid, isbn, title, author, genre, borrow, 0, 0, 0);
+    //         allBooks.push_back(temp);
+    //     }
+    //     allBooksFile.close();
+    // }
 
     void saveBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
@@ -797,11 +876,14 @@ class System {
 int main() {
     System librarySystem;
     
-    // Book testBook("B001", "9783161484100", "Sample Book", "Test Author", "Fiction", false, 0, 0, 0);
+    Book testBook("B001", "9783161484100", "Sample Book", "Test Author", "Fiction", false, 0, 0, 0);
     
     // Load initial data
     librarySystem.loadBooks();
-    
+    cout << "trying to display vector" << endl;
+    librarySystem.display();
+    cout << "hogya display vector";
+
     // librarySystem.loadUsers(); // Uncomment when implemented
     
     // Test book search functionalities

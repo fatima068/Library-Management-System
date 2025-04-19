@@ -62,7 +62,9 @@ class Book {
         allBooksFile << genre << endl; 
         if (isBorrowed) allBooksFile << "true\n";
         else allBooksFile << "false\n";
-        allBooksFile << dueDate.dd << dueDate.mm << dueDate.yy << endl;
+        allBooksFile << dueDate.dd << endl;
+        allBooksFile << dueDate.mm << endl;
+        allBooksFile << dueDate.yy << endl;
         allBooksFile << timesRenewed << endl;
         allBooksFile.close();
     }
