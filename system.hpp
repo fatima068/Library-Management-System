@@ -142,12 +142,15 @@ class System {
     }
 
     void saveBooks() {
-        ifstream allBooksFile("textFiles/allBooks.txt");
+        ofstream allBooksFile("textFiles/allBooks.txt");
         if (!allBooksFile) {
             cerr << "Error in opening all books file" << endl;
             return;
         }
 
+        for (int i = 0; i < allBooks.size(); i++) {
+            allBooks[i].addBookToFile();
+        }
         allBooksFile.close();
     }
 
@@ -157,8 +160,6 @@ class System {
             cout << allBooks[i];
         }
     }
-
-    
 
     void displayBorrowedBooks() {
         int numBooks = allBooks.size();
@@ -183,10 +184,10 @@ class System {
             cin >> choice;
             switch (choice) {
                 case 1: { // search book
-                    int choice; 
+                    int choice1; 
                     cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
-                    cin >> choice;
-                    switch (choice) {
+                    cin >> choice1;
+                    switch (choice1) {
                         case 1: {
                             searchBookName();
                             break;
@@ -207,10 +208,10 @@ class System {
                 }
 
                 case 2: { // search user
-                    int choice; 
+                    int choice2; 
                     cout << "1. by user name\n2. by book id\nenter your choice: ";
-                    cin >> choice;
-                    switch (choice) {
+                    cin >> choice2;
+                    switch (choice2) {
                         case 1: {
                             searchUserName(); 
                             break;
@@ -233,10 +234,10 @@ class System {
                 }
 
                 case 4: { // view book list
-                    int choice; 
-                    cout << "1. view all books\n2. view borrowed books\n3. view available books\n4";
-                    cin >> choice; 
-                    switch (choice) {
+                    int choice3; 
+                    cout << "1. view all books\n2. view borrowed books\n3. view available books\nenter your choice: ";
+                    cin >> choice3; 
+                    switch (choice3) {
                         case 1: {
                             displayAllBooks();
                             break;
@@ -298,6 +299,10 @@ class System {
                     cout << "exiting menu..." << endl; // c later if program can be exited instead of break
                     break;
                 }
+
+                default:
+                    cout << "wrong choice" << endl; 
+                    break;
             }
         }
     }
@@ -305,8 +310,95 @@ class System {
     
 
     void userMenu() {
+        int choice = -1;
+        while(choice != 8) {
+            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. exit\nenter your choice: ";
+            cin >> choice;
 
+            switch (choice)
+            {
+            case 1: { // search book
+                    int choice1; 
+                    cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
+                    cin >> choice1;
+                    switch (choice1) {
+                        case 1: {
+                            searchBookName();
+                            break;
+                        }
+                        case 2: {
+                            searchAuthorName();
+                            break;
+                        } 
+                        case 3: { //finking of removing this because what user is searching using a book id lmao
+                            searchBookId();
+                            break;
+                        }
+                        default:
+                            cout << "wrong choice " << endl; 
+                            break;
+                    }
+                    break;
+            }
+
+            case 2: { // view book list
+                    int choice3; 
+                    cout << "1. view all books\n2. view borrowed books\n3. view available books\nenter your choice: ";
+                    cin >> choice3; 
+                    switch (choice3) {
+                        case 1: {
+                            displayAllBooks();
+                            break;
+                        }
+                        case 2: {
+                            displayBorrowedBooks();
+                            break;
+                        }
+                        case 3: {
+                            displayAvailableBooks(); 
+                            break;
+                        }
+
+                        default:
+                            cout << "invalid choice " << endl; 
+                            break;
+                    }
+                    break;
+            }
+
+            case 3: { //borrow book
+                
+                break;
+            }
+
+            case 4: { //return book
+                
+                break;
+            }
+
+            case 5: { //pay fine
+                
+                break;
+            }
+
+            case 6: { //renew book
+                
+                break;
+            }
+
+            case 7: {
+                cout << "exiting menu..." << endl; // c later if program can be exited instead of break
+                    break;
+                break;
+            }
+
+            default:
+                cout << "wrong choice" << endl; 
+                break;
+            }
+        }
     }
+
 
     ~System() {
         for (User* user : allUsers) {
