@@ -41,8 +41,8 @@ bool isLeapYear(int year) {
 
 class Book { 
     protected:
-    const string bookID;
-    const string ISBN;
+    string bookID;
+    string ISBN;
     string title;
     string author;
     string genre;
@@ -267,10 +267,6 @@ class Book {
 
 // instead of making display function here, do operator<< overloading to display book in system class
 
-
-
-//user wala hpp here
-
 class User {
     protected:
     const string userID;
@@ -291,13 +287,13 @@ class User {
 
     virtual void borrowBook(Book* b1) = 0;
     virtual void returnBook(Book* b1) = 0;
-    virtual void setNewFine(float amt) = 0;
+    virtual void payFine(float amt) = 0;
     virtual bool addNewBook(Book b1) = 0;
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
 
-    virtual void displayBooksBorrowed() {}
-    virtual bool isBookBorrowed(string id) {}
+    virtual void displayBooksBorrowed() = 0;
+    virtual bool isBookBorrowed(string id) = 0;
 
     virtual ~User() = default;
 
@@ -317,7 +313,7 @@ class PremiumUser: public User {
 
     PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
-    void setNewFine(float amt) override {
+    void payFine(float amt) override {
         totalFines = totalFines - amt;
     }
 
@@ -420,7 +416,7 @@ class NormalUser: public User {
 
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
-    void setNewFine(float amt) override {
+    void payFine(float amt) override {
         totalFines = totalFines - amt;
     }
 
@@ -531,7 +527,7 @@ class Librarian : public User {
         cout << "action cannot be performed by librarian " << endl;
     }
 
-    void setNewFine(float amt) override {}
+    void payFine(float amt) override {}
 
     bool addNewBook(Book b1) {
         cout << "Librarian " << userID << " attempting to add book" << endl;
@@ -549,6 +545,15 @@ class Librarian : public User {
         out << "User Type: Librarian" << endl; 
         out << "User ID: " << l1.userID << endl << "Name: " << l1.name << endl << "Contact Number: " << l1.contactNum << endl << "Monthly Salary: " << l1.monthlySalary <<  endl;
         return out;
+    }
+
+    virtual void displayBooksBorrowed() override {
+        cout << "not a valid librarian operation" << endl;
+    }
+
+    virtual bool isBookBorrowed (string id) override {
+        cout << "not a valid librarian function" << endl;
+        return false;
     }
 
     friend class System;

@@ -192,21 +192,21 @@ class System {
     }
 
     void borrowBook() { 
-        string id;
-        cout << "enter Book ID of book you want to borrow: ";
-        cin >> id;
-        if (loginedUser->isBookBorrowed(id)) {
-            cout << "You have already borrowed the Book" << endl;
-            return;
-        }
+        // string id;
+        // cout << "enter Book ID of book you want to borrow: ";
+        // cin >> id;
+        // if (loginedUser->isBookBorrowed(id)) {
+        //     cout << "You have already borrowed the Book" << endl;
+        //     return;
+        // }
 
-        for (int i = 0; i < allBooks.size(); i++) {
-            if (id == allBooks[i].bookID) {
-                allBooks[i].borrowBook();
-                return;
-            }
-        }
-        cout << "Book ID doesn't exist" << endl;
+        // for (int i = 0; i < allBooks.size(); i++) {
+        //     if (id == allBooks[i].bookID) {
+        //         allBooks[i].borrowBook();
+        //         return;
+        //     }
+        // }
+        // cout << "Book ID doesn't exist" << endl;
     }
 
     void returnBook() {
@@ -265,7 +265,7 @@ class System {
                     break;
                 }
 
-                case 3: { // delete use account
+                case 3: { // delete user account
                     break;
                 }
 
@@ -328,7 +328,7 @@ class System {
                 }
 
                 case 7: {
-                    cout << "exiting menu..." << endl; // c later if program can be exited instead of break
+                    cout << "exiting menu..." << endl; // maybe give logout option here ? make logout function in login system class
                     break;
                 }
 
@@ -350,7 +350,7 @@ class System {
             switch (choice) {
             case 1: { // search book
                     int choice1; 
-                    cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
+                    cout << "1. by book name\n2. by author name\n3. exit\nenter your choice: ";
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
@@ -361,10 +361,12 @@ class System {
                             searchAuthorName();
                             break;
                         } 
-                        case 3: { //finking of removing this because what user is searching using a book id lmao
-                            searchBookId();
+
+                        case 3: {
+                            cout << "exiting book search menu" << endl;
                             break;
                         }
+
                         default:
                             cout << "wrong choice " << endl; 
                             break;
@@ -382,7 +384,7 @@ class System {
                             break;
                         }
                         case 2: {
-                            displayUserBorrowedBooks();
+                            // displayUserBorrowedBooks(); // remove this maybe because does user even need to know borrowed books alag se like this ? 
                             break;
                         }
                         case 3: {
@@ -398,22 +400,42 @@ class System {
             }
 
             case 3: { //borrow book
-                borrowBook();
+                // borrowBook();
                 break;
             }
 
             case 4: { //return book
-                //returnBook();
+                
+                // something about pointers is confusing. maybe try removing pointers from user class return book function by calling return book for both book and user in system class instead of in user class by passing book as pointer
+
+                // string idToReturn;
+                // Book* b1;
+                // cout << "enter id of book to return: ";
+                // getline(cin, idToReturn);
+                // for (int i=0; i<allBooks.size(); i++) {
+                //     if (allBooks[i].bookID == idToReturn) {
+                //         allBooks[i].returnBook();
+                //     }
+                // }
+                // loginedUser->returnBook(b1);
                 break;
             }
 
             case 5: { //pay fine
                 //this can be done yahin pe maybe
+                float amt;
+                cout << "enter amount of fine to pay: ";
+                cin >> amt;
+                loginedUser->payFine(amt);
+                cout << "fine amount " << amt << " paid for user: " << loginedUser->userID << endl;
                 break;
             }
 
             case 6: { //renew book
-                
+                // loginedUser->renewBook()
+
+                // try removing pointers from here as well. 
+                // what we can do is edit user to rmeove or include books borrowed by them separately, then search for book id in all books vector and edit that separately over here, no need to make a sepaarte function because function not a part of librarian class.
                 break;
             }
 

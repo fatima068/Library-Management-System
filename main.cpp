@@ -1,5 +1,6 @@
 #include <iostream>
 #include "system.hpp"
+#include "login.hpp"
 using namespace std;
 
 //oke so abhi we havent done this but
@@ -11,35 +12,34 @@ using namespace std;
 //this will make our life very very easier pleaseeeeeee
 
 int main() {
-    //LoginSystem obj; 
+    LoginSystem loginSystem; 
     System librarySystem;
-    
+
     // Load initial data
     librarySystem.loadBooks();
-    // librarySystem.loadUsers(); // Uncomment when implemented
     
-    // Test book search functionalities
-    cout << "=== Testing Book Search ===" << endl;
-    librarySystem.searchBookName();
-    librarySystem.searchAuthorName();
-    librarySystem.searchBookId();
+    // Test login
+    string userID;
+    cout << "Enter user ID: ";
+    getline(cin, userID);
     
-    // Test user search functionalities
-    cout << "\n=== Testing User Search ===" << endl;
-    librarySystem.searchUserName();
-    librarySystem.searchUserId();
-    
-    // Test librarian menu
-    cout << "\n=== Testing Librarian Menu ===" << endl;
-    librarySystem.LibrarianMenu();
-    
-    // Test user menu
-    cout << "\n=== Testing User Menu ===" << endl;
-    librarySystem.userMenu();
-    
-    // Save data before exiting
-    // librarySystem.saveUsers(); // Uncomment when implemented
-    librarySystem.saveBooks();
+    if (loginSystem.login(userID)) {
+        librarySystem.logAUser(userID);
+        
+        // Determine user type and show appropriate menu
+        char userType = loginSystem.getUserType();
+        
+        if (userType == 'L') { // Librarian
+            cout << "\n=== LIBRARIAN MENU ===" << endl;
+            librarySystem.LibrarianMenu();
+        } 
+        else { // Normal or Premium User
+            cout << "\n=== USER MENU ===" << endl;
+            librarySystem.userMenu();
+        }
+    } else {
+        cout << "Login failed. Exiting..." << endl;
+    }
     
     return 0;
 }
