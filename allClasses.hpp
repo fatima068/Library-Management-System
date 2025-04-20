@@ -318,7 +318,7 @@ class PremiumUser: public User {
     }
 
     void addUserToFile() override {
-        ofstream allUsersFile("textFiles/allUsers.txt", ios::app);
+        ofstream allUsersFile("textFiles/premiumUsers.txt", ios::app);
         if (!allUsersFile) {
             cerr << "Error in opening all users file" << endl;
         }
@@ -450,10 +450,30 @@ class NormalUser: public User {
     public:
     NormalUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
-    NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+    NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {
+        this->addUserToFile();
+    }
 
     void addUserToFile() override {
+        ofstream allUsersFile("textFiles/normalUsers.txt", ios::app);
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
+        }
 
+        allUsersFile << userID << endl;
+        allUsersFile << name << endl;
+        allUsersFile << contactNum << endl;
+        allUsersFile << maxBooks << endl;
+        for (int i = 0; i < borrowedBooks.size(); i++) {
+            allUsersFile << borrowedBooks[i] << endl;
+        }
+        for (int i = borrowedBooks.size(); i < maxBooks; i++) {
+            allUsersFile << "x" << endl;
+        }
+        allUsersFile << finePerDay << endl;
+        allUsersFile << totalFines << endl;
+        // after this, the file will store 1 user in 16 lines.
+        allUsersFile.close();
     }
 
     void borrowBook(Book* b1) override {
@@ -558,10 +578,22 @@ class Librarian : public User {
     public:
     Librarian() : User(), monthlySalary(0.0) {}
 
-    Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {}
+    Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {
+        this->addUserToFile();
+    }
 
     void addUserToFile() override {
+        ofstream allUsersFile("textFiles/librarians.txt", ios::app);
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
+        }
 
+        allUsersFile << userID << endl;
+        allUsersFile << name << endl;
+        allUsersFile << contactNum << endl;
+        allUsersFile << monthlySalary << endl;
+        // after this, the file will store 1 user in 16 lines.
+        allUsersFile.close();
     }
 
     void borrowBook(Book* b1) override {
