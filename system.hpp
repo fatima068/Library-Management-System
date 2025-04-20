@@ -170,12 +170,98 @@ class System {
         }
         allBooksFile.close();
     }
+        
+    void loadPremiumUsers() {
+        ifstream premiumFile("textFiles/premiumUsers.txt");
+        if (!premiumFile) {
+            cerr << "Error in opening premium users file" << endl; 
+            return; 
+            
+        }
+        string userData[16]; // userID, name, contactNum, maxbooks, borrowedBooks(), fineperday, totalFines, 
+        string line; 
 
-    void loadUsers() {
+        while (getline(premiumFile, userData[0])) { // Read userID (first field)
+            // Read the remaining basic fields
+            for (int i = 1; i < 16; i++) {
+                if (!getline(premiumFile, userData[i])) {
+                    cerr << "Incomplete user record" << endl;
+                    return;
+                }
+            }
+    
+            // create appropriate user object for premium user
+     
+            PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
+            pUser->totalFines = stof(userData[3]);
+            
+            // Load borrowed books count
+            getline(premiumFile, line);
+            int borrowedCount = stoi(line);
+            
+            // Load borrowed books IDs
+            for (int i = 0; i < borrowedCount; i++) {
+                getline(premiumFile, line); // book ID
+                // Note: Actual book objects would need to be linked from allBooks vector
+            }
+            
+            allUsers.push_back(pUser);
+        
+            // Skip empty line between user records if exists
+            getline(premiumFile, line);
+        }
+        
+        premiumFile.close();
+        cout << "Loaded " << allUsers.size() << " users" << endl;
+    
+
+    }
+
+    void loadNormalUsers() {
+        ifstream normalFile("textFiles/normalUsers.txt");
+        if (!normalFile) {
+            cerr << "Error in opening normal users file" << endl; 
+            return; 
+        }
+        string userData[9]; // userID, name, contactNum, maxbooks, borrowedBooks(), fineperday, totalFines, 
+        string line;
+    }
+    
+    void loadLibrarian() {
+        ifstream librariansFile("textFiles/librarians.txt");
+        if (!librariansFile) {
+            cerr << "Error in opening librarians file" << endl; 
+            return; 
+            
+        }
+        string userData[4]; // userID, name, contactNum, monthlySalary
+        string line;
+
+         while (getline(librariansFile, userData[0])) { // Read userID (first field)
+            // Read the remaining basic fields
+            for (int i = 1; i < 4; i++) {
+                if (!getline(librariansFile, userData[i])) {
+                    cerr << "Incomplete user record" << endl;
+                    return;
+                }
+            }
+
+            Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3])); // yaar this constuctor is weird because like ismai write to file bhi hora uween i dont get
+            allUsers.push_back(lUser);
+            // Skip empty line between user records if exists
+            getline(librariansFile, line);
+        }
+        librariansFile.close();
+        cout << "Loaded " << allUsers.size() << " users" << endl;
+    }
+     
+
+    void loadUsers() { 
         ifstream allUsersFile("textFiles/allUsers.txt");
         if (!allUsersFile) {
-            cerr << "Error in opening all users file" << endl;
-            return;
+            cerr << "Error in opening all users file" << endl; 
+            return; 
+            
         }
     
         string userData[5]; // userID, name, contactNum, type-specific field, borrowed books count

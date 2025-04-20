@@ -1,13 +1,13 @@
 #include <iostream>
 #include "system.hpp"
 using namespace std;
-
-int main() {
+// oooo saddd
+int main() { // c tafree can u run run terminal pls chachi came lmao she gave me kebab it is very maze ka but it is aadha lmao 
     // System librarySystem;
     // librarySystem.mainMenu();
-    // User* u1 = new PremiumUser("P100", "fatima", "0330");
+    User* u1 = new PremiumUser("P100", "fatima", "0330");
     User* u2 = new Librarian("L100", "fama", "03322", 50000.0);
-    // User* u3 = new NormalUser("N100", "ikrash", "033068");
+    User* u3 = new NormalUser("N100", "ikrash", "033068");
 
 }
 

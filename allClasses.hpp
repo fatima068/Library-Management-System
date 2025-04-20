@@ -312,10 +312,9 @@ class PremiumUser: public User {
     public:
     PremiumUser() : User(), totalFines(0.0), borrowedBooks() {}
 
-    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {
-        this->addUserToFile();
-        
-    }
+    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
+
+    PremiumUser(string userID, string name, string contactNum, int maxBooks, string arr[10], float fine15, float totalFines) : User(userID, name, contactNum) {}
 
     void addUserToFile() override {
         ofstream allUsersFile("textFiles/premiumUsers.txt", ios::app);
@@ -472,9 +471,9 @@ class NormalUser: public User {
         }
         allUsersFile << finePerDay << endl;
         allUsersFile << totalFines << endl;
-        // after this, the file will store 1 user in 16 lines.
-        allUsersFile.close();
-    }
+        // after this, the file will store 1 user in 9 lines. elo it wos very danger
+        allUsersFile.close();// sadddd acha neeche aao
+    } // no wai oki
 
     void borrowBook(Book* b1) override {
         if (currentBooksBorrowed == maxBooks) {
@@ -592,7 +591,7 @@ class Librarian : public User {
         allUsersFile << name << endl;
         allUsersFile << contactNum << endl;
         allUsersFile << monthlySalary << endl;
-        // after this, the file will store 1 user in 16 lines.
+        // after this, the file will store 1 user in 4 lines. 
         allUsersFile.close();
     }
 
@@ -642,3 +641,32 @@ class Librarian : public User {
     friend class System;
 };
 #endif
+
+/* 
+OKE     to we need to see loading user abhi na
+
+no wait pehle lets figure out the outline of the program (oki)
+
+id say 
+we make ek vector of user class  iska load karna about the vector<string> borrowedBooks in user class i was thinking ke what we do is: 
+    id tou agai na books ki
+    tou like if user wants to return a book 
+    we hata usski id from user ka object 
+    but then we go to books array
+    and udhr se we find our desired book id
+    and we do 
+    if (id == allBooks[i].bookID) {
+        allBooks[i].returnBook();
+    }
+    but for this hume user class mei function rewrite karne parenge and also change systen class accordingly 
+
+
+     
+ek vector of book\
+matlab load dono ka shit from files haina
+then user type ajayega login ke baad 
+tou acording to user type we load the appropriate file to a vector 
+then logined user nikalen uss se
+then uss  logined user pe saare operation perform karen
+
+*/
