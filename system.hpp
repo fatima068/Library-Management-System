@@ -333,14 +333,19 @@ class System {
 
                 case 6: { // remove a book
                     string idToRemove;
+                    bool flag = false;
                     cout << "enter book id of book to remove: ";
+                    cin.ignore();
                     getline(cin, idToRemove);
                     for (int i = 0; i < allBooks.size(); i++) {
                         if (allBooks[i].bookID == idToRemove) {
                             allBooks.erase(allBooks.begin() + i);
-                            cout << "book " << idToRemove << " rempved successfully" << endl;
-                            return;
+                            cout << "book " << idToRemove << " removed successfully" << endl;
+                            flag = true;
+                            break;
                         }
+                    }
+                    if (flag == false) {
                         cout << "book not found" << endl;
                     }
                     break;

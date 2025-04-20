@@ -9,9 +9,19 @@ false
 0
 0
 B002
-9783987884100
+9785555484100
 Sample Book2
 Test Author
+Fiction
+false
+0
+0
+0
+0
+B003
+9785555484400
+Sample Book3
+Test Author1
 Fiction
 false
 0
