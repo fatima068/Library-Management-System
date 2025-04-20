@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "allClasses.hpp"
+#include "login.hpp"
 using namespace std;
 
 class System {
@@ -12,6 +13,7 @@ class System {
     vector<User*> allUsers;
     vector<Book> allBooks;
     User* loginedUser;
+    LoginSystem loginSystem;
 
     public:
     void logAUser(string id) { // will this work lets hope it does lmao
@@ -222,10 +224,40 @@ class System {
 
     }
 
+    void mainMenu() {
+        // now over here give 2 option: login or signup
+        // login functionality has been made, need to make sign up (basically registering a new user)'
+        // first make load user and save user maybe ? 
+        
+        string userID;
+        cout << "Enter user ID: ";
+        getline(cin, userID);
+        if (loginSystem.login(userID)) {
+            logAUser(userID);
+            loadBooks();
+            
+            // Determine user type and show appropriate menu
+            char userType = loginSystem.getUserType();
+            
+            if (userType == 'L') { // Librarian
+                cout << "\n=== LIBRARIAN MENU ===" << endl;
+                LibrarianMenu();
+            } 
+            else { // Normal or Premium User
+                cout << "\n=== USER MENU ===" << endl;
+                userMenu();
+            }
+        } else {
+            cout << "Login failed. Exiting..." << endl;
+            saveBooks();
+            exit(0);
+        }
+    }
+
     void LibrarianMenu() {
         int choice = -1;
         while(choice != 7) {
-            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. exit\nenter your choice: ";
+            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. logout\nenter your choice: ";
             cin >> choice;
             switch (choice) {
                 case 1: { // search book
@@ -352,7 +384,9 @@ class System {
                 }
 
                 case 7: {
-                    cout << "exiting menu..." << endl; // maybe give logout option here ? make logout function in login system class
+                    cout << "logging out..." << endl; 
+                    saveBooks();
+                    loginSystem.logout();
                     break;
                 }
 
@@ -463,8 +497,8 @@ class System {
             }
 
             case 7: {
-                cout << "exiting menu..." << endl; // c later if program can be exited instead of break
-                    break;
+                saveBooks();
+                loginSystem.logout();
                 break;
             }
 
@@ -484,6 +518,8 @@ class System {
     }
 };
 
+#endif
+
 // search user by id
 // search book by name (done)
 // search book by author (done)
@@ -495,5 +531,3 @@ class System {
 // view all borrowed books (done)
 // renew a borrowed book
 // session management and axxess control seekhn hai 
-
-#endif

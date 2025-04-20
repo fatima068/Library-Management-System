@@ -1,6 +1,6 @@
 #include <iostream>
 #include "system.hpp"
-#include "login.hpp"
+// #include "login.hpp"
 using namespace std;
 
 //oke so abhi we havent done this but
@@ -12,34 +12,6 @@ using namespace std;
 //this will make our life very very easier pleaseeeeee
 
 int main() {
-    LoginSystem loginSystem; 
     System librarySystem;
-
-    // Load initial data
-    librarySystem.loadBooks();
-    
-    // Test login
-    string userID;
-    cout << "Enter user ID: ";
-    getline(cin, userID);
-    
-    if (loginSystem.login(userID)) {
-        librarySystem.logAUser(userID);
-        
-        // Determine user type and show appropriate menu
-        char userType = loginSystem.getUserType();
-        
-        if (userType == 'L') { // Librarian
-            cout << "\n=== LIBRARIAN MENU ===" << endl;
-            librarySystem.LibrarianMenu();
-        } 
-        else { // Normal or Premium User
-            cout << "\n=== USER MENU ===" << endl;
-            librarySystem.userMenu();
-        }
-    } else {
-        cout << "Login failed. Exiting..." << endl;
-    }
-
-    librarySystem.saveBooks();
+    librarySystem.mainMenu();
 }
