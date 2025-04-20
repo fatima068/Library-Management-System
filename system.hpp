@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <limits>
+// #include <limits>
 #include "allClasses.hpp"
 using namespace std;
 
@@ -235,17 +235,20 @@ class System {
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // a leftover newline character in the input buffer after using cin >> choice in the menu, which causes getline() to read an empty string immediately afterward.
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // a leftover newline character in the input buffer after using cin >> choice in the menu, which causes getline() to read an empty string immediately afterward.
+                            cin.ignore();
                             searchBookName();
                             break;
                         }
                         case 2: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchAuthorName();
                             break;
                         } 
                         case 3: { 
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchBookId();
                             break;
                         }
@@ -262,13 +265,15 @@ class System {
                     cin >> choice2;
                     switch (choice2) {
                         case 1: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchUserName(); 
                             break;
                         }
 
                         case 2: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchUserId();
                             break;
                         }
@@ -369,12 +374,14 @@ class System {
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchBookName();
                             break;
                         }
                         case 2: {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
                             searchAuthorName();
                             break;
                         } 
@@ -440,7 +447,8 @@ class System {
 
             case 5: { //pay fine
                 //this can be done yahin pe maybe
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 loginedUser->payFine();
                 break;
             }
