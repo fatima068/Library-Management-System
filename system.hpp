@@ -183,7 +183,7 @@ class System {
 
         while (getline(premiumFile, userData[0])) { // Read userID (first field)
             // Read the remaining basic fields
-            for (int i = 1; i < 16; i++) {
+            for (int i = 1; i < 14; i++) {
                 if (!getline(premiumFile, userData[i])) {
                     cerr << "Incomplete user record" << endl;
                     return;
@@ -191,30 +191,20 @@ class System {
             }
     
             // create appropriate user object for premium user
-     
-            PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
-            pUser->totalFines = stof(userData[3]);
-            
-            // Load borrowed books count
-            getline(premiumFile, line);
-            int borrowedCount = stoi(line);
-            
-            // Load borrowed books IDs
-            for (int i = 0; i < borrowedCount; i++) {
-                getline(premiumFile, line); // book ID
-                // Note: Actual book objects would need to be linked from allBooks vector
+            float fine = stof(userData[13]);
+            string arr[10];
+            int j = 3;
+            for (int i = 0; i<10; i++) {
+                arr[i] = userData[j];
+                j++;
             }
             
+            PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2], arr, fine);
             allUsers.push_back(pUser);
-        
-            // Skip empty line between user records if exists
-            getline(premiumFile, line);
         }
         
         premiumFile.close();
         cout << "Loaded " << allUsers.size() << " users" << endl;
-    
-
     }
 
     void loadNormalUsers() {
@@ -223,8 +213,32 @@ class System {
             cerr << "Error in opening normal users file" << endl; 
             return; 
         }
-        string userData[9]; // userID, name, contactNum, maxbooks, borrowedBooks(), fineperday, totalFines, 
+        string userData[7]; // userID, name, contactNum, borrowedBooks(), totalFines, 
         string line;
+        while (getline(normalFile, userData[0])) { // Read userID (first field)
+            // Read the remaining basic fields
+            for (int i = 1; i < 7; i++) {
+                if (!getline(normalFile, userData[i])) {
+                    cerr << "Incomplete user record" << endl;
+                    return;
+                }
+            }
+    
+            // create appropriate user object for premium user
+            float fine = stof(userData[6]);
+            string arr[3];
+            int j = 3;
+            for (int i = 0; i<3; i++) {
+                arr[i] = userData[j];
+                j++;
+            }
+            
+            NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2], arr, fine);    
+            allUsers.push_back(nUser);
+        }
+        
+        normalFile.close();
+        cout << "Loaded " << allUsers.size() << " users" << endl;
     }
     
     void loadLibrarian() {
@@ -256,122 +270,122 @@ class System {
     }
      
 
-    void loadUsers() { 
-        ifstream allUsersFile("textFiles/allUsers.txt");
-        if (!allUsersFile) {
-            cerr << "Error in opening all users file" << endl; 
-            return; 
+    // void loadUsers() { 
+    //     ifstream allUsersFile("textFiles/allUsers.txt");
+    //     if (!allUsersFile) {
+    //         cerr << "Error in opening all users file" << endl; 
+    //         return; 
             
-        }
+    //     }
     
-        string userData[5]; // userID, name, contactNum, type-specific field, borrowed books count
-        string line;
+    //     string userData[5]; // userID, name, contactNum, type-specific field, borrowed books count
+    //     string line;
         
-        while (getline(allUsersFile, userData[0])) { // Read userID (first field)
-            // Read the remaining basic fields
-            for (int i = 1; i < 4; i++) {
-                if (!getline(allUsersFile, userData[i])) {
-                    cerr << "Incomplete user record" << endl;
-                    return;
-                }
-            }
+    //     while (getline(allUsersFile, userData[0])) { // Read userID (first field)
+    //         // Read the remaining basic fields
+    //         for (int i = 1; i < 4; i++) {
+    //             if (!getline(allUsersFile, userData[i])) {
+    //                 cerr << "Incomplete user record" << endl;
+    //                 return;
+    //             }
+    //         }
     
-            // Determine user type and create appropriate user object
-            char userType = userData[0][0]; // First character of userID indicates type
+    //         // Determine user type and create appropriate user object
+    //         char userType = userData[0][0]; // First character of userID indicates type
             
-            if (userType == 'P') { // Premium User
-                PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
-                pUser->totalFines = stof(userData[3]);
+    //         if (userType == 'P') { // Premium User
+    //             PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
+    //             pUser->totalFines = stof(userData[3]);
                 
-                // Load borrowed books count
-                getline(allUsersFile, line);
-                int borrowedCount = stoi(line);
+    //             // Load borrowed books count
+    //             getline(allUsersFile, line);
+    //             int borrowedCount = stoi(line);
                 
-                // Load borrowed books IDs
-                for (int i = 0; i < borrowedCount; i++) {
-                    getline(allUsersFile, line); // book ID
-                    // Note: Actual book objects would need to be linked from allBooks vector
-                }
+    //             // Load borrowed books IDs
+    //             for (int i = 0; i < borrowedCount; i++) {
+    //                 getline(allUsersFile, line); // book ID
+    //                 // Note: Actual book objects would need to be linked from allBooks vector
+    //             }
                 
-                allUsers.push_back(pUser);
-            }
-            else if (userType == 'N') { // Normal User
-                NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2]);
-                nUser->totalFines = stof(userData[3]);
+    //             allUsers.push_back(pUser);
+    //         }
+    //         else if (userType == 'N') { // Normal User
+    //             NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2]);
+    //             nUser->totalFines = stof(userData[3]);
                 
-                // Load borrowed books count
-                getline(allUsersFile, line);
-                nUser->currentBooksBorrowed = stoi(line);
+    //             // Load borrowed books count
+    //             getline(allUsersFile, line);
+    //             nUser->currentBooksBorrowed = stoi(line);
                 
-                // Load borrowed books IDs
-                for (int i = 0; i < nUser->currentBooksBorrowed; i++) {
-                    getline(allUsersFile, line); // book ID
-                    // Note: Actual book pointers would need to be linked from allBooks vector
-                }
+    //             // Load borrowed books IDs
+    //             for (int i = 0; i < nUser->currentBooksBorrowed; i++) {
+    //                 getline(allUsersFile, line); // book ID
+    //                 // Note: Actual book pointers would need to be linked from allBooks vector
+    //             }
                 
-                allUsers.push_back(nUser);
-            }
-            else if (userType == 'L') { // Librarian
-                Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3]));
-                allUsers.push_back(lUser);
-            }
+    //             allUsers.push_back(nUser);
+    //         }
+    //         else if (userType == 'L') { // Librarian
+    //             Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3]));
+    //             allUsers.push_back(lUser);
+    //         }
             
-            // Skip empty line between user records if exists
-            getline(allUsersFile, line);
-        }
+    //         // Skip empty line between user records if exists
+    //         getline(allUsersFile, line);
+    //     }
         
-        allUsersFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
-    }
+    //     allUsersFile.close();
+    //     cout << "Loaded " << allUsers.size() << " users" << endl;
+    // }
     
-    void saveUsers() {
-        ofstream allUsersFile("textFiles/allUsers.txt");
-        if (!allUsersFile) {
-            cerr << "Error in opening all users file" << endl;
-            return;
-        }
+    // void saveUsers() {
+    //     ofstream allUsersFile("textFiles/allUsers.txt");
+    //     if (!allUsersFile) {
+    //         cerr << "Error in opening all users file" << endl;
+    //         return;
+    //     }
     
-        for (User* user : allUsers) {
-            char userType = user->userID[0];
+    //     for (User* user : allUsers) {
+    //         char userType = user->userID[0];
             
-            // Write common user fields
-            allUsersFile << user->userID << endl;
-            allUsersFile << user->name << endl;
-            allUsersFile << user->contactNum << endl;
+    //         // Write common user fields
+    //         allUsersFile << user->userID << endl;
+    //         allUsersFile << user->name << endl;
+    //         allUsersFile << user->contactNum << endl;
     
-            if (userType == 'P') {
-                PremiumUser* pUser = dynamic_cast<PremiumUser*>(user);
-                allUsersFile << pUser->totalFines << endl;
-                allUsersFile << pUser->borrowedBooks.size() << endl;
+            // if (userType == 'P') {
+            //     PremiumUser* pUser = dynamic_cast<PremiumUser*>(user);
+            //     allUsersFile << pUser->totalFines << endl;
+            //     allUsersFile << pUser->borrowedBooks.size() << endl;
                 
-                // Write borrowed books IDs
-                for (const string book : pUser->borrowedBooks) {
-                    allUsersFile << book << endl;
-                }
-            }
-            else if (userType == 'N') {
-                NormalUser* nUser = dynamic_cast<NormalUser*>(user);
-                allUsersFile << nUser->totalFines << endl;
-                allUsersFile << nUser->currentBooksBorrowed << endl;
+            //     // Write borrowed books IDs
+            //     for (const string book : pUser->borrowedBooks) {
+            //         allUsersFile << book << endl;
+            //     }
+            // }
+    //         else if (userType == 'N') {
+    //             NormalUser* nUser = dynamic_cast<NormalUser*>(user);
+    //             allUsersFile << nUser->totalFines << endl;
+    //             allUsersFile << nUser->currentBooksBorrowed << endl;
                 
-                // Write borrowed books IDs
-                for (Book* book : nUser->borrowedBooks) {
-                    if (book) {
-                        allUsersFile << book->bookID << endl;
-                    }
-                }
-            }
-            else if (userType == 'L') {
-                Librarian* lUser = dynamic_cast<Librarian*>(user);
-                allUsersFile << lUser->monthlySalary << endl;
-            }
+    //             // Write borrowed books IDs
+    //             for (Book* book : nUser->borrowedBooks) {
+    //                 if (book) {
+    //                     allUsersFile << book->bookID << endl;
+    //                 }
+    //             }
+    //         }
+    //         else if (userType == 'L') {
+    //             Librarian* lUser = dynamic_cast<Librarian*>(user);
+    //             allUsersFile << lUser->monthlySalary << endl;
+    //         }
             
-            // Separate user records with empty line
-            allUsersFile << endl;
-        }
+    //         // Separate user records with empty line
+    //         allUsersFile << endl;
+    //     }
         
-        allUsersFile.close();
-    }
+    //     allUsersFile.close();
+    // }
 
     void displayAllBooks() {
         int numBooks = allBooks.size();
