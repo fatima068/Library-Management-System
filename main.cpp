@@ -3,8 +3,11 @@
 using namespace std;
 
 int main() {
-    System librarySystem;
-    librarySystem.mainMenu();
+    // System librarySystem;
+    // librarySystem.mainMenu();
+    User* u1 = new PremiumUser("N100", "fatima", "0330");
+    User* u2 = new Librarian("L100", "fama", "03322", 50000.0);
+
 }
 
 //oke so abhi we havent done this but

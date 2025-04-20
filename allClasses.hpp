@@ -305,14 +305,17 @@ class User {
 class PremiumUser: public User {
     protected:
     int maxBooks = 10; // use borrowed books.size() to get number of books currently borrowed by user
-    vector<Book> borrowedBooks; 
+    vector<string> borrowedBooks; 
     float finePer15Days = 5.0;
     float totalFines;
 
     public:
     PremiumUser() : User(), totalFines(0.0), borrowedBooks() {}
 
-    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
+    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {
+        this->addUserToFile();
+        
+    }
 
     void addUserToFile() override {
         ofstream allUsersFile("textFiles/allUsers.txt", ios::app);
@@ -325,9 +328,14 @@ class PremiumUser: public User {
         allUsersFile << contactNum << endl;
         allUsersFile << maxBooks << endl;
         for (int i = 0; i < borrowedBooks.size(); i++) {
-            borrowedBooks[i].addBookToFile();
+            allUsersFile << borrowedBooks[i] << endl;
         }
-
+        for (int i = borrowedBooks.size(); i < maxBooks; i++) {
+            allUsersFile << "x" << endl;
+        }
+        allUsersFile << finePer15Days << endl;
+        allUsersFile << totalFines << endl;
+        // after this, the file will store 1 user in 16 lines.
         allUsersFile.close();
     }
 
@@ -342,6 +350,11 @@ class PremiumUser: public User {
     //         currentBooksBorrowed++;
     //    }
     // }
+
+    void borrowBook(Book* b1) override {}
+    void returnBook(Book* b1) override {}
+    bool isBookBorrowed(string id) override {}
+    void renewBook(Book* b1) override {}
 
     // void returnBook(Book* b1) override {
     //     int index = -1;

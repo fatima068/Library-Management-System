@@ -171,6 +171,122 @@ class System {
         allBooksFile.close();
     }
 
+    void loadUsers() {
+        ifstream allUsersFile("textFiles/allUsers.txt");
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
+            return;
+        }
+    
+        string userData[5]; // userID, name, contactNum, type-specific field, borrowed books count
+        string line;
+        
+        while (getline(allUsersFile, userData[0])) { // Read userID (first field)
+            // Read the remaining basic fields
+            for (int i = 1; i < 4; i++) {
+                if (!getline(allUsersFile, userData[i])) {
+                    cerr << "Incomplete user record" << endl;
+                    return;
+                }
+            }
+    
+            // Determine user type and create appropriate user object
+            char userType = userData[0][0]; // First character of userID indicates type
+            
+            if (userType == 'P') { // Premium User
+                PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
+                pUser->totalFines = stof(userData[3]);
+                
+                // Load borrowed books count
+                getline(allUsersFile, line);
+                int borrowedCount = stoi(line);
+                
+                // Load borrowed books IDs
+                for (int i = 0; i < borrowedCount; i++) {
+                    getline(allUsersFile, line); // book ID
+                    // Note: Actual book objects would need to be linked from allBooks vector
+                }
+                
+                allUsers.push_back(pUser);
+            }
+            else if (userType == 'N') { // Normal User
+                NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2]);
+                nUser->totalFines = stof(userData[3]);
+                
+                // Load borrowed books count
+                getline(allUsersFile, line);
+                nUser->currentBooksBorrowed = stoi(line);
+                
+                // Load borrowed books IDs
+                for (int i = 0; i < nUser->currentBooksBorrowed; i++) {
+                    getline(allUsersFile, line); // book ID
+                    // Note: Actual book pointers would need to be linked from allBooks vector
+                }
+                
+                allUsers.push_back(nUser);
+            }
+            else if (userType == 'L') { // Librarian
+                Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3]));
+                allUsers.push_back(lUser);
+            }
+            
+            // Skip empty line between user records if exists
+            getline(allUsersFile, line);
+        }
+        
+        allUsersFile.close();
+        cout << "Loaded " << allUsers.size() << " users" << endl;
+    }
+    
+    void saveUsers() {
+        ofstream allUsersFile("textFiles/allUsers.txt");
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
+            return;
+        }
+    
+        for (User* user : allUsers) {
+            char userType = user->userID[0];
+            
+            // Write common user fields
+            allUsersFile << user->userID << endl;
+            allUsersFile << user->name << endl;
+            allUsersFile << user->contactNum << endl;
+    
+            if (userType == 'P') {
+                PremiumUser* pUser = dynamic_cast<PremiumUser*>(user);
+                allUsersFile << pUser->totalFines << endl;
+                allUsersFile << pUser->borrowedBooks.size() << endl;
+                
+                // Write borrowed books IDs
+                for (const string book : pUser->borrowedBooks) {
+                    allUsersFile << book << endl;
+                }
+            }
+            else if (userType == 'N') {
+                NormalUser* nUser = dynamic_cast<NormalUser*>(user);
+                allUsersFile << nUser->totalFines << endl;
+                allUsersFile << nUser->currentBooksBorrowed << endl;
+                
+                // Write borrowed books IDs
+                for (Book* book : nUser->borrowedBooks) {
+                    if (book) {
+                        allUsersFile << book->bookID << endl;
+                    }
+                }
+            }
+            else if (userType == 'L') {
+                Librarian* lUser = dynamic_cast<Librarian*>(user);
+                allUsersFile << lUser->monthlySalary << endl;
+            }
+            
+            // Separate user records with empty line
+            allUsersFile << endl;
+        }
+        
+        allUsersFile.close();
+    }
+
     void displayAllBooks() {
         int numBooks = allBooks.size();
         for (int i = 0; i < numBooks; i++) {
@@ -221,20 +337,22 @@ class System {
 
     }
 
-    void loadUsers() {}
+    // becuase one user will be logged in at one time, just fetch that user from the file instead of fetching all users, but then librarian mei seach users function wont work, so what if we remove that function? or just fetch the records of the user that the librarian has searched for ? maybe this would work  
 
-    void saveUsers() { // jo hum kar r
-        ofstream allUsersFile("textFiles/allUsers.txt");
-        if (!allUsersFile) {
-            cerr << "Error in opening all users file" << endl;
-            return;
-        }
+    // void loadUsers() {}
 
-        for (int i = 0; i < allUsers.size(); i++) {
-            // allUsers[i]->addUserToFile(); 
-        }
-        allUsersFile.close();
-    }
+    // void saveUsers() { // jo hum kar r
+    //     ofstream allUsersFile("textFiles/allUsers.txt");
+    //     if (!allUsersFile) {
+    //         cerr << "Error in opening all users file" << endl;
+    //         return;
+    //     }
+
+    //     for (int i = 0; i < allUsers.size(); i++) {
+    //         // allUsers[i]->addUserToFile(); 
+    //     }
+    //     allUsersFile.close();
+    // }
 
     void mainMenu() {
         // now over here give 2 option: login or signup
