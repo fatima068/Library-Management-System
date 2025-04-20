@@ -1,7 +1,11 @@
 #include <iostream>
 #include "system.hpp"
-// #include "login.hpp"
 using namespace std;
+
+int main() {
+    System librarySystem;
+    librarySystem.mainMenu();
+}
 
 //oke so abhi we havent done this but
 //first we'll make an object of loginsystem, and then we ask for an id from user
@@ -10,8 +14,3 @@ using namespace std;
 //if true to we have to see what type of user has logined
 //to i finking, we make some function in system class, where we pass the id and we find id from the array and store everything from there to the pointer logined user (pssss i made a function in system, i.e. logAUser(string id) )
 //this will make our life very very easier pleaseeeeee
-
-int main() {
-    System librarySystem;
-    librarySystem.mainMenu();
-}

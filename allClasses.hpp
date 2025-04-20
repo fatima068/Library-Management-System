@@ -76,8 +76,9 @@ class Book {
         allBooksFile << timesRenewed << endl;
         allBooksFile.close();
     }
-
-    int getDaysOverdue() {
+// how tf do we add borrowed books to user file? . id say lets just add book id and phir ek search book ka function bana denge, tou whenever user performs some function on borrowed book we jusst search book in books array and edi oiiiiii jeeeee
+     // oke do that make it to be only string storing book ids
+    int getDaysOverdue() { 
         // first compare year
         // then month
         // then day of the month
@@ -269,7 +270,7 @@ class Book {
 
 class User {
     protected:
-    const string userID;
+    string userID;
     string name;
     string contactNum;
 
@@ -291,6 +292,7 @@ class User {
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
     virtual void payFine() = 0;
+    virtual void addUserToFile() =0;
 
     virtual void displayBooksBorrowed() = 0;
     virtual bool isBookBorrowed(string id) = 0;
@@ -302,69 +304,85 @@ class User {
 
 class PremiumUser: public User {
     protected:
-    const int maxBooks = 10;
-    int currentBooksBorrowed;
-    vector<Book*> borrowedBooks; 
-    const float finePer15Days = 5.0;
+    int maxBooks = 10; // use borrowed books.size() to get number of books currently borrowed by user
+    vector<Book> borrowedBooks; 
+    float finePer15Days = 5.0;
     float totalFines;
 
     public:
-    PremiumUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+    PremiumUser() : User(), totalFines(0.0), borrowedBooks() {}
 
-    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
 
-    void borrowBook(Book* b1) override {
-        if (currentBooksBorrowed == maxBooks) {
-            cout << "max borrowing limit reached. return a book to borrow a new one" << endl;
-            return;
+    void addUserToFile() override {
+        ofstream allUsersFile("textFiles/allUsers.txt", ios::app);
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
         }
-        bool flag = b1->borrowBook();
-        if (flag == true) {
-            borrowedBooks.push_back(b1);
-            currentBooksBorrowed++;
-       }
+
+        allUsersFile << userID << endl;
+        allUsersFile << name << endl;
+        allUsersFile << contactNum << endl;
+        allUsersFile << maxBooks << endl;
+        for (int i = 0; i < borrowedBooks.size(); i++) {
+            borrowedBooks[i].addBookToFile();
+        }
+
+        allUsersFile.close();
     }
 
-    void returnBook(Book* b1) override {
-        int index = -1;
-        for (int i = 0; i<currentBooksBorrowed; i++) {
-            if (borrowedBooks[i]->bookID == b1->bookID) {
-                index = i;
-                break;
-            }
-        }
-        if (index == -1) {
-            cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
-            return;
-        }
-        bool flag = b1->returnBook();
-        if (flag) {
-            int daysOverdue = b1->getDaysOverdue();
-            if (daysOverdue >= 15) {
-                float fine = (daysOverdue/15) * finePer15Days;
-                totalFines += fine;
-            }
-        }
-        borrowedBooks.erase(borrowedBooks.begin() + index);
-        currentBooksBorrowed--;
-    }
+    // void borrowBook(Book* b1) override {
+    //     if (currentBooksBorrowed == maxBooks) {
+    //         cout << "max borrowing limit reached. return a book to borrow a new one" << endl;
+    //         return;
+    //     }
+    //     bool flag = b1->borrowBook();
+    //     if (flag == true) {
+    //         borrowedBooks.push_back(b1);
+    //         currentBooksBorrowed++;
+    //    }
+    // }
 
-    bool isBookBorrowed(string id) override {
-        for (int i = 0; i < borrowedBooks.size(); i ++) {
-            if (id == borrowedBooks[i]->bookID) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // void returnBook(Book* b1) override {
+    //     int index = -1;
+    //     for (int i = 0; i<currentBooksBorrowed; i++) {
+    //         if (borrowedBooks[i]->bookID == b1->bookID) {
+    //             index = i;
+    //             break;
+    //         }
+    //     }
+    //     if (index == -1) {
+    //         cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
+    //         return;
+    //     }
+    //     bool flag = b1->returnBook();
+    //     if (flag) {
+    //         int daysOverdue = b1->getDaysOverdue();
+    //         if (daysOverdue >= 15) {
+    //             float fine = (daysOverdue/15) * finePer15Days;
+    //             totalFines += fine;
+    //         }
+    //     }
+    //     borrowedBooks.erase(borrowedBooks.begin() + index);
+    //     currentBooksBorrowed--;
+    // }
 
-    void renewBook(Book* b1) override {
-        if (b1->timesRenewed == 3) {
-            cout << "book cannot be renewed again! limit is reached" << endl;
-            return;
-        }
-        b1->renew();
-    }
+    // bool isBookBorrowed(string id) override {
+    //     for (int i = 0; i < borrowedBooks.size(); i ++) {
+    //         if (id == borrowedBooks[i]->bookID) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    // void renewBook(Book* b1) override {
+    //     if (b1->timesRenewed == 3) {
+    //         cout << "book cannot be renewed again! limit is reached" << endl;
+    //         return;
+    //     }
+    //     b1->renew();
+    // }
 
     void payFine() override {
         float amt;
@@ -387,17 +405,17 @@ class PremiumUser: public User {
 
     void displayBooksBorrowed() override { 
         cout << "List of Borrowed Books: " << endl; //um idk maybe change the wordings here
-            for (int i = 0; i < currentBooksBorrowed; i++) {
+            for (int i = 0; i < borrowedBooks.size(); i++) {
                 cout << i << ") " << borrowedBooks[i];
             }
     }
 
     friend ostream& operator<< (ostream& out, PremiumUser p1) {
         out << "User Type: Premium User" << endl; 
-        out << "User ID: " << p1.userID<< endl << "Name: " << p1.name << endl << "Contact Number: " << p1.contactNum << endl << "Total Fine: " << p1.totalFines << endl << "Number of Books Currently Borrowed: " << p1.currentBooksBorrowed << endl;
-        if (p1.currentBooksBorrowed > 0) {
+        out << "User ID: " << p1.userID<< endl << "Name: " << p1.name << endl << "Contact Number: " << p1.contactNum << endl << "Total Fine: " << p1.totalFines << endl << "Number of Books Currently Borrowed: " << p1.borrowedBooks.size() << endl;
+        if (p1.borrowedBooks.size() > 0) {
             out << "List of Borrowed Books: " << endl;
-            for (int i = 0; i < p1.currentBooksBorrowed; i++) {
+            for (int i = 0; i < p1.borrowedBooks.size(); i++) {
                 out << i << ") " << p1.borrowedBooks[i];
                 // ya to we do upar wali fing or i was finking ke yahan pe maybe lets only output the index number and the book name worr do u say
             }
@@ -420,6 +438,10 @@ class NormalUser: public User {
     NormalUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
+
+    void addUserToFile() override {
+
+    }
 
     void borrowBook(Book* b1) override {
         if (currentBooksBorrowed == maxBooks) {
@@ -524,6 +546,10 @@ class Librarian : public User {
     Librarian() : User(), monthlySalary(0.0) {}
 
     Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {}
+
+    void addUserToFile() override {
+
+    }
 
     void borrowBook(Book* b1) override {
         cout << "librarian cant borrow/return books" << endl;

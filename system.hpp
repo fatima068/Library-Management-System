@@ -30,10 +30,7 @@ class System {
         
         getline(cin, nameToSearch);
         cout << endl;
-        // Trim whitespace from the search input
-        // nameToSearch.erase(nameToSearch.find_last_not_of(" \t\n\r\f\v") + 1);
-        // nameToSearch.erase(0, nameToSearch.find_first_not_of(" \t\n\r\f\v"));
-    
+
         bool flag = false;
         for (int i = 0; i < allBooks.size(); i++) { 
             if (allBooks[i].title == nameToSearch) {
@@ -118,14 +115,14 @@ class System {
         } 
     }
 
-    User* findUser(const string& userID) {
-        for (User* user : allUsers) {
-            if (user->userID == userID) {
-                return user;
-            }
-        }
-        return nullptr;
-    }
+    // User* findUser(const string& userID) {
+    //     for (User* user : allUsers) {
+    //         if (user->userID == userID) {
+    //             return user;
+    //         }
+    //     }
+    //     return nullptr;
+    // } 
 
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
@@ -222,6 +219,21 @@ class System {
 
     void returnBook() {
 
+    }
+
+    void loadUsers() {}
+
+    void saveUsers() { // jo hum kar r
+        ofstream allUsersFile("textFiles/allUsers.txt");
+        if (!allUsersFile) {
+            cerr << "Error in opening all users file" << endl;
+            return;
+        }
+
+        for (int i = 0; i < allUsers.size(); i++) {
+            // allUsers[i]->addUserToFile(); 
+        }
+        allUsersFile.close();
     }
 
     void mainMenu() {
