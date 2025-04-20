@@ -102,7 +102,7 @@ class System {
     
     void searchUserId() {
         string idToSearch;
-        cout << "enter user name to search: ";
+        cout << "enter user id to search: ";
         getline(cin, idToSearch);
         cout << endl;
         int numUsers = allUsers.size(); 
@@ -292,7 +292,7 @@ class System {
 
                 case 2: { // search user
                     int choice2; 
-                    cout << "1. by user name\n2. by book id\nenter your choice: ";
+                    cout << "1. by user name\n2. by user id\nenter your choice: ";
                     cin >> choice2;
                     switch (choice2) {
                         case 1: {

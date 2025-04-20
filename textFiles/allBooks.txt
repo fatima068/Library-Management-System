@@ -18,11 +18,11 @@ false
 0
 0
 0
-B003
-9785555484400
-Sample Book3
-Test Author1
-Fiction
+B069
+56484284
+cool book
+fama
+rom-com
 false
 0
 0
