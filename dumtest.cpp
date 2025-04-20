@@ -1,11 +1,12 @@
 // hi can we like leave this cpp to test out dumm stuff plis fanks
 #include <iostream>
-using namespace std;
 #include <vector>
+using namespace std;
 // oke see this output aara bilkul sahi oki to aise hi karenge hum
 class user {
     public:
-    string name; string id; 
+    string name; 
+    string id; 
 
     user(string n, string i) : name(n), id(i) {}
 };
@@ -15,7 +16,8 @@ int main() {
     user u2 = user("babar", "N001");
     vector<user*> allUsers;
     user* loginedUser;
-    allUsers.push_back(&u1); allUsers.push_back(&u2);
+    allUsers.push_back(&u1); 
+    allUsers.push_back(&u2);
 
     string id = "N001";
     for (int i = 0; i < allUsers.size(); i++) {
