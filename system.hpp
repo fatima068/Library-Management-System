@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include "allClasses.hpp"
 using namespace std;
 
@@ -25,17 +26,22 @@ class System {
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
+        
         getline(cin, nameToSearch);
-        int numBooks = allBooks.size(); 
+        cout << endl;
+        // Trim whitespace from the search input
+        // nameToSearch.erase(nameToSearch.find_last_not_of(" \t\n\r\f\v") + 1);
+        // nameToSearch.erase(0, nameToSearch.find_first_not_of(" \t\n\r\f\v"));
+    
         bool flag = false;
-        for (int i = 0; i < numBooks; i++) { 
+        for (int i = 0; i < allBooks.size(); i++) { 
             if (allBooks[i].title == nameToSearch) {
-                cout << allBooks[i];
+                cout << allBooks[i] << endl;
                 flag = true;
             }
         }
         if (!flag) {
-            cout << "no book found" << endl;
+            cout << "no book found" << endl << endl;
         }
     } 
     
@@ -43,16 +49,17 @@ class System {
         string authorToSearch;
         cout << "enter author to search: ";
         getline(cin, authorToSearch);
+        cout << endl;
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
             if (allBooks[i].author == authorToSearch) {
-                cout << allBooks[i];
+                cout << allBooks[i] << endl;
                 flag = true;
             }
         }
         if (!flag) {
-            cout << "no book found" << endl;
+            cout << "no book found" << endl << endl;
         }
     }
 
@@ -60,16 +67,17 @@ class System {
         string bookIDtoSearch;
         cout << "enter book id to search: "; 
         getline(cin, bookIDtoSearch);
+        cout << endl;
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
             if (allBooks[i].bookID == bookIDtoSearch) {
-                cout << allBooks[i];
+                cout << allBooks[i] << endl;
                 flag = true;
             }
         }
         if (!flag) {
-            cout << "no book found" << endl;
+            cout << "no book found" << endl << endl;
         }
     }
     
@@ -77,16 +85,17 @@ class System {
         string nameToSearch;
         cout << "enter user name to search: ";
         getline(cin, nameToSearch);
+        cout << endl;
         int numUsers = allUsers.size(); 
         bool flag = false;
         for (int i = 0; i < numUsers; i++) {
             if (allUsers[i]->name == nameToSearch) {
-                cout << allUsers[i];
+                cout << allUsers[i] << endl;
                 flag = true;
             }
         }
         if (!flag) {
-            cout << "no user found" << endl;
+            cout << "no user found" << endl << endl;
         } 
     }
     
@@ -94,16 +103,17 @@ class System {
         string idToSearch;
         cout << "enter user name to search: ";
         getline(cin, idToSearch);
+        cout << endl;
         int numUsers = allUsers.size(); 
         bool flag = false;
         for (int i = 0; i < numUsers; i++) {
             if (allUsers[i]->userID == idToSearch) {
-                cout << allUsers[i];
+                cout << allUsers[i] << endl;
                 flag = true;
             }
         }
         if (!flag) {
-            cout << "no user found" << endl;
+            cout << "no user found" << endl << endl;
         } 
     }
 
@@ -225,14 +235,17 @@ class System {
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // a leftover newline character in the input buffer after using cin >> choice in the menu, which causes getline() to read an empty string immediately afterward.
                             searchBookName();
                             break;
                         }
                         case 2: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchAuthorName();
                             break;
                         } 
                         case 3: { 
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchBookId();
                             break;
                         }
@@ -249,11 +262,13 @@ class System {
                     cin >> choice2;
                     switch (choice2) {
                         case 1: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchUserName(); 
                             break;
                         }
 
                         case 2: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchUserId();
                             break;
                         }
@@ -354,10 +369,12 @@ class System {
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchBookName();
                             break;
                         }
                         case 2: {
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             searchAuthorName();
                             break;
                         } 
@@ -423,11 +440,8 @@ class System {
 
             case 5: { //pay fine
                 //this can be done yahin pe maybe
-                float amt;
-                cout << "enter amount of fine to pay: ";
-                cin >> amt;
-                loginedUser->payFine(amt);
-                cout << "fine amount " << amt << " paid for user: " << loginedUser->userID << endl;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                loginedUser->payFine();
                 break;
             }
 

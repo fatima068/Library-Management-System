@@ -287,10 +287,10 @@ class User {
 
     virtual void borrowBook(Book* b1) = 0;
     virtual void returnBook(Book* b1) = 0;
-    virtual void payFine(float amt) = 0;
     virtual bool addNewBook(Book b1) = 0;
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
+    virtual void payFine() = 0;
 
     virtual void displayBooksBorrowed() = 0;
     virtual bool isBookBorrowed(string id) = 0;
@@ -312,10 +312,6 @@ class PremiumUser: public User {
     PremiumUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
     PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
-
-    void payFine(float amt) override {
-        totalFines = totalFines - amt;
-    }
 
     void borrowBook(Book* b1) override {
         if (currentBooksBorrowed == maxBooks) {
@@ -370,6 +366,15 @@ class PremiumUser: public User {
         b1->renew();
     }
 
+    void payFine() override {
+        float amt;
+        cout << "Total Fines: " << totalFines << endl;
+        cout << "enter amount of fine to pay: ";
+        cin >> amt;
+        totalFines -= amt;
+        cout << "fine amount " << amt << " paid for user: " << userID << endl;
+    }
+
     bool addNewBook(Book b1) override {
         cout << "User cannot add new book"<< endl;
         return false;
@@ -415,10 +420,6 @@ class NormalUser: public User {
     NormalUser() : User(), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
 
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), currentBooksBorrowed(0), totalFines(0.0), borrowedBooks() {}
-
-    void payFine(float amt) override {
-        totalFines = totalFines - amt;
-    }
 
     void borrowBook(Book* b1) override {
         if (currentBooksBorrowed == maxBooks) {
@@ -471,6 +472,15 @@ class NormalUser: public User {
             return;
         }
         b1->renew();
+    }
+
+    void payFine() override {
+        float amt;
+        cout << "Total Fines: " << totalFines << endl;
+        cout << "enter amount of fine to pay: ";
+        cin >> amt;
+        totalFines -= amt;
+        cout << "fine amount " << amt << " paid for user: " << userID << endl;
     }
 
     bool addNewBook(Book b1) override {
@@ -527,7 +537,9 @@ class Librarian : public User {
         cout << "action cannot be performed by librarian " << endl;
     }
 
-    void payFine(float amt) override {}
+    void payFine() override {
+        cout << "action cannot be performed by librarian " << endl;
+    }
 
     bool addNewBook(Book b1) {
         cout << "Librarian " << userID << " attempting to add book" << endl;
