@@ -4,7 +4,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-// #include <limits>
 #include "allClasses.hpp"
 using namespace std;
 
@@ -225,7 +224,7 @@ class System {
 
     void LibrarianMenu() {
         int choice = -1;
-        while(choice != 8) {
+        while(choice != 7) {
             cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. exit\nenter your choice: ";
             cin >> choice;
             switch (choice) {
@@ -234,24 +233,24 @@ class System {
                     cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
                     cin >> choice1;
                     switch (choice1) {
-                        case 1: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // a leftover newline character in the input buffer after using cin >> choice in the menu, which causes getline() to read an empty string immediately afterward.
+                        case 1: { 
                             cin.ignore();
                             searchBookName();
                             break;
                         }
+                        
                         case 2: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchAuthorName();
                             break;
-                        } 
+                        }
+                         
                         case 3: { 
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchBookId();
                             break;
                         }
+                        
                         default:
                             cout << "wrong choice " << endl; 
                             break;
@@ -265,14 +264,12 @@ class System {
                     cin >> choice2;
                     switch (choice2) {
                         case 1: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchUserName(); 
                             break;
                         }
 
                         case 2: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchUserId();
                             break;
@@ -317,7 +314,9 @@ class System {
                 case 5: { // add new book to library
                     string id, isbn, title, author, genre;
                     cout << "Enter book details of book to add" << endl;
-                    cout << "Book ID: "; // should i first check if its unique ? 
+                    cout << "Book ID: "; // should i first check if its unique ?  
+                    //yesh
+                    cin.ignore();
                     getline(cin, id);
                     cout << "ISBN: ";
                     getline(cin, isbn);
@@ -374,13 +373,11 @@ class System {
                     cin >> choice1;
                     switch (choice1) {
                         case 1: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchBookName();
                             break;
                         }
                         case 2: {
-                            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cin.ignore();
                             searchAuthorName();
                             break;
@@ -446,8 +443,7 @@ class System {
             }
 
             case 5: { //pay fine
-                //this can be done yahin pe maybe
-                // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                //this can be done yahin pe ma
                 cin.ignore();
                 loginedUser->payFine();
                 break;
@@ -486,12 +482,12 @@ class System {
 // search user by id
 // search book by name (done)
 // search book by author (done)
-// search book by genre 
-// search book by id 
+// search book by genre (kinda done)
+// search book by id (done)
 // create a new user 
 // delete user from system 
-// view all available books 
-// view all borrowed books
+// view all available books (done)
+// view all borrowed books (done)
 // renew a borrowed book
 // session management and axxess control seekhn hai 
 

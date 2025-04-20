@@ -9,7 +9,7 @@ using namespace std;
 //so then if false we'll be like bruh give a correct password
 //if true to we have to see what type of user has logined
 //to i finking, we make some function in system class, where we pass the id and we find id from the array and store everything from there to the pointer logined user (pssss i made a function in system, i.e. logAUser(string id) )
-//this will make our life very very easier pleaseeeeeee
+//this will make our life very very easier pleaseeeeee
 
 int main() {
     LoginSystem loginSystem; 
@@ -40,6 +40,6 @@ int main() {
     } else {
         cout << "Login failed. Exiting..." << endl;
     }
-    
-    return 0;
+
+    librarySystem.saveBooks();
 }
