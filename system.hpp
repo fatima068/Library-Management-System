@@ -214,7 +214,7 @@ class System {
         }
         
         premiumFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " premium users" << endl;
     }
 
     void loadNormalUsers() {
@@ -248,7 +248,7 @@ class System {
         }
         
         normalFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " normal users" << endl;
     }
     
     void loadLibrarian() {
@@ -269,16 +269,14 @@ class System {
                     return;
                 }
             }
+            float salary = stof(userData[3]);
 
-            Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3])); // yaar this constuctor is weird because like ismai write to file bhi hora uween i dont get
+            Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], salary); 
             allUsers.push_back(lUser);
-            // Skip empty line between user records if exists
-            getline(librariansFile, line);
         }
         librariansFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " librarians" << endl;
     }
-     
 
     // void loadUsers() { 
     //     ifstream allUsersFile("textFiles/allUsers.txt");
@@ -629,7 +627,7 @@ class System {
                     loginSystem.logout();
                     break;
                 }
-
+                
                 default:
                     cout << "wrong choice" << endl; 
                     break;
@@ -676,7 +674,7 @@ class System {
 
             case 2: { // view book list
                     int choice3; 
-                    cout << "1. view all books\n2. view borrowed books\n3. view available books\nenter your choice: ";
+                    cout << "1. view all books\n2. view available books\nenter your choice: ";
                     cin >> choice3; 
                     switch (choice3) {
                         case 1: {
@@ -684,14 +682,9 @@ class System {
                             break;
                         }
                         case 2: {
-                            // displayUserBorrowedBooks(); // remove this maybe because does user even need to know borrowed books alag se like this ? 
-                            break;
-                        }
-                        case 3: {
                             displayAvailableBooks(); 
                             break;
                         }
-
                         default:
                             cout << "invalid choice " << endl; 
                             break;
