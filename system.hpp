@@ -627,7 +627,7 @@ class System {
                     loginSystem.logout();
                     break;
                 }
-
+                
                 default:
                     cout << "wrong choice" << endl; 
                     break;
@@ -674,7 +674,7 @@ class System {
 
             case 2: { // view book list
                     int choice3; 
-                    cout << "1. view all books\n2. view borrowed books\n3. view available books\nenter your choice: ";
+                    cout << "1. view all books\n2. view available books\nenter your choice: ";
                     cin >> choice3; 
                     switch (choice3) {
                         case 1: {
@@ -682,14 +682,9 @@ class System {
                             break;
                         }
                         case 2: {
-                            // displayUserBorrowedBooks(); // remove this maybe because does user even need to know borrowed books alag se like this ? 
-                            break;
-                        }
-                        case 3: {
                             displayAvailableBooks(); 
                             break;
                         }
-
                         default:
                             cout << "invalid choice " << endl; 
                             break;
