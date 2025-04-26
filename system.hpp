@@ -24,6 +24,14 @@ class System {
         }
     }
 
+    char getCurrentUserType() {
+        return loginSystem.getUserType();
+    }
+
+    bool loginUser(string id) {
+        return loginSystem.login(id);
+    }
+
     void searchBookName() {
         string nameToSearch;
         cout << "enter book name to search: ";
@@ -454,35 +462,35 @@ class System {
     //     allUsersFile.close();
     // }
 
-    void mainMenu() {
-        // now over here give 2 option: login or signup
-        // login functionality has been made, need to make sign up (basically registering a new user)'
-        // first make load user and save user maybe ? 
+    // void mainMenu() {
+    //     // now over here give 2 option: login or signup
+    //     // login functionality has been made, need to make sign up (basically registering a new user)'
+    //     // first make load user and save user maybe ? 
         
-        string userID;
-        cout << "Enter user ID: ";
-        getline(cin, userID);
-        if (loginSystem.login(userID)) {
-            logAUser(userID);
-            loadBooks();
+    //     string userID;
+    //     cout << "Enter user ID: ";
+    //     getline(cin, userID);
+    //     if (loginSystem.login(userID)) {
+    //         logAUser(userID);
+    //         loadBooks();
             
-            // Determine user type and show appropriate menu
-            char userType = loginSystem.getUserType();
+    //         // Determine user type and show appropriate menu
+    //         char userType = loginSystem.getUserType();
             
-            if (userType == 'L') { // Librarian
-                cout << "\n=== LIBRARIAN MENU ===" << endl;
-                LibrarianMenu();
-            } 
-            else { // Normal or Premium User
-                cout << "\n=== USER MENU ===" << endl;
-                userMenu();
-            }
-        } else {
-            cout << "Login failed. Exiting..." << endl;
-            saveBooks();
-            exit(0);
-        }
-    }
+    //         if (userType == 'L') { // Librarian
+    //             cout << "\n=== LIBRARIAN MENU ===" << endl;
+    //             LibrarianMenu();
+    //         } 
+    //         else { // Normal or Premium User
+    //             cout << "\n=== USER MENU ===" << endl;
+    //             userMenu();
+    //         }
+    //     } else {
+    //         cout << "Login failed. Exiting..." << endl;
+    //         saveBooks();
+    //         exit(0);
+    //     }
+    // }
 
     void LibrarianMenu() {
         int choice = -1;
