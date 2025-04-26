@@ -16,7 +16,57 @@ class System {
     LoginSystem loginSystem;
 
     public:
-    void logAUser(string id) { // will this work lets hope it does lmao
+    bool isUserIDunique(string id) {
+        for (int i = 0; i<allUsers.size(); i++) {
+            if (allUsers[i]->userID == id) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void signUp() {
+        char userType;
+        cout << "Enter type of user to register: P(premium), N(normal), L(librarian):";
+        cin >> userType;
+        switch (userType) {
+            case 'P':
+            case 'p': {
+                string userID, username, contactNum;
+                cout << "enter the following information to register a new user: " << endl;
+                cout << "user id: ";
+                cin.ignore();
+                getline(cin, userID);
+                loadPremiumUsers();
+                while (!isUserIDunique(userID)) {
+                    cout << "user id taken! Enter new id" << endl;
+                    cin >> userID;
+                }
+                cout << "enter your name: ";
+                getline(cin, username);
+                cout << "enter contact number: ";
+                getline(cin, contactNum);
+                User* u1 = new PremiumUser(userID, username, contactNum);
+                u1->addUserToFile();
+                // also add user and their encrypted password to login.txt
+                break;
+            }
+
+            case 'N':
+            case 'n':
+                break;
+
+            case 'L':
+            case 'l':
+                break;
+
+            default:
+                cout << "invalid user type" << endl;
+                break;
+        }
+    }
+
+    void logAUser(string id) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
                 loginedUser = allUsers[i];
@@ -130,7 +180,7 @@ class System {
     //         }
     //     }
     //     return nullptr;
-    // } 
+    // }
 
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
@@ -167,7 +217,7 @@ class System {
     }
 
     void saveBooks() {
-        ofstream allBooksFile("textFiles/allBooks.txt");
+        ofstream allBooksFile("textFiles/allBooks.txt", ios::trunc);
         if (!allBooksFile) {
             cerr << "Error in opening all books file" << endl;
             return;
@@ -276,73 +326,49 @@ class System {
         cout << "Loaded " << allUsers.size() << " librarians" << endl;
     }
 
-    // void loadUsers() { 
-    //     ifstream allUsersFile("textFiles/allUsers.txt");
-    //     if (!allUsersFile) {
-    //         cerr << "Error in opening all users file" << endl; 
-    //         return; 
-            
-    //     }
+    void saveUsers() {
+        if (loginSystem.getUserType() == 'L') {
+            ofstream librariansFile("textFiles/librarians.txt", ios::trunc);
+            if (!librariansFile) {
+                cerr << "Error in opening all books file" << endl;
+                return;
+            }
     
-    //     string userData[5]; // userID, name, contactNum, type-specific field, borrowed books count
-    //     string line;
-        
-    //     while (getline(allUsersFile, userData[0])) { // Read userID (first field)
-    //         // Read the remaining basic fields
-    //         for (int i = 1; i < 4; i++) {
-    //             if (!getline(allUsersFile, userData[i])) {
-    //                 cerr << "Incomplete user record" << endl;
-    //                 return;
-    //             }
-    //         }
+            for (int i = 0; i < allUsers.size(); i++) {
+                allUsers[i]->addUserToFile();
+            }
+            librariansFile.close();
+        }
+
+        else if (loginSystem.getUserType() == 'P') {
+            ofstream premiumUsersFile("textFiles/premiumUsers.txt", ios::trunc);
+            if (!premiumUsersFile) {
+                cerr << "Error in opening all books file" << endl;
+                return;
+            }
     
-    //         // Determine user type and create appropriate user object
-    //         char userType = userData[0][0]; // First character of userID indicates type
-            
-    //         if (userType == 'P') { // Premium User
-    //             PremiumUser* pUser = new PremiumUser(userData[0], userData[1], userData[2]);
-    //             pUser->totalFines = stof(userData[3]);
-                
-    //             // Load borrowed books count
-    //             getline(allUsersFile, line);
-    //             int borrowedCount = stoi(line);
-                
-    //             // Load borrowed books IDs
-    //             for (int i = 0; i < borrowedCount; i++) {
-    //                 getline(allUsersFile, line); // book ID
-    //                 // Note: Actual book objects would need to be linked from allBooks vector
-    //             }
-                
-    //             allUsers.push_back(pUser);
-    //         }
-    //         else if (userType == 'N') { // Normal User
-    //             NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2]);
-    //             nUser->totalFines = stof(userData[3]);
-                
-    //             // Load borrowed books count
-    //             getline(allUsersFile, line);
-    //             nUser->currentBooksBorrowed = stoi(line);
-                
-    //             // Load borrowed books IDs
-    //             for (int i = 0; i < nUser->currentBooksBorrowed; i++) {
-    //                 getline(allUsersFile, line); // book ID
-    //                 // Note: Actual book pointers would need to be linked from allBooks vector
-    //             }
-                
-    //             allUsers.push_back(nUser);
-    //         }
-    //         else if (userType == 'L') { // Librarian
-    //             Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3]));
-    //             allUsers.push_back(lUser);
-    //         }
-            
-    //         // Skip empty line between user records if exists
-    //         getline(allUsersFile, line);
-    //     }
-        
-    //     allUsersFile.close();
-    //     cout << "Loaded " << allUsers.size() << " users" << endl;
-    // }
+            for (int i = 0; i < allUsers.size(); i++) {
+                allUsers[i]->addUserToFile();
+            }
+            premiumUsersFile.close();
+        }
+
+        else if (loginSystem.getUserType() == 'N') {
+            ofstream normalUserFile("textFiles/normalUsers.txt", ios::trunc);
+            if (!normalUserFile) {
+                cerr << "Error in opening all books file" << endl;
+                return;
+            }
+    
+            for (int i = 0; i < allUsers.size(); i++) {
+                allUsers[i]->addUserToFile();
+            }
+            normalUserFile.close();
+        }
+        else {
+            cout << "login to access functions" << endl;
+        }
+    }
     
     // void saveUsers() {
     //     ofstream allUsersFile("textFiles/allUsers.txt");
@@ -443,57 +469,10 @@ class System {
 
     }
 
-    // becuase one user will be logged in at one time, just fetch that user from the file instead of fetching all users, but then librarian mei seach users function wont work, so what if we remove that function? or just fetch the records of the user that the librarian has searched for ? maybe this would work  
-
-    // void loadUsers() {}
-
-    // void saveUsers() { // jo hum kar r
-    //     ofstream allUsersFile("textFiles/allUsers.txt");
-    //     if (!allUsersFile) {
-    //         cerr << "Error in opening all users file" << endl;
-    //         return;
-    //     }
-
-    //     for (int i = 0; i < allUsers.size(); i++) {
-    //         // allUsers[i]->addUserToFile(); 
-    //     }
-    //     allUsersFile.close();
-    // }
-
-    // void mainMenu() {
-    //     // now over here give 2 option: login or signup
-    //     // login functionality has been made, need to make sign up (basically registering a new user)'
-    //     // first make load user and save user maybe ? 
-        
-    //     string userID;
-    //     cout << "Enter user ID: ";
-    //     getline(cin, userID);
-    //     if (loginSystem.login(userID)) {
-    //         logAUser(userID);
-    //         loadBooks();
-            
-    //         // Determine user type and show appropriate menu
-    //         char userType = loginSystem.getUserType();
-            
-    //         if (userType == 'L') { // Librarian
-    //             cout << "\n=== LIBRARIAN MENU ===" << endl;
-    //             LibrarianMenu();
-    //         } 
-    //         else { // Normal or Premium User
-    //             cout << "\n=== USER MENU ===" << endl;
-    //             userMenu();
-    //         }
-    //     } else {
-    //         cout << "Login failed. Exiting..." << endl;
-    //         saveBooks();
-    //         exit(0);
-    //     }
-    // }
-
     void LibrarianMenu() {
         int choice = -1;
         while(choice != 7) {
-            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n 7. logout\nenter your choice: ";
+            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n7. logout\nenter your choice: ";
             cin >> choice;
             switch (choice) {
                 case 1: { // search book
@@ -620,8 +599,8 @@ class System {
                 }
 
                 case 7: {
-                    cout << "logging out..." << endl; 
                     saveBooks();
+                    saveUsers();
                     loginSystem.logout();
                     break;
                 }
@@ -729,6 +708,7 @@ class System {
 
             case 7: {
                 saveBooks();
+                saveUsers();
                 loginSystem.logout();
                 break;
             }
