@@ -16,57 +16,7 @@ class System {
     LoginSystem loginSystem;
 
     public:
-    bool isUserIDunique(string id) {
-        for (int i = 0; i<allUsers.size(); i++) {
-            if (allUsers[i]->userID == id) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void signUp() {
-        char userType;
-        cout << "Enter type of user to register: P(premium), N(normal), L(librarian):";
-        cin >> userType;
-        switch (userType) {
-            case 'P':
-            case 'p': {
-                string userID, username, contactNum;
-                cout << "enter the following information to register a new user: " << endl;
-                cout << "user id: ";
-                cin.ignore();
-                getline(cin, userID);
-                loadPremiumUsers();
-                while (!isUserIDunique(userID)) {
-                    cout << "user id taken! Enter new id" << endl;
-                    cin >> userID;
-                }
-                cout << "enter your name: ";
-                getline(cin, username);
-                cout << "enter contact number: ";
-                getline(cin, contactNum);
-                User* u1 = new PremiumUser(userID, username, contactNum);
-                u1->addUserToFile();
-                // also add user and their encrypted password to login.txt
-                break;
-            }
-
-            case 'N':
-            case 'n':
-                break;
-
-            case 'L':
-            case 'l':
-                break;
-
-            default:
-                cout << "invalid user type" << endl;
-                break;
-        }
-    }
-
-    void logAUser(string id) {
+    void logAUser(string id) { // will this work lets hope it does lmao
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
                 loginedUser = allUsers[i];
@@ -222,11 +172,13 @@ class System {
             cerr << "Error in opening all books file" << endl;
             return;
         }
+        int i;
 
-        for (int i = 0; i < allBooks.size(); i++) {
+        for (i = 0; i < allBooks.size(); i++) {
             allBooks[i].addBookToFile();
         }
         allBooksFile.close();
+        cout << "saved " << i << " books" << endl;
     }
         
     void loadPremiumUsers() {
