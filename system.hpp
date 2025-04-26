@@ -403,7 +403,6 @@ class System {
                 cerr << "Error in opening all books file" << endl;
                 return;
             }
-    
             for (int i = 0; i < allUsers.size(); i++) {
                 allUsers[i]->addUserToFile();
             }
@@ -411,7 +410,9 @@ class System {
         }
 
         else if (loginSystem.getUserType() == 'P') {
+            // open the file in trunc mode just erase all existing data in it, then call add user to file for each array element 
             ofstream premiumUsersFile("textFiles/premiumUsers.txt", ios::trunc);
+            premiumUsersFile.close();
             if (!premiumUsersFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
