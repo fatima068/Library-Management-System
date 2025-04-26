@@ -471,9 +471,8 @@ class NormalUser: public User {
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
 
     //constructor to create object after reading data from file
-    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {
+    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {}
 
-    }
     void addUserToFile() override {
         ofstream normalFile("textFiles/normalUsers.txt", ios::app);
         if (!normalFile) {
@@ -609,9 +608,8 @@ class Librarian : public User {
     public:
     Librarian() : User(), monthlySalary(0.0) {}
 
-    Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {
-        this->addUserToFile();
-    }
+    // constructor to create object after reading data from file 
+    Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {}
 
     void addUserToFile() override {
         ofstream librariansFile("textFiles/librarians.txt", ios::app);

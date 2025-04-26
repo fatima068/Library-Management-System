@@ -29,6 +29,7 @@ int main() {
             }
             else if (userType == 'L') {
                 librarySystem.loadLibrarian();
+                cout << "librarians loadded w out error" << endl;
                 librarySystem.LibrarianMenu();
             }
             
