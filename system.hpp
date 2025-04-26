@@ -27,38 +27,106 @@ class System {
 
     void signUp() {
         char userType;
-        cout << "Enter type of user to register: P(premium), N(normal), L(librarian):";
+        cout << "Enter type of user to register: P(premium), N(normal), L(librarian): ";
         cin >> userType;
+        cin.ignore(1000, '\n');
         switch (userType) {
             case 'P':
             case 'p': {
+                // taking input of inofrmation of new user
                 string userID, username, contactNum;
                 cout << "enter the following information to register a new user: " << endl;
                 cout << "user id: ";
-                cin.ignore();
                 getline(cin, userID);
+                // load premium users to check that id user entered is unique
                 loadPremiumUsers();
                 while (!isUserIDunique(userID)) {
-                    cout << "user id taken! Enter new id" << endl;
-                    cin >> userID;
+                    cout << "user id taken! Enter new id: ";
+                    getline(cin, userID);
                 }
                 cout << "enter your name: ";
                 getline(cin, username);
                 cout << "enter contact number: ";
                 getline(cin, contactNum);
+                // create user object then call addToFile function for this user to append them to the end of premium users file 
                 User* u1 = new PremiumUser(userID, username, contactNum);
+                // then get their password, encode it, and add to login.txt file 
+                string password = loginSystem.getPassword();
+                loginSystem.encode(password);
+                ofstream loginFile("textFiles/login.txt", ios::app);
+                string line = userID + " " + password;
+                loginFile << line << endl;
+                loginFile.close();
                 u1->addUserToFile();
-                // also add user and their encrypted password to login.txt
+                cout << "premium user " << userID << " added successfully" << endl;
                 break;
             }
 
             case 'N':
-            case 'n':
+            case 'n': {
+                // taking input of inofrmation of new user
+                string userID, username, contactNum;
+                cout << "enter the following information to register a new user: " << endl;
+                cout << "user id: ";
+                getline(cin, userID);
+                // load normal users to check that id user entered is unique
+                loadNormalUsers();
+                while (!isUserIDunique(userID)) {
+                    cout << "user id taken! Enter new id: ";
+                    getline(cin, userID);
+                }
+                cout << "enter your name: ";
+                getline(cin, username);
+                cout << "enter contact number: ";
+                getline(cin, contactNum);
+                // create user object then call addToFile function for this user to append them to the end of premium users file 
+                User* u1 = new NormalUser(userID, username, contactNum);
+                // then get their password, encode it, and add to login.txt file 
+                string password = loginSystem.getPassword();
+                loginSystem.encode(password);
+                ofstream loginFile("textFiles/login.txt", ios::app);
+                string line = userID + " " + password;
+                loginFile << line << endl;
+                loginFile.close();
+                u1->addUserToFile();
+                cout << "normal user " << userID << " added successfully" << endl;
                 break;
+            }
 
             case 'L':
-            case 'l':
+            case 'l': {
+                // taking input of inofrmation of new user
+                string userID, username, contactNum;
+                float salary;
+                cout << "enter the following information to register a new user: " << endl;
+                cout << "user id: ";
+                getline(cin, userID);
+                // load normal users to check that id user entered is unique
+                loadNormalUsers();
+                while (!isUserIDunique(userID)) {
+                    cout << "user id taken! Enter new id: ";
+                    cin.ignore();
+                    getline(cin, userID);
+                }
+                cout << "enter your name: ";
+                getline(cin, username);
+                cout << "enter contact number: ";
+                getline(cin, contactNum);
+                cout << "enter salary: ";
+                cin >> salary;
+                // create user object then call addToFile function for this user to append them to the end of premium users file 
+                User* u1 = new Librarian(userID, username, contactNum, salary);
+                // then get their password, encode it, and add to login.txt file 
+                string password = loginSystem.getPassword();
+                loginSystem.encode(password);
+                ofstream loginFile("textFiles/login.txt", ios::app);
+                string line = userID + " " + password;
+                loginFile << line << endl;
+                loginFile.close();
+                u1->addUserToFile();
+                cout << "librarian " << userID << " added successfully" << endl;
                 break;
+            }
 
             default:
                 cout << "invalid user type" << endl;
@@ -66,15 +134,7 @@ class System {
         }
     }
 
-    void logAUser(string id) { // will this work lets hope it does lmao
-        for (int i = 0; i < allUsers.size(); i++) {
-            if (id == allUsers[i]->userID) {
-                loginedUser = allUsers[i];
-            }
-        }
-    }
-
-    void logAUser(string id) { // will this work lets hope it does lmao
+    void logAUser(string id) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
                 loginedUser = allUsers[i];
@@ -379,55 +439,6 @@ class System {
             cout << "login to access functions" << endl;
         }
     }
-    
-    // void saveUsers() {
-    //     ofstream allUsersFile("textFiles/allUsers.txt");
-    //     if (!allUsersFile) {
-    //         cerr << "Error in opening all users file" << endl;
-    //         return;
-    //     }
-    
-    //     for (User* user : allUsers) {
-    //         char userType = user->userID[0];
-            
-    //         // Write common user fields
-    //         allUsersFile << user->userID << endl;
-    //         allUsersFile << user->name << endl;
-    //         allUsersFile << user->contactNum << endl;
-    
-            // if (userType == 'P') {
-            //     PremiumUser* pUser = dynamic_cast<PremiumUser*>(user);
-            //     allUsersFile << pUser->totalFines << endl;
-            //     allUsersFile << pUser->borrowedBooks.size() << endl;
-                
-            //     // Write borrowed books IDs
-            //     for (const string book : pUser->borrowedBooks) {
-            //         allUsersFile << book << endl;
-            //     }
-            // }
-    //         else if (userType == 'N') {
-    //             NormalUser* nUser = dynamic_cast<NormalUser*>(user);
-    //             allUsersFile << nUser->totalFines << endl;
-    //             allUsersFile << nUser->currentBooksBorrowed << endl;
-                
-    //             // Write borrowed books IDs
-    //             for (Book* book : nUser->borrowedBooks) {
-    //                 if (book) {
-    //                     allUsersFile << book->bookID << endl;
-    //                 }
-    //             }
-    //         }
-    //         else if (userType == 'L') {
-    //             Librarian* lUser = dynamic_cast<Librarian*>(user);
-    //             allUsersFile << lUser->monthlySalary << endl;
-    //         }
-            
-    //         // Separate user records with empty line
-    //         allUsersFile << endl;
-    //     }
-        
-    //     allUsersFile.close();
-    // }
 
     void displayAllBooks() {
         int numBooks = allBooks.size();
@@ -450,11 +461,6 @@ class System {
             if (!allBooks[i].isBorrowed)
                 cout << allBooks[i];
         }
-    }
-
-    void displayUserBorrowedBooks() {
-        //oke so we make a function for this in users 
-        loginedUser->displayBooksBorrowed();
     }
 
     void borrowBook() { 
@@ -626,8 +632,8 @@ class System {
 
     void userMenu() {
         int choice = -1;
-        while(choice != 7) {
-            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. exit\nenter your choice: ";
+        while(choice != 8) {
+            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display borrowed books\n8. exit\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {
@@ -716,7 +722,12 @@ class System {
                 break;
             }
 
-            case 7: {
+            case 7: { // display borrowed books
+                loginedUser->displayBooksBorrowed();
+                break;
+            }
+
+            case 8: {
                 saveBooks();
                 saveUsers();
                 loginSystem.logout();
@@ -740,15 +751,3 @@ class System {
 };
 
 #endif
-
-// search user by id
-// search book by name (done)
-// search book by author (done)
-// search book by genre (kinda done)
-// search book by id (done)
-// create a new user 
-// delete user from system 
-// view all available books (done)
-// view all borrowed books (done)
-// renew a borrowed book
-// session management and axxess control seekhn hai 

@@ -13,7 +13,6 @@ int main() {
         cin.ignore();
         cout << "Enter your User ID: ";
         getline(cin, userID);
-        
         if (librarySystem.loginUser(userID)) {
             char userType = librarySystem.getCurrentUserType();
             librarySystem.logAUser(userID);
@@ -39,16 +38,6 @@ int main() {
 
         case 2:
             librarySystem.signUp();
-            break;
-            
+            break;    
     }
 }
-
-//         case 2:
-//             // Sign up functionality to be implemented
-//             cout << "Sign up functionality coming soon!" << endl;
-//             break;
-//         default:
-//             cout << "Invalid choice. Exiting..." << endl;
-//             break;
-//     }

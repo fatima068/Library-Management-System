@@ -300,14 +300,14 @@ class User {
 class PremiumUser: public User {
     protected:
     int maxBooks = 10; // use borrowed books.size() to get number of books currently borrowed by user
-    string borrowedBooks[10] = {"x"}; 
+    string borrowedBooks[10] = {"x", "x", "x", "x", "x", "x", "x", "x", "x", "x"}; 
     float finePer15Days = 5.0;
     float totalFines;
 
     public:
-    PremiumUser() : User(), totalFines(0.0), borrowedBooks() {}
+    PremiumUser() : User(), totalFines(0.0) {}
 
-    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
+    PremiumUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0) {}
 
     // to create user object from information stored in premium file
     PremiumUser(string userID, string name, string contactNum, string arr[10], float totalFines) : User(userID, name, contactNum), maxBooks(10), finePer15Days(5.0), totalFines(totalFines)  {
@@ -461,14 +461,14 @@ class PremiumUser: public User {
 class NormalUser: public User {
     protected:
     int maxBooks = 3;
-    string borrowedBooks[3] = {"x"}; 
+    string borrowedBooks[3] = {"x", "x", "x"}; 
     float finePerDay = 0.5;
     float totalFines;
 
     public:
-    NormalUser() : User(), totalFines(0.0), borrowedBooks() {}
+    NormalUser() : User(), totalFines(0.0) {}
 
-    NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0), borrowedBooks() {}
+    NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0) {}
 
     //constructor to create object after reading data from file
     NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {}

@@ -40,7 +40,7 @@ class LoginSystem {
     }
     
     void encode(string& password) {
-        string encoded = "";
+        // string encoded = "";
         for (int i=0; i<password.length(); i++){
             if (password.at(i) >= 65 && password.at(i) <= 89){
                 password.at(i)++;
