@@ -16,7 +16,7 @@ class System {
     LoginSystem loginSystem;
 
     public:
-    void logAUser(string id) { // will this work lets hope it does lmao
+    void logAUser(string id) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
                 loginedUser = allUsers[i];
@@ -172,11 +172,13 @@ class System {
             cerr << "Error in opening all books file" << endl;
             return;
         }
+        int i;
 
-        for (int i = 0; i < allBooks.size(); i++) {
+        for (i = 0; i < allBooks.size(); i++) {
             allBooks[i].addBookToFile();
         }
         allBooksFile.close();
+        cout << "saved " << i << " books" << endl;
     }
         
     void loadPremiumUsers() {
