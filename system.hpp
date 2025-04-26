@@ -486,6 +486,34 @@ class System {
 
     }
 
+    void deleteUserAccount() {
+        string idToRemove;
+        char userType;
+        bool flag = false;
+        cout << "enter user ID to remove: ";
+        cin.ignore();
+        getline(cin, idToRemove);
+        cout << "enter user type to remove: ";
+        cin >> userType;
+        if (userType == 'p'|| userType == 'P' || userType == 'n' || userType == 'N') {
+            
+        }
+
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (allUsers[i]->userID == idToRemove) {
+                delete allUsers[i];
+                allUsers.erase(allUsers.begin() + i);
+                cout << "user " << idToRemove << " removed successfully" << endl;
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
+            cout << "User not found" << endl;
+        }
+    }
+
     void LibrarianMenu() {
         int choice = -1;
         while(choice != 7) {
@@ -547,6 +575,7 @@ class System {
                 }
 
                 case 3: { // delete user account
+                    deleteUserAccount();
                     break;
                 }
 
