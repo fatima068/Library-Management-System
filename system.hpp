@@ -212,7 +212,7 @@ class System {
         }
         
         premiumFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " premium users" << endl;
     }
 
     void loadNormalUsers() {
@@ -246,7 +246,7 @@ class System {
         }
         
         normalFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " normal users" << endl;
     }
     
     void loadLibrarian() {
@@ -267,16 +267,14 @@ class System {
                     return;
                 }
             }
+            float salary = stof(userData[3]);
 
-            Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], stof(userData[3])); // yaar this constuctor is weird because like ismai write to file bhi hora uween i dont get
+            Librarian* lUser = new Librarian(userData[0], userData[1], userData[2], salary); 
             allUsers.push_back(lUser);
-            // Skip empty line between user records if exists
-            getline(librariansFile, line);
         }
         librariansFile.close();
-        cout << "Loaded " << allUsers.size() << " users" << endl;
+        cout << "Loaded " << allUsers.size() << " librarians" << endl;
     }
-     
 
     // void loadUsers() { 
     //     ifstream allUsersFile("textFiles/allUsers.txt");
