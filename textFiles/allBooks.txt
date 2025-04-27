@@ -3,28 +3,28 @@ B001
 Sample Book
 Test Author
 Fiction
-false
-0
-0
-0
+true
+11
+5
+2025
 0
 B002
 9785555484100
 Sample Book2
 Test Author
 Fiction
-false
-0
-0
-0
+true
+11
+5
+2025
 0
 B069
 56484284
 cool book
 fama
 rom-com
-false
-0
-0
-0
+true
+11
+5
+2025
 0

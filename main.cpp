@@ -15,22 +15,19 @@ int main() {
         getline(cin, userID);
         if (librarySystem.loginUser(userID)) {
             char userType = librarySystem.getCurrentUserType();
-            librarySystem.logAUser(userID);
             librarySystem.loadBooks();
             
             if (userType == 'P') {
                 librarySystem.loadPremiumUsers();
-                librarySystem.logineduserworks(); //debug
-                librarySystem.userMenu();
+                librarySystem.userMenu(userID);
             }
             else if (userType == 'N') {
                 librarySystem.loadNormalUsers();
-                librarySystem.logineduserworks(); //debug
-                librarySystem.userMenu();
+                librarySystem.userMenu(userID);
             }
             else if (userType == 'L') {
                 librarySystem.loadLibrarian();
-                librarySystem.LibrarianMenu();
+                librarySystem.LibrarianMenu(userID);
             } 
         } else {
             cout << "Login failed. Exiting..." << endl;

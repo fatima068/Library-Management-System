@@ -13,15 +13,10 @@ class System {
     private:
     vector<User*> allUsers;
     vector<Book> allBooks;
-    User* loginedUser;
+    // User* loginedUser;
     LoginSystem loginSystem;
 
     public:
-    System() {
-        loadBooks();
-        loadNormalUsers();
-    }
-
     bool isUserIDunique(string id) {
         for (int i = 0; i<allUsers.size(); i++) {
             if (allUsers[i]->userID == id) {
@@ -29,14 +24,6 @@ class System {
             }
         }
         return true;
-    }
-
-    void logineduserworks () {
-        cout << "oke now we display the details of the user who loggened in\n" << loginedUser << endl << "yayyy hogya display haina?\n"; //deepseek saying ke make it cout << *loginedUser, but uss se weird error aara
-        cout << "oke now lets see all users\n";
-        for (int i = 0; i < allUsers.size(); i++) {
-            cout << i + 1 << endl << allUsers[i] << endl;
-        }
     }
 
     void signUp() {
@@ -147,16 +134,13 @@ class System {
         }
     }
 
-    void logAUser(string id) {
-        cout << "login a user func starts here\n";
+    int loginedUserIndex(string id) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
-                cout << allUsers[i];
-                loginedUser = allUsers[i];
-                break;
+                return i;
             }
         }
-        cout << "login a user func ends here\n";
+        cout << "unable to log user " << endl;
     }
 
     char getCurrentUserType() {
@@ -257,15 +241,6 @@ class System {
             cout << "no user found" << endl << endl;
         } 
     }
-
-    // User* findUser(const string& userID) {
-    //     for (User* user : allUsers) {
-    //         if (user->userID == userID) {
-    //             return user;
-    //         }
-    //     }
-    //     return nullptr;
-    // }
 
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
@@ -483,27 +458,23 @@ class System {
         }
     }
 
-    void borrowBook() { 
+    void borrowBook(string idOfUser) { 
         string idToBorrow;
-        cout << "enter Book ID of book you want to borrow: ";
+        int index = loginedUserIndex(idOfUser);
+        cout << "enter Book ID of book to borrow: ";
         cin.ignore();
         getline(cin, idToBorrow);
-        // check if book is not already borrowed by other user 
-        string temp =  "..." + idToBorrow + "...";
-        cout << "book id: " << temp <<endl; 
         for (int i = 0; i<allBooks.size(); i++) {
             if (allBooks[i].bookID == idToBorrow) {
                 bool flag = allBooks[i].borrowBook();
-                cout << "oke so boook class fing hgya hai ab user" <<endl;
                 if (flag) {
-                    cout << "oflag true now user class function will be called" <<endl;
-                    loginedUser->borrowBook(idToBorrow);
-                    cout << "oke hogya user ka kaam done bye" <<endl;
-                    return;
+                    allUsers[index]->borrowBook(idToBorrow);
+                    saveBooks();
+                    saveUsers();
                 }
             }
         }
-        cout << "book id not found in system" << endl;
+        // cout << "book id not found in system" << endl;
     }
 
     void returnBook() {
@@ -699,7 +670,7 @@ class System {
         }
     }
 
-    void LibrarianMenu() {
+    void LibrarianMenu(string userID) {
         int choice = -1;
         while(choice != 7) {
             cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n7. logout\nenter your choice: ";
@@ -806,6 +777,7 @@ class System {
                     getline(cin, genre);
                     Book b1 = Book(id, isbn, title, author, genre, false, 0, 0, 0);
                     allBooks.push_back(b1);
+                    saveBooks();
                     break;
                 }
 
@@ -819,6 +791,7 @@ class System {
                         if (allBooks[i].bookID == idToRemove) {
                             allBooks.erase(allBooks.begin() + i);
                             cout << "book " << idToRemove << " removed successfully" << endl;
+                            saveBooks();
                             flag = true;
                             break;
                         }
@@ -845,7 +818,7 @@ class System {
 
     
 
-    void userMenu() {
+    void userMenu(string userID) {
         int choice = -1;
         while(choice != 8) {
             cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display borrowed books\n8. exit\nenter your choice: ";
@@ -901,31 +874,17 @@ class System {
             }
 
             case 3: { //borrow book
-                borrowBook();
+                borrowBook(userID);
                 break;
             }
 
             case 4: { //return book
-                
-                // something about pointers is confusing. maybe try removing pointers from user class return book function by calling return book for both book and user in system class instead of in user class by passing book as pointer
-
-                // string idToReturn;
-                // Book* b1;
-                // cout << "enter id of book to return: ";
-                // getline(cin, idToReturn);
-                // for (int i=0; i<allBooks.size(); i++) {
-                //     if (allBooks[i].bookID == idToReturn) {
-                //         allBooks[i].returnBook();
-                //     }
-                // }
-                // loginedUser->returnBook(b1);
                 break;
             }
 
             case 5: { //pay fine
-                //this can be done yahin pe ma
                 cin.ignore();
-                loginedUser->payFine();
+                // loginedUser->payFine();
                 break;
             }
 
@@ -938,7 +897,7 @@ class System {
             }
 
             case 7: { // display borrowed books
-                loginedUser->displayBooksBorrowed();
+                // loginedUser->displayBooksBorrowed();
                 break;
             }
 
@@ -961,7 +920,7 @@ class System {
         for (User* user : allUsers) {
             delete user;
         }
-        
+        // delete loginedUser;
     }
 };
 
