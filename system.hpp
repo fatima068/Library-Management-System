@@ -353,7 +353,7 @@ class System {
                 j++;
             }
             
-            NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2], arr, fine);    
+            NormalUser* nUser = new NormalUser(userData[0], userData[1], userData[2], arr, fine); 
             allUsers.push_back(nUser);
         }
         
@@ -670,6 +670,72 @@ class System {
         }
     }
 
+    void displayUserBorrowedBooks(string userID) {
+        int index = loginedUserIndex(userID);
+        // if (index == -1) {
+        //     cout << "User not found!" << endl;
+        //     return;
+        // }
+    
+        User* user = allUsers[index];
+        
+        // Check user type to determine max books and borrowed books array
+        // if (PremiumUser* pUser = dynamic_cast<PremiumUser*>(user)) {
+        //     if (pUser->borrowedBooks[0] == "x") {
+        //         cout << "no books borrowed currently" << endl;
+        //         return;
+        //     }
+        //     cout << "ids of books borrowed by " << pUser->name << ":" << endl;
+        //     // bool hasBooks = false;
+        //     for (int i = 0; i < 10; i++) {
+        //         if (pUser->borrowedBooks[i] != "x") {
+        //             cout << pUser->borrowedBooks[i] << endl;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        if (NormalUser* nUser = dynamic_cast<NormalUser*>(user)) {
+            cout << nUser->borrowedBooks[0] << endl << nUser->borrowedBooks[1] << endl << nUser->borrowedBooks[2] <<endl;
+            if (nUser->borrowedBooks[0] == "x") {
+                cout << "no books borrowed currently" << endl;
+                return;
+            }
+            cout << "books borrowed by " << nUser->name << endl;
+            // bool hasBooks = false;
+            for (int i = 0; i < 3; i++) {
+                if (nUser->borrowedBooks[i] != "x") {
+                    cout << nUser->borrowedBooks[i] << endl;
+                    break;
+                }
+            }
+        }
+
+        // else if (NormalUser* nUser = dynamic_cast<NormalUser*>(user)) {
+        //     if (nUser->borrowedBooks[0] == "x") {
+        //         cout << "no books borrowed currently" << endl;
+        //         return;
+        //     }
+        //     cout << "books borrowed by " << nUser->name << endl;
+        //     // bool hasBooks = false;
+        //     for (int i = 0; i < 3; i++) {
+        //         if (nUser->borrowedBooks[i] != "x") {
+        //             // Find the book in allBooks
+        //             for (const Book& book : allBooks) {
+        //                 if (book.bookID == nUser->borrowedBooks[i]) {
+        //                     cout << book.bookID << " " << book.title << " due date: " << book.dueDate.dd << "." << book.dueDate.mm << "." << book.dueDate.yy << endl;
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // else {
+        //     cout << "Librarians cannot borrow books." << endl;
+        // }
+    }
+
     void LibrarianMenu(string userID) {
         int choice = -1;
         while(choice != 7) {
@@ -692,7 +758,7 @@ class System {
                             searchAuthorName();
                             break;
                         }
-                         
+                        
                         case 3: { 
                             cin.ignore();
                             searchBookId();
@@ -820,8 +886,8 @@ class System {
 
     void userMenu(string userID) {
         int choice = -1;
-        while(choice != 8) {
-            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display borrowed books\n8. exit\nenter your choice: ";
+        while(choice != 8) { // case 4 5 6 7 left
+            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. exit\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {
@@ -897,7 +963,7 @@ class System {
             }
 
             case 7: { // display borrowed books
-                // loginedUser->displayBooksBorrowed();
+                displayUserBorrowedBooks(userID);
                 break;
             }
 
