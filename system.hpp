@@ -399,6 +399,7 @@ class System {
     void saveUsers() {
         if (loginSystem.getUserType() == 'L') {
             ofstream librariansFile("textFiles/librarians.txt", ios::trunc);
+            librariansFile.close();
             if (!librariansFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
@@ -426,6 +427,7 @@ class System {
 
         else if (loginSystem.getUserType() == 'N') {
             ofstream normalUserFile("textFiles/normalUsers.txt", ios::trunc);
+            normalUserFile.close();
             if (!normalUserFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
@@ -465,21 +467,21 @@ class System {
     }
 
     void borrowBook() { 
-        // string id;
-        // cout << "enter Book ID of book you want to borrow: ";
-        // cin >> id;
-        // if (loginedUser->isBookBorrowed(id)) {
-        //     cout << "You have already borrowed the Book" << endl;
-        //     return;
-        // }
-
-        // for (int i = 0; i < allBooks.size(); i++) {
-        //     if (id == allBooks[i].bookID) {
-        //         allBooks[i].borrowBook();
-        //         return;
-        //     }
-        // }
-        // cout << "Book ID doesn't exist" << endl;
+        string idToBorrow;
+        cout << "enter Book ID of book you want to borrow: ";
+        cin.ignore();
+        getline(cin, idToBorrow);
+        // check if book is not already borrowed by other user 
+        for (int i = 0; i<allBooks.size(); i++) {
+            if (allBooks[i].bookID == idToBorrow) {
+                bool flag = allBooks[i].borrowBook();
+                if (flag) {
+                    loginedUser->borrowBook(idToBorrow);
+                    return;
+                }
+            }
+        }
+        cout << "book id not found in system" << endl;
     }
 
     void returnBook() {
@@ -810,7 +812,7 @@ void deleteFirst10Lines(const string& filename) {
             }
 
             case 3: { //borrow book
-                // borrowBook();
+                borrowBook();
                 break;
             }
 
