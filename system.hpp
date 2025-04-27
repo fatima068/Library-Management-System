@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 #include "allClasses.hpp"
 #include "login.hpp"
 using namespace std;
@@ -486,6 +487,34 @@ class System {
     }
 
     void deleteUserAccount() {
+
+    /*
+void deleteFirst10Lines(const string& filename) {
+    vector<string> lines;
+    string line;
+    
+    // 1. Read all lines from file
+    ifstream inFile(filename);
+    if (!inFile) {
+        cerr << "Error opening file!" << endl;
+        return;
+    }
+    
+    // Skip first 10 lines
+    for (int i = 0; i < 10 && getline(inFile, line); i++) {}
+    
+    // Store remaining lines
+    while (getline(inFile, line)) {
+        lines.push_back(line);
+    }
+    inFile.close();
+    
+    // 2. Rewrite file without first 10 lines
+    ofstream outFile(filename);
+    for (const auto& l : lines) {
+        outFile << l << '\n';
+    }
+}*/
         string idToRemove;
         char userType;
         bool flag = false;
@@ -494,7 +523,73 @@ class System {
         getline(cin, idToRemove);
         cout << "enter user type to remove: ";
         cin >> userType;
-        if (userType == 'p'|| userType == 'P' || userType == 'n' || userType == 'N') {
+
+        if (userType == 'p'|| userType == 'P' ) {
+                ifstream premUsers("textFiles/premiumUsers.txt");
+                if (!premUsers) {
+                    cerr << "Error opening file: " << endl;
+                    return;
+                }
+
+                ofstream tempFile("temp.txt");
+                if (!tempFile) {
+                    cerr << "Error creating temporary file." << endl;
+                    premUsers.close();
+                    return;
+                }
+
+                string line;
+                bool found = false;
+                int linesToSkip = 0;
+
+                while (getline(premUsers, line)) {
+                    if (linesToSkip > 0) {
+                        linesToSkip--;
+                        continue;
+                    }
+
+                    if (line == idToRemove) {
+                        // Found the record to remove - skip next 13 lines
+                        found = true;
+                        linesToSkip = 13;
+                        continue;
+                    }
+
+                    tempFile << line << endl;
+                }
+
+                premUsers.close();
+                tempFile.close();
+
+                if (found) {
+                    // Replace original file with temp file
+                    ifstream premUsers("textFiles/premiumUsers.txt");
+                    if (!premUsers) {
+                        cerr << "Error opening file: " << endl;
+                        return;
+                    }
+
+                    ifstream tempFile("temp.txt");
+                    if (!tempFile) {
+                        cerr << "Error creating temporary file." << endl;
+                        premUsers.close();
+                        return;
+                    }
+
+                    //pickup from here
+
+                    cout << "Record with ID " << idToRemove << " removed successfully." << endl;
+                } else {
+                    cout << "Record with ID " << idToRemove << " not found." << endl;
+                    remove("temp.txt"); // Delete the temporary file
+                }
+        }
+
+        if (userType == 'n' || userType == 'N') {
+
+        }
+
+        if (userType == 'l' || userType == 'L') {
             
         }
 
