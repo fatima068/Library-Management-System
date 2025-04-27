@@ -9,9 +9,9 @@
 #include <fstream>
 using namespace std;
 
-class User;
-class NormalUser;
-class PremiumUser;
+// class User;
+// class NormalUser;
+// class PremiumUser;
 
 struct Date {
     int dd, mm, yy; // date format is dd-mm-yyyy (01-02-2024)
@@ -35,8 +35,6 @@ bool isLeapYear(int year) {
     if (year % 100 != 0 || year % 400 == 0) return true;     
     return false;                          
 }
-
-// in compare date check if year is leap year and use 29 instead of 28 for daysInMonth[1]
 
 class Book { 
     protected:
@@ -164,7 +162,7 @@ class Book {
         return daysOverdue;
     }
     
-
+    // wehn user is returning bok u find that book from system class vector, call return book for both book and user, and get fine overdue for book, thencalculate according to users subscription
     bool returnBook() {
         if (isBorrowed) {
             isBorrowed = false; 
@@ -178,7 +176,6 @@ class Book {
     }
 
     bool borrowBook() {
-        // first fetch data for that book from text file ???? or are we making aarrays in system class
         if(isBorrowed) {
             cout << "book already borrowed by other user" << endl;
             return false;
@@ -191,7 +188,6 @@ class Book {
 
         if (dueDay <= daysThisMonth) {
             dueDate = Date(dueDay, dueMonth, dueYear);
-            //update records in the file 
             cout << "book " << bookID << " borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
             return true;
         }
@@ -206,7 +202,6 @@ class Book {
         }
 
         dueDate = Date(dueDay, dueMonth, dueYear);
-        // save data to file
         cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
         return true;
     }
@@ -325,18 +320,6 @@ class PremiumUser: public User {
         premiumFile.close();
     }
 
-    // void borrowBook(string idToBorrow) override {
-    //     if (currentBooksBorrowed == maxBooks) {
-    //         cout << "max borrowing limit reached. return a book to borrow a new one" << endl;
-    //         return;
-    //     }
-    //     bool flag = b1->borrowBook();
-    //     if (flag == true) {
-    //         borrowedBooks.push_back(b1);
-    //         currentBooksBorrowed++;
-    //    }
-    // }
-
     bool isBookBorrowedByUser(string idToBorrow) {
         for (int i = 0; i<10; i++) {
             if (idToBorrow == borrowedBooks[i]) {
@@ -347,6 +330,7 @@ class PremiumUser: public User {
         return false;
     }
 
+    // check book.borrow book in systen class, if book can be borrowed then claa this function 
     void borrowBook(string idToBorrow) override {
         if (borrowedBooks[9] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
