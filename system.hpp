@@ -36,12 +36,12 @@ class System {
                 // taking input of inofrmation of new user
                 string userID, username, contactNum;
                 cout << "enter the following information to register a new user: " << endl;
-                cout << "user id: ";
+                cout << "user id(eg. P001, P333 ....): ";
                 getline(cin, userID);
                 // load premium users to check that id user entered is unique
                 loadPremiumUsers();
-                while (!isUserIDunique(userID)) {
-                    cout << "user id taken! Enter new id: ";
+                while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'P') {
+                    cout << "user id taken or invalid format! Enter new id(P000, P001, etc): ";
                     getline(cin, userID);
                 }
                 cout << "enter your name: ";
@@ -67,12 +67,12 @@ class System {
                 // taking input of inofrmation of new user
                 string userID, username, contactNum;
                 cout << "enter the following information to register a new user: " << endl;
-                cout << "user id: ";
+                cout << "user id(eg N000, N001, ....): ";
                 getline(cin, userID);
                 // load normal users to check that id user entered is unique
                 loadNormalUsers();
-                while (!isUserIDunique(userID)) {
-                    cout << "user id taken! Enter new id: ";
+                while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'N') {
+                    cout << "user id taken or invalid format! Enter new id(N000, N001, etc): ";
                     getline(cin, userID);
                 }
                 cout << "enter your name: ";
@@ -99,13 +99,12 @@ class System {
                 string userID, username, contactNum;
                 float salary;
                 cout << "enter the following information to register a new user: " << endl;
-                cout << "user id: ";
+                cout << "user id(eg. L001, L333 ....): ";
                 getline(cin, userID);
-                // load normal users to check that id user entered is unique
-                loadNormalUsers();
-                while (!isUserIDunique(userID)) {
-                    cout << "user id taken! Enter new id: ";
-                    cin.ignore();
+                // load premium users to check that id user entered is unique
+                loadPremiumUsers();
+                while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'P') {
+                    cout << "user id taken or invalid format! Enter new id(L000, L001, etc): ";
                     getline(cin, userID);
                 }
                 cout << "enter your name: ";
