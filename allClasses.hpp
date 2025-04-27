@@ -7,7 +7,6 @@
 #include <ctime>
 #include <vector>
 #include <fstream>
-// #include "system.hpp"
 using namespace std;
 
 class User;
@@ -275,13 +274,6 @@ class User {
 
     User(string userID, string name, string contactNum) : userID(userID), name(name), contactNum(contactNum) {}
 
-    // void setName(string n) {
-    //     name = n;
-    // }
-    // void setContact(string c) {
-    //     contactNum = c;
-    // }
-
     virtual void borrowBook(string idToBorrow) = 0;
     virtual void returnBook(Book* b1) = 0;
     virtual bool addNewBook(Book b1) = 0;
@@ -299,7 +291,7 @@ class User {
 
 class PremiumUser: public User {
     protected:
-    int maxBooks = 10; // use borrowed books.size() to get number of books currently borrowed by user
+    int maxBooks = 10;
     string borrowedBooks[10] = {"x", "x", "x", "x", "x", "x", "x", "x", "x", "x"}; 
     float finePer15Days = 5.0;
     float totalFines;
@@ -355,7 +347,7 @@ class PremiumUser: public User {
         return false;
     }
 
-    void borrowBook(string idToBorrow) override { // in system class, take input for id to borrow, find book from all books vector. first check if user has not already borrowed book. if not, call borrow book for book object, if it returns true, then call this function 
+    void borrowBook(string idToBorrow) override {
         if (borrowedBooks[9] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
             return;
@@ -651,8 +643,6 @@ class Librarian : public User {
         return true;
     }
 
-    // system class mei for user* object, call this function, if it returns true add book else user cannot add book
-
     friend ostream& operator<< (ostream& out, Librarian l1) {
         out << "User Type: Librarian" << endl; 
         out << "User ID: " << l1.userID << endl << "Name: " << l1.name << endl << "Contact Number: " << l1.contactNum << endl << "Monthly Salary: " << l1.monthlySalary <<  endl;
@@ -670,33 +660,5 @@ class Librarian : public User {
 
     friend class System;
 };
+
 #endif
-
-/* 
-OKE     to we need to see loading user abhi na
-
-no wait pehle lets figure out the outline of the program (oki)
-
-id say 
-we make ek vector of user class  iska load karna about the vector<string> borrowedBooks in user class i was thinking ke what we do is: 
-    id tou agai na books ki
-    tou like if user wants to return a book 
-    we hata usski id from user ka object 
-    but then we go to books array
-    and udhr se we find our desired book id
-    and we do 
-    if (id == allBooks[i].bookID) {
-        allBooks[i].returnBook();
-    }
-    but for this hume user class mei function rewrite karne parenge and also change systen class accordingly 
-
-
-     
-ek vector of book\
-matlab load dono ka shit from files haina
-then user type ajayega login ke baad 
-tou acording to user type we load the appropriate file to a vector 
-then logined user nikalen uss se
-then uss  logined user pe saare operation perform karen
-
-*/
