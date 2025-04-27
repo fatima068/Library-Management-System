@@ -477,16 +477,21 @@ class NormalUser: public User {
     }
 
     void borrowBook(string idToBorrow) override { // in system class, take input for id to borrow, find book from all books vector. first check if user has not already borrowed book. if not, call borrow book for book object, if it returns true, then call this function 
+    cout << "\n oke so the borrow function in user is khul gayua" << endl;
         if (borrowedBooks[2] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
             return;
         }
+        cout << "user has jagah to borrow books yaay" << endl;
         bool flag = isBookBorrowedByUser(idToBorrow);
         if (flag == false) {
             for (int i = 0; i<3; i++) {
                 if (borrowedBooks[i] == "x") {
                     borrowedBooks[i] = idToBorrow;
+                    cout << "book stored in user array" << endl;
+                    cout << "oke byebye function hello menu" << endl;
                     return;
+
                 }
             }
         }

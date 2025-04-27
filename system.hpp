@@ -17,6 +17,11 @@ class System {
     LoginSystem loginSystem;
 
     public:
+    System() {
+        loadBooks();
+        loadNormalUsers();
+    }
+
     bool isUserIDunique(string id) {
         for (int i = 0; i<allUsers.size(); i++) {
             if (allUsers[i]->userID == id) {
@@ -24,6 +29,14 @@ class System {
             }
         }
         return true;
+    }
+
+    void logineduserworks () {
+        cout << "oke now we display the details of the user who loggened in\n" << loginedUser << endl << "yayyy hogya display haina?\n"; //deepseek saying ke make it cout << *loginedUser, but uss se weird error aara
+        cout << "oke now lets see all users\n";
+        for (int i = 0; i < allUsers.size(); i++) {
+            cout << i + 1 << endl << allUsers[i] << endl;
+        }
     }
 
     void signUp() {
@@ -135,11 +148,15 @@ class System {
     }
 
     void logAUser(string id) {
+        cout << "login a user func starts here\n";
         for (int i = 0; i < allUsers.size(); i++) {
             if (id == allUsers[i]->userID) {
+                cout << allUsers[i];
                 loginedUser = allUsers[i];
+                break;
             }
         }
+        cout << "login a user func ends here\n";
     }
 
     char getCurrentUserType() {
@@ -472,11 +489,16 @@ class System {
         cin.ignore();
         getline(cin, idToBorrow);
         // check if book is not already borrowed by other user 
+        string temp =  "..." + idToBorrow + "...";
+        cout << "book id: " << temp <<endl; 
         for (int i = 0; i<allBooks.size(); i++) {
             if (allBooks[i].bookID == idToBorrow) {
                 bool flag = allBooks[i].borrowBook();
+                cout << "oke so boook class fing hgya hai ab user" <<endl;
                 if (flag) {
+                    cout << "oflag true now user class function will be called" <<endl;
                     loginedUser->borrowBook(idToBorrow);
+                    cout << "oke hogya user ka kaam done bye" <<endl;
                     return;
                 }
             }

@@ -20,10 +20,12 @@ int main() {
             
             if (userType == 'P') {
                 librarySystem.loadPremiumUsers();
+                librarySystem.logineduserworks(); //debug
                 librarySystem.userMenu();
             }
             else if (userType == 'N') {
                 librarySystem.loadNormalUsers();
+                librarySystem.logineduserworks(); //debug
                 librarySystem.userMenu();
             }
             else if (userType == 'L') {
