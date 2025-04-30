@@ -58,8 +58,10 @@ class System {
                 string line = userID + " " + password;
                 loginFile << line << endl;
                 loginFile.close();
-                u1->addUserToFile();
+                ofstream premiumFile("textFiles/premiumUsers.txt", ios::app);
+                u1->addUserToFile(premiumFile);
                 cout << "premium user " << userID << " added successfully" << endl;
+                premiumFile.close();
                 break;
             }
 
@@ -89,8 +91,10 @@ class System {
                 string line = userID + " " + password;
                 loginFile << line << endl;
                 loginFile.close();
-                u1->addUserToFile();
+                ofstream normalFile("textFiles/normalUsers.txt", ios::app);
+                u1->addUserToFile(normalFile);
                 cout << "normal user " << userID << " added successfully" << endl;
+                normalFile.close();
                 break;
             }
 
@@ -123,8 +127,10 @@ class System {
                 string line = userID + " " + password;
                 loginFile << line << endl;
                 loginFile.close();
-                u1->addUserToFile();
+                ofstream librarianFile("textFiles/librarian.txt", ios::app);
+                u1->addUserToFile(librarianFile);
                 cout << "librarian " << userID << " added successfully" << endl;
+                librarianFile.close();
                 break;
             }
 
@@ -673,73 +679,7 @@ class System {
     void displayUserBorrowedBooks(string userID) {
         int index = loginedUserIndex(userID);
         allUsers[index]->displayBooksBorrowed();
-        // if (index == -1) {
-        //     cout << "User not found!" << endl;
-        //     return;
-        // }
-    
-        // User* user = allUsers[index];
         
-        // Check user type to determine max books and borrowed books array
-        // if (PremiumUser* pUser = dynamic_cast<PremiumUser*>(user)) {
-        //     if (pUser->borrowedBooks[0] == "x") {
-        //         cout << "no books borrowed currently" << endl;
-        //         return;
-        //     }
-        //     cout << "ids of books borrowed by " << pUser->name << ":" << endl;
-        //     // bool hasBooks = false;
-        //     for (int i = 0; i < 10; i++) {
-        //         if (pUser->borrowedBooks[i] != "x") {
-        //             cout << pUser->borrowedBooks[i] << endl;
-        //             break;
-        //         }
-        //     }
-        // }
-
-        // if (NormalUser* nUser = dynamic_cast<NormalUser*>(allUsers[index])) {
-        //     int numBorrowed = 0;
-        //     for (int i = 0; i < 3; i++) {
-        //         if (nUser->borrowedBooks[i] != "x") numBorrowed++;
-        //     }
-
-            // if (numBorrowed == 0) {
-            //     cout << "no books borrowed currently" << endl;
-            //     return;
-            // }
-            // cout << "books borrowed by " << nUser->name << endl;
-
-            // bool hasBooks = false;
-            // for (int i = 0; i < 3; i++) {
-            //     if (nUser->borrowedBooks[i] != "x") {
-            //         cout << nUser->borrowedBooks[i] << endl;
-            //     }
-            // }
-        //     cout << "Num: " << numBorrowed <<endl << nUser->borrowedBooks[0] << endl  << nUser->borrowedBooks[1] << endl  << nUser->borrowedBooks[2] << endl;
-        // }
-
-        // else if (NormalUser* nUser = dynamic_cast<NormalUser*>(user)) {
-        //     if (nUser->borrowedBooks[0] == "x") {
-        //         cout << "no books borrowed currently" << endl;
-        //         return;
-        //     }
-        //     cout << "books borrowed by " << nUser->name << endl;
-        //     // bool hasBooks = false;
-        //     for (int i = 0; i < 3; i++) {
-        //         if (nUser->borrowedBooks[i] != "x") {
-        //             // Find the book in allBooks
-        //             for (const Book& book : allBooks) {
-        //                 if (book.bookID == nUser->borrowedBooks[i]) {
-        //                     cout << book.bookID << " " << book.title << " due date: " << book.dueDate.dd << "." << book.dueDate.mm << "." << book.dueDate.yy << endl;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // else {
-        //     cout << "Librarians cannot borrow books." << endl;
-        // }
     }
 
     void LibrarianMenu(string userID) {
@@ -892,7 +832,7 @@ class System {
 
     void userMenu(string userID) {
         int choice = -1;
-        while(choice != 8) { // case 4 5 6 7 left
+        while(choice != 8) { // case 4 5 6 left
             cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. logout\nenter your choice: ";
             cin >> choice;
 

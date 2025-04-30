@@ -9,10 +9,6 @@
 #include <fstream>
 using namespace std;
 
-// class User;
-// class NormalUser;
-// class PremiumUser;
-
 struct Date {
     int dd, mm, yy; // date format is dd-mm-yyyy (01-02-2024)
 
@@ -275,7 +271,7 @@ class User {
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
     virtual void payFine() = 0;
-    virtual void addUserToFile() = 0;
+    // virtual void addUserToFile() = 0;
     virtual void addUserToFile(ofstream& filep) = 0;
     virtual void displayBooksBorrowed() = 0;
     virtual bool isBookBorrowed(string id) = 0;
@@ -302,23 +298,6 @@ class PremiumUser: public User {
         for (int i = 0; i < 10; i++) {
             borrowedBooks[i] = arr[i];
         }
-    }
-
-    void addUserToFile() override {
-        ofstream premiumFile("textFiles/premiumUsers.txt", ios::app);
-        if (!premiumFile) {
-            cerr << "Error in opening all users file" << endl;
-        }
-
-        premiumFile << userID << endl;
-        premiumFile << name << endl;
-        premiumFile << contactNum << endl;
-        for (int i = 0; i<10; i++) {
-            premiumFile << borrowedBooks[i] << endl;
-        }
-        premiumFile << totalFines << endl;
-        // after this, the file will store 1 user in 14 lines.
-        premiumFile.close();
     }
 
     void addUserToFile(ofstream& filep) override {
@@ -464,23 +443,6 @@ class NormalUser: public User {
         }
     }
 
-    void addUserToFile() override {
-        ofstream normalFile("textFiles/normalUsers.txt", ios::app);
-        if (!normalFile) {
-            cerr << "Error in opening all users file" << endl;
-        }
-
-        normalFile << userID << endl;
-        normalFile << name << endl;
-        normalFile << contactNum << endl;
-        for (int i=0; i<3; i++) {
-            normalFile << borrowedBooks[i] << endl;
-        }
-        normalFile << totalFines << endl;
-        // after this, the file will store 1 user in 7 lines. 
-        normalFile.close();
-    }
-
     void addUserToFile(ofstream& filep) override {
         filep << userID << endl;
         filep << name << endl;
@@ -617,20 +579,6 @@ class Librarian : public User {
 
     // constructor to create object after reading data from file 
     Librarian(string userID, string name, string contactNum, float monthlySalary) : User(userID, name, contactNum), monthlySalary(monthlySalary) {}
-
-    void addUserToFile() override {
-        ofstream librariansFile("textFiles/librarians.txt", ios::app);
-        if (!librariansFile) {
-            cerr << "Error in opening all users file" << endl;
-        }
-
-        librariansFile << userID << endl;
-        librariansFile << name << endl;
-        librariansFile << contactNum << endl;
-        librariansFile << monthlySalary << endl;
-        // after this, the file will store 1 user in 4 lines. 
-        librariansFile.close();
-    }
 
     void addUserToFile(ofstream& filep) override {
         filep << userID << endl;
