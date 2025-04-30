@@ -141,6 +141,7 @@ class System {
             }
         }
         cout << "unable to log user " << endl;
+        return -1;
     }
 
     char getCurrentUserType() {
