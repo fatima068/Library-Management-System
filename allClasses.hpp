@@ -460,10 +460,10 @@ class NormalUser: public User {
                 break;
             }
         }
-        for (int i = index; i < 9; i++) {
+        for (int i = index; i < 2; i++) {
             borrowedBooks[i] = borrowedBooks[i + 1]; //wahtapp
         }
-        borrowedBooks[9] = "x";
+        borrowedBooks[2] = "x";
     }
 
     void renewBook(string idToRenew) override {

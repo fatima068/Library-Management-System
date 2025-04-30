@@ -508,10 +508,10 @@ class System {
     void returnBook(string idOfUser) {
         string idToReturn;
         int userIndex = loginedUserIndex(idOfUser);
-        int bookIndex = findBookIndex(idToReturn);
         cout << "enter Book ID of book to return: ";
         cin.ignore();
         getline(cin, idToReturn);
+        int bookIndex = findBookIndex(idToReturn);
         if (bookIndex == -1) {
             cout << "invalid book id" << endl;
             return;
