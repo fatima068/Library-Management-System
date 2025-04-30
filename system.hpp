@@ -536,6 +536,10 @@ class System {
         saveUsers();
     }
 
+    void renewBook(string idOfUser) {
+        
+    }
+
     void payFine(string userID) {
         int userIndex = loginedUserIndex(userID);
         allUsers[userIndex]->payFine();
