@@ -451,11 +451,17 @@ class System {
     }
 
     void displayAvailableBooks() {
+        int available = 0;
         int numBooks = allBooks.size();
         for (int i = 0; i < numBooks; i++) {
-            if (!allBooks[i].isBorrowed)
+            if (!allBooks[i].isBorrowed) {
                 cout << allBooks[i];
+                available++;
+            }
         }
+
+        if (available == 0)
+            cout << "No books available" << endl;
     }
 
     void borrowBook(string idOfUser) { 
