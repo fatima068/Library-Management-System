@@ -230,6 +230,10 @@ class Book {
         return true;
     }
 
+    int getTimesRenewed() {
+        return timesRenewed;
+    }
+
     friend ostream& operator<< (ostream& out, Book &b1) {
         out << "Book ID: " << b1.bookID << endl << "Book title: " << b1.title << endl << "Author: " << b1.author << endl << "Genre: " << b1.genre << "ISBN: " << b1.ISBN << endl;
         if (b1.isBorrowed) {

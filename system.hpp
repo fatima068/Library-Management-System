@@ -536,7 +536,47 @@ class System {
     }
 
     void renewBook(string idOfUser) {
+        char userType = idOfUser.at(0);
+        string idToRenew;
+        int userIndex = loginedUserIndex(idOfUser);
+        cout << "enter Book ID of book to renew: ";
+        cin.ignore();
+        getline(cin, idToRenew);
+        int bookIndex = findBookIndex(idToRenew);
+        if (bookIndex == -1) {
+            cout << "invalid book id" << endl;
+            return;
+        }
+
+        if (allBooks[bookIndex].isBorrowed == false) {
+            cout << "book is not borrowed" << endl;
+            return;
+        }
         
+        if (allUsers[userIndex]->isBookBorrowedByUser(idToRenew) == false) {
+            cout << "this book is not borrowed by you!" << endl;
+            return;
+        }
+
+        int timesRenewed = allBooks[bookIndex].getTimesRenewed();
+        if (userType == 'n' || userType == 'N') {
+            if (timesRenewed == 1) {
+                cout << "book has been renewed maximum times and cannot be renewed again" <<endl;
+                return;
+            }
+        }
+
+        if (userType == 'p' || userType == 'P') {
+            if (timesRenewed == 3) {
+                cout << "book has been renewed maximum times and cannot be renewed again" <<endl;
+                return;
+            }
+        }
+
+        allBooks[bookIndex].renew(); 
+        // allUsers[userIndex]->renewBook(idToRenew);
+        saveBooks();
+        saveUsers();
     }
 
     void payFine(string userID) {
@@ -959,10 +999,7 @@ class System {
             }
 
             case 6: { //renew book
-                // loginedUser->renewBook()
-
-                // try removing pointers from here as well. 
-                // what we can do is edit user to rmeove or include books borrowed by them separately, then search for book id in all books vector and edit that separately over here, no need to make a sepaarte function because function not a part of librarian class.
+                renewBook(userID);
                 break;
             }
 

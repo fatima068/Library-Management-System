@@ -4,10 +4,10 @@ Sample Book
 Test Author
 Fiction
 true
-14
+26
 5
 2025
-0
+1
 B002
 9785555484100
 Sample Book2
