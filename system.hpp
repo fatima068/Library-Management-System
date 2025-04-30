@@ -507,25 +507,12 @@ class System {
     }
 
     void returnBook(string idOfUser) {
-        /*
-        oke so:
-        1) get user index and index of book to return
-        2) validate book index
-            - return if invalid
-        3) check if book at index is borrowed even
-            -return if it is not borrowed
-        4) check if book at index is borrowed by user at index
-            -return if it is not borrowed by user
-        5) call a return book member function of user, so book removed from borrowed books array
-        6) call a return book member function of book, so book isBorrowed can be made false
-        7) saveBooks(),saveUsers()*/
         string idToReturn;
-
         int userIndex = loginedUserIndex(idOfUser);
+        int bookIndex = findBookIndex(idToReturn);
         cout << "enter Book ID of book to return: ";
         cin.ignore();
         getline(cin, idToReturn);
-        int bookIndex = findBookIndex(idToReturn);
         if (bookIndex == -1) {
             cout << "invalid book id" << endl;
             return;
@@ -540,8 +527,11 @@ class System {
             return;
         }
 
+        int daysOverDue = allBooks[bookIndex].getDaysOverdue();
+        allUsers[userIndex]->calculateFine(daysOverDue);
+
         allBooks[bookIndex].returnBook(); 
-        allUsers[userIndex]->borrowBook(idToReturn);  
+        allUsers[userIndex]->returnBook(idToReturn);
         saveBooks();
         saveUsers();
     }

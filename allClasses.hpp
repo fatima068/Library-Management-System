@@ -158,7 +158,7 @@ class Book {
         return daysOverdue;
     }
     
-    // wehn user is returning bok u find that book from system class vector, call return book for both book and user, and get fine overdue for book, thencalculate according to users subscription
+    // wehn user is returning bok u find that book from system class vector, call return book for both book and user, and get fine overdue for book, then calculate according to users subscription
     bool returnBook() {
         if (isBorrowed) {
             isBorrowed = false; 
@@ -268,6 +268,7 @@ class User {
     virtual void addUserToFile(ofstream& filep) = 0; 
     virtual void displayBooksBorrowed() = 0; 
     virtual bool isBookBorrowedByUser(string id) = 0;
+    virtual void calculateFine(int daysOverDue) = 0;
     virtual ~User() = default;
 
     friend class System;
@@ -369,10 +370,28 @@ class PremiumUser: public User {
     //         }
     //     }
     //     return out;
-    // }
 
-    void returnBook(string idToReturn) { //lmao
+    void returnBook(string idToReturn) { 
+       int index = -1;
+       for (int i = 0; i<10; i++) {
+            if (borrowedBooks[i] == idToReturn) {
+                index = i;
+                break;
+            }
+        }
+        for (int i = index; i < 9; i++) {
+            borrowedBooks[i] = borrowedBooks[i + 1]; 
+        }
+        borrowedBooks[9] = "x";
+    }
 
+    void calculateFine(int daysOverDue) override {
+        float fine = 0.0;
+        if (daysOverDue >= 15) {
+             fine = daysOverDue % 15 * finePer15Days;
+        }
+        totalFines += fine;
+        cout << "fine of rs " << fine << ", new total fines are: rs " << totalFines << endl;
     }
 
     void renewBook(string idToRenew) {
@@ -434,11 +453,28 @@ class NormalUser: public User {
     }
 
     void returnBook(string idToReturn) override {
-
+        int index = -1;
+        for (int i = 0; i<3; i++) {
+            if (borrowedBooks[i] == idToReturn) {
+                index = i;
+                break;
+            }
+        }
+        for (int i = index; i < 9; i++) {
+            borrowedBooks[i] = borrowedBooks[i + 1]; //wahtapp
+        }
+        borrowedBooks[9] = "x";
     }
 
     void renewBook(string idToRenew) override {
 
+    } 
+
+    void calculateFine(int daysOverDue) override {
+        float fine = 0;
+        fine = daysOverDue * finePerDay;
+        totalFines += fine;
+        cout << "fine of rs " << fine << ", new total fines: " << totalFines << endl;
     }
 
     void payFine() override {
@@ -531,6 +567,10 @@ class Librarian : public User {
 
     bool isBookBorrowedByUser(string id) override {
         cout << "not a valid librarian function " << endl;
+    }
+
+    void calculateFine(int daysOverDue) override {
+        cout << "not a valid librarian function " << endl;    
     }
 };
 
