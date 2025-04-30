@@ -29,7 +29,7 @@ int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 bool isLeapYear(int year) {
     if (year % 4 != 0) return false;       
     if (year % 100 != 0 || year % 400 == 0) return true;     
-    return false;                          
+    return false;
 }
 
 class Book { 
@@ -460,10 +460,10 @@ class NormalUser: public User {
                 break;
             }
         }
-        for (int i = index; i < 9; i++) {
+        for (int i = index; i < 2; i++) {
             borrowedBooks[i] = borrowedBooks[i + 1]; //wahtapp
         }
-        borrowedBooks[9] = "x";
+        borrowedBooks[2] = "x";
     }
 
     void renewBook(string idToRenew) override {
@@ -567,6 +567,7 @@ class Librarian : public User {
 
     bool isBookBorrowedByUser(string id) override {
         cout << "not a valid librarian function " << endl;
+        return false;
     }
 
     void calculateFine(int daysOverDue) override {

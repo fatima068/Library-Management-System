@@ -13,7 +13,6 @@ class System {
     private:
     vector<User*> allUsers;
     vector<Book> allBooks;
-    // User* loginedUser;
     LoginSystem loginSystem;
 
     public:
@@ -509,10 +508,10 @@ class System {
     void returnBook(string idOfUser) {
         string idToReturn;
         int userIndex = loginedUserIndex(idOfUser);
-        int bookIndex = findBookIndex(idToReturn);
         cout << "enter Book ID of book to return: ";
         cin.ignore();
         getline(cin, idToReturn);
+        int bookIndex = findBookIndex(idToReturn);
         if (bookIndex == -1) {
             cout << "invalid book id" << endl;
             return;
@@ -949,6 +948,7 @@ class System {
             }
 
             case 4: { //return book
+                returnBook(userID);
                 break;
             }
 
