@@ -289,8 +289,8 @@ class System {
             cerr << "Error in opening all books file" << endl;
             return;
         }
+        
         int i;
-
         for (i = 0; i < allBooks.size(); i++) {
             allBooks[i].addBookToFile();
         }
@@ -470,27 +470,86 @@ class System {
             cout << "No books available" << endl;
     }
 
+    int findBookIndex(string id) {
+        for (int i = 0; i<allBooks.size(); i++) {
+            if (allBooks[i].bookID == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     void borrowBook(string idOfUser) { 
         string idToBorrow;
-        int index = loginedUserIndex(idOfUser);
+
+        int userIndex = loginedUserIndex(idOfUser);
         cout << "enter Book ID of book to borrow: ";
         cin.ignore();
         getline(cin, idToBorrow);
-        for (int i = 0; i<allBooks.size(); i++) {
-            if (allBooks[i].bookID == idToBorrow) {
-                bool flag = allBooks[i].borrowBook();
-                if (flag) {
-                    allUsers[index]->borrowBook(idToBorrow);
-                    saveBooks();
-                    saveUsers();
-                }
-            }
+        int bookIndex = findBookIndex(idToBorrow);
+        if (bookIndex == -1) {
+            cout << "invalid id" << endl;
+            return;
         }
-        // cout << "book id not found in system" << endl;
+        if (allUsers[userIndex]->isBookBorrowedByUser(idToBorrow) == true) {
+            cout << "book already borrowed by you!" << endl;
+            return;
+        }
+        if (allBooks[bookIndex].isBorrowed == true) {
+            cout << "book already borrowed" << endl;
+            return;
+        }
+
+        allBooks[bookIndex].borrowBook();
+        allUsers[userIndex]->borrowBook(idToBorrow);  
+        saveBooks();
+        saveUsers();
     }
 
-    void returnBook() {
+    void returnBook(string idOfUser) {
+        /*
+        oke so:
+        1) get user index and index of book to return
+        2) validate book index
+            - return if invalid
+        3) check if book at index is borrowed even
+            -return if it is not borrowed
+        4) check if book at index is borrowed by user at index
+            -return if it is not borrowed by user
+        5) call a return book member function of user, so book removed from borrowed books array
+        6) call a return book member function of book, so book isBorrowed can be made false
+        7) saveBooks(),saveUsers()*/
+        string idToReturn;
 
+        int userIndex = loginedUserIndex(idOfUser);
+        cout << "enter Book ID of book to return: ";
+        cin.ignore();
+        getline(cin, idToReturn);
+        int bookIndex = findBookIndex(idToReturn);
+        if (bookIndex == -1) {
+            cout << "invalid book id" << endl;
+            return;
+        }
+        if (allBooks[bookIndex].isBorrowed == false) {
+            cout << "book is not borrowed" << endl;
+            return;
+        }
+        
+        if (allUsers[userIndex]->isBookBorrowedByUser(idToReturn) == false) {
+            cout << "this book is not borrowed by you!" << endl;
+            return;
+        }
+
+        allBooks[bookIndex].returnBook(); 
+        allUsers[userIndex]->borrowBook(idToReturn);  
+        saveBooks();
+        saveUsers();
+    }
+
+    void payFine(string userID) {
+        int userIndex = loginedUserIndex(userID);
+        allUsers[userIndex]->payFine();
+        saveUsers();
     }
 
     void deleteUserAccount() {     
@@ -781,8 +840,7 @@ class System {
                 case 5: { // add new book to library
                     string id, isbn, title, author, genre;
                     cout << "Enter book details of book to add" << endl;
-                    cout << "Book ID: "; // should i first check if its unique ?  
-                    //yesh
+                    cout << "Book ID: "; // check if it is unique
                     cin.ignore();
                     getline(cin, id);
                     cout << "ISBN: ";
@@ -902,7 +960,7 @@ class System {
 
             case 5: { //pay fine
                 cin.ignore();
-                // loginedUser->payFine();
+                payFine(userID);
                 break;
             }
 
@@ -918,7 +976,7 @@ class System {
                 displayUserBorrowedBooks(userID);
                 break;
             }
-
+            
             case 8: {
                 saveBooks();
                 saveUsers();

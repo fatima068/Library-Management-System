@@ -169,13 +169,9 @@ class Book {
         }
         cout << "book is not borrowed" << endl; 
         return false; // fine will be calculated in user class ka return book 
-    }
+    } 
 
-    bool borrowBook() {
-        if(isBorrowed) {
-            cout << "book already borrowed by other user" << endl;
-            return false;
-        }
+    void borrowBook() {
         isBorrowed = true;
         int dueDay = dateTodayVar.dd + 14; 
         int dueMonth = dateTodayVar.mm; 
@@ -185,7 +181,7 @@ class Book {
         if (dueDay <= daysThisMonth) {
             dueDate = Date(dueDay, dueMonth, dueYear);
             cout << "book " << bookID << " borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
-            return true;
+            return;
         }
 
         if (dueDay > daysThisMonth) {
@@ -199,7 +195,7 @@ class Book {
 
         dueDate = Date(dueDay, dueMonth, dueYear);
         cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
-        return true;
+        return;
     }
 
     bool renew() {
@@ -266,16 +262,12 @@ class User {
     User(string userID, string name, string contactNum) : userID(userID), name(name), contactNum(contactNum) {}
 
     virtual void borrowBook(string idToBorrow) = 0;
-    virtual void returnBook(Book* b1) = 0;
-    virtual bool addNewBook(Book b1) = 0;
-    virtual bool removeBook(Book b1) = 0;
-    virtual void renewBook(Book* b1) = 0;
+    virtual void returnBook(string idToReturn) = 0;
+    virtual void renewBook(string idToRenew) = 0;
     virtual void payFine() = 0;
-    // virtual void addUserToFile() = 0;
-    virtual void addUserToFile(ofstream& filep) = 0;
-    virtual void displayBooksBorrowed() = 0;
-    virtual bool isBookBorrowed(string id) = 0;
-
+    virtual void addUserToFile(ofstream& filep) = 0; 
+    virtual void displayBooksBorrowed() = 0; 
+    virtual bool isBookBorrowedByUser(string id) = 0;
     virtual ~User() = default;
 
     friend class System;
@@ -313,7 +305,6 @@ class PremiumUser: public User {
     bool isBookBorrowedByUser(string idToBorrow) {
         for (int i = 0; i<10; i++) {
             if (idToBorrow == borrowedBooks[i]) {
-                cout << "you have already borrowed this book!" << endl;
                 return true;
             }
         }
@@ -326,86 +317,45 @@ class PremiumUser: public User {
             cout << "cannot borrow more books. limit reached" << endl;
             return;
         }
-        bool flag = isBookBorrowedByUser(idToBorrow);
-        if (flag == false) {
-            for (int i = 0; i<10; i++) {
-                if (borrowedBooks[i] == "x") {
-                    borrowedBooks[i] = idToBorrow;
-                    return;
-                }
+        for (int i = 0; i<10; i++) {
+            if (borrowedBooks[i] == "x") {
+                borrowedBooks[i] = idToBorrow;
+                return;
             }
         }
-    }
-
-    void returnBook(Book* b1) override {}
-    bool isBookBorrowed(string id) override {}
-    void renewBook(Book* b1) override {}
-
-    // void returnBook(Book* b1) override {
-    //     int index = -1;
-    //     for (int i = 0; i<currentBooksBorrowed; i++) {
-    //         if (borrowedBooks[i]->bookID == b1->bookID) {
-    //             index = i;
-    //             break;
-    //         }
-    //     }
-    //     if (index == -1) {
-    //         cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
-    //         return;
-    //     }
-    //     bool flag = b1->returnBook();
-    //     if (flag) {
-    //         int daysOverdue = b1->getDaysOverdue();
-    //         if (daysOverdue >= 15) {
-    //             float fine = (daysOverdue/15) * finePer15Days;
-    //             totalFines += fine;
-    //         }
-    //     }
-    //     borrowedBooks.erase(borrowedBooks.begin() + index);
-    //     currentBooksBorrowed--;
-    // }
-
-    // bool isBookBorrowed(string id) override {
-    //     for (int i = 0; i < borrowedBooks.size(); i ++) {
-    //         if (id == borrowedBooks[i]->bookID) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-    // void renewBook(Book* b1) override {
-    //     if (b1->timesRenewed == 3) {
-    //         cout << "book cannot be renewed again! limit is reached" << endl;
-    //         return;
-    //     }
-    //     b1->renew();
-    // }
+}
 
     void payFine() override {
-        float amt;
-        cout << "Total Fines: " << totalFines << endl;
-        cout << "enter amount of fine to pay: ";
-        cin >> amt;
-        totalFines -= amt;
-        cout << "fine amount " << amt << " paid for user: " << userID << endl;
-    }
-
-    bool addNewBook(Book b1) override {
-        cout << "User cannot add new book"<< endl;
-        return false;
-    }
-
-    bool removeBook(Book b1) override {
-        cout << "user cannot remove book" << endl;
-        return false;
-    }
+        if (totalFines > 0) {
+            char choice;
+            cout << "Total Fines: " << totalFines << endl;
+            cout << "would you like to pay (y for Yes, n for No): ";
+            cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                totalFines = 0.0;
+                cout << "All fine cleared. \nTotal Fines: " << totalFines << endl;
+                return;
+            }
+            if (choice == 'n' || choice == 'N') {
+                cout << "returning to User Menu" << endl;
+                return;
+            }
+            cout << "Invalid input! returning to User Menu" << endl;
+            return;
+        }
+        cout << "All fines have been paid" << endl;
+    } 
 
     void displayBooksBorrowed() override { 
-        cout << "List of Borrowed Books: " << endl; //um idk maybe change the wordings here
-            // for (int i = 0; i < borrowedBooks.size(); i++) {
-            //     cout << i << ") " << borrowedBooks[i];
-            // }
+        int j = 0;
+        for (int i = 0; i < 10; i++) {
+            if (borrowedBooks[i] == "x") 
+                continue;
+            cout << ++j << ". " << borrowedBooks[i] << endl; 
+        }
+        if (j == 0) {
+            cout << "no books borrowed" <<endl;
+        }
     }
 
     // friend ostream& operator<< (ostream& out, PremiumUser p1) {
@@ -420,6 +370,14 @@ class PremiumUser: public User {
     //     }
     //     return out;
     // }
+
+    void returnBook(string idToReturn) { //lmao
+
+    }
+
+    void renewBook(string idToRenew) {
+        
+    }
 
     friend class System;
 };
@@ -456,7 +414,6 @@ class NormalUser: public User {
     bool isBookBorrowedByUser(string idToBorrow) {
         for (int i = 0; i<3; i++) {
             if (idToBorrow == borrowedBooks[i]) {
-                cout << "you have already borrowed this book!" << endl;
                 return true;
             }
         }
@@ -468,76 +425,41 @@ class NormalUser: public User {
             cout << "cannot borrow more books. limit reached" << endl;
             return;
         }
-        bool flag = isBookBorrowedByUser(idToBorrow);
-        if (flag == false) {
-            for (int i = 0; i<3; i++) {
-                if (borrowedBooks[i] == "x") {
-                    borrowedBooks[i] = idToBorrow;
-                    return;
-
-                }
+        for (int i = 0; i<3; i++) {
+            if (borrowedBooks[i] == "x") {
+                borrowedBooks[i] = idToBorrow;
+                return;
             }
         }
     }
 
-    void returnBook(Book* b1) override {
-    //     int index = -1;
-    //     for (int i = 0; i<currentBooksBorrowed; i++) {
-    //         if (borrowedBooks[i]->bookID == b1->bookID) {
-    //             index = i;
-    //             break;
-    //         }
-    //     }
-    //     if (index == -1) {
-    //         cout << "book " << b1->bookID << " not borrowed by user " << userID << endl;
-    //         return;
-    //     }
-    //     bool flag = b1->returnBook();
-    //     if (flag) {
-    //         int daysOverdue = b1->getDaysOverdue();
-    //         if (daysOverdue >= 15) {
-    //             float fine = daysOverdue * finePerDay;
-    //             totalFines += fine;
-    //         }
-    //     }
-    //     borrowedBooks.erase(borrowedBooks.begin() + index);
-    //     currentBooksBorrowed--;
+    void returnBook(string idToReturn) override {
+
     }
 
-    bool isBookBorrowed(string id) override {
-    //     for (int i = 0; i < borrowedBooks.size(); i ++) {
-    //         if (id == borrowedBooks[i]->bookID) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    }
+    void renewBook(string idToRenew) override {
 
-    void renewBook(Book* b1) override {
-    //     if (b1->timesRenewed == 1) {
-    //         cout << "book cannot be renewed again! limit is reached" << endl;
-    //         return;
-    //     }
-    //     b1->renew();
     }
 
     void payFine() override {
-        float amt;
-        cout << "Total Fines: " << totalFines << endl;
-        cout << "enter amount of fine to pay: ";
-        cin >> amt;
-        totalFines -= amt;
-        cout << "fine amount " << amt << " paid for user: " << userID << endl;
-    }
-
-    bool addNewBook(Book b1) override {
-        cout << "User cannot add new book"<< endl;
-        return false;
-    }
-
-    bool removeBook(Book b1) override {
-        cout << "user cannot remove book" << endl;
-        return false;
+        if (totalFines > 0) {
+            char choice;
+            cout << "Total Fines: " << totalFines << endl;
+            cout << "would you like to pay (y for Yes, n for No): ";
+            cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                totalFines = 0.0;
+                cout << "All fine cleared. \nTotal Fines: " << totalFines << endl;
+                return;
+            }
+            if (choice == 'n' || choice == 'N') {
+                cout << "returning to User Menu" << endl;
+                return;
+            }
+            cout << "Invalid input! returning to User Menu" << endl;
+            return;
+        }
+        cout << "All fines have been paid" << endl;
     }
 
     void displayBooksBorrowed() override { 
@@ -545,7 +467,7 @@ class NormalUser: public User {
         for (int i = 0; i < 3; i++) {
             if (borrowedBooks[i] == "x") 
                 continue;
-            cout << ++j << ") " << borrowedBooks[i] << endl; 
+            cout << ++j << ". " << borrowedBooks[i] << endl; 
         }
         if (j == 0) {
             cout << "no books borrowed" <<endl;
@@ -591,44 +513,25 @@ class Librarian : public User {
         cout << "librarian cant borrow/return books" << endl;
     }
 
-    void returnBook(Book* b1) override {
+    void returnBook(string idToReturn) override {
         cout << "librarian cant borrow/return books" << endl;         
     }
 
-    void renewBook(Book* b1) override {
-        cout << "action cannot be performed by librarian " << endl;
-    }
-
     void payFine() override {
-        cout << "action cannot be performed by librarian " << endl;
+        cout << "not a valid librarian function " << endl;
     }
 
-    bool addNewBook(Book b1) {
-        cout << "Librarian " << userID << " attempting to add book" << endl;
-        return true;
+    void renewBook(string idToRenew) override {
+        cout << "not a valid librarian function " << endl;
     }
 
-    bool removeBook(Book b1) {
-        cout << "Librarian " << userID << " attempting to add book" << endl;
-        return true;
+    void displayBooksBorrowed() override {
+        cout << "not a valid librarian function " << endl;
     }
 
-    friend ostream& operator<< (ostream& out, Librarian l1) {
-        out << "User Type: Librarian" << endl; 
-        out << "User ID: " << l1.userID << endl << "Name: " << l1.name << endl << "Contact Number: " << l1.contactNum << endl << "Monthly Salary: " << l1.monthlySalary <<  endl;
-        return out;
+    bool isBookBorrowedByUser(string id) override {
+        cout << "not a valid librarian function " << endl;
     }
-
-    virtual void displayBooksBorrowed() override {
-        cout << "not a valid librarian operation" << endl;
-    }
-
-    virtual bool isBookBorrowed (string id) override {
-        cout << "not a valid librarian function" << endl;
-        return false;
-    }
-
-    friend class System;
 };
 
 #endif
