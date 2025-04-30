@@ -397,7 +397,7 @@ class System {
                 return;
             }
             for (int i = 0; i < allUsers.size(); i++) {
-                allUsers[i]->addUserToFile();
+                allUsers[i]->addUserToFile(librariansFile);
             }
             librariansFile.close();
         }
@@ -412,21 +412,20 @@ class System {
             }
     
             for (int i = 0; i < allUsers.size(); i++) {
-                allUsers[i]->addUserToFile();
+                allUsers[i]->addUserToFile(premiumUsersFile);
             }
             premiumUsersFile.close();
         }
 
         else if (loginSystem.getUserType() == 'N') {
             ofstream normalUserFile("textFiles/normalUsers.txt", ios::trunc);
-            normalUserFile.close();
             if (!normalUserFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
             }
     
             for (int i = 0; i < allUsers.size(); i++) {
-                allUsers[i]->addUserToFile();
+                allUsers[i]->addUserToFile(normalUserFile);
             }
             normalUserFile.close();
         }
@@ -672,12 +671,13 @@ class System {
 
     void displayUserBorrowedBooks(string userID) {
         int index = loginedUserIndex(userID);
+        allUsers[index]->displayBooksBorrowed();
         // if (index == -1) {
         //     cout << "User not found!" << endl;
         //     return;
         // }
     
-        User* user = allUsers[index];
+        // User* user = allUsers[index];
         
         // Check user type to determine max books and borrowed books array
         // if (PremiumUser* pUser = dynamic_cast<PremiumUser*>(user)) {
@@ -695,21 +695,26 @@ class System {
         //     }
         // }
 
-        if (NormalUser* nUser = dynamic_cast<NormalUser*>(user)) {
-            cout << nUser->borrowedBooks[0] << endl << nUser->borrowedBooks[1] << endl << nUser->borrowedBooks[2] <<endl;
-            if (nUser->borrowedBooks[0] == "x") {
-                cout << "no books borrowed currently" << endl;
-                return;
-            }
-            cout << "books borrowed by " << nUser->name << endl;
+        // if (NormalUser* nUser = dynamic_cast<NormalUser*>(allUsers[index])) {
+        //     int numBorrowed = 0;
+        //     for (int i = 0; i < 3; i++) {
+        //         if (nUser->borrowedBooks[i] != "x") numBorrowed++;
+        //     }
+
+            // if (numBorrowed == 0) {
+            //     cout << "no books borrowed currently" << endl;
+            //     return;
+            // }
+            // cout << "books borrowed by " << nUser->name << endl;
+
             // bool hasBooks = false;
-            for (int i = 0; i < 3; i++) {
-                if (nUser->borrowedBooks[i] != "x") {
-                    cout << nUser->borrowedBooks[i] << endl;
-                    break;
-                }
-            }
-        }
+            // for (int i = 0; i < 3; i++) {
+            //     if (nUser->borrowedBooks[i] != "x") {
+            //         cout << nUser->borrowedBooks[i] << endl;
+            //     }
+            // }
+        //     cout << "Num: " << numBorrowed <<endl << nUser->borrowedBooks[0] << endl  << nUser->borrowedBooks[1] << endl  << nUser->borrowedBooks[2] << endl;
+        // }
 
         // else if (NormalUser* nUser = dynamic_cast<NormalUser*>(user)) {
         //     if (nUser->borrowedBooks[0] == "x") {
@@ -887,7 +892,7 @@ class System {
     void userMenu(string userID) {
         int choice = -1;
         while(choice != 8) { // case 4 5 6 7 left
-            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. exit\nenter your choice: ";
+            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. logout\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {

@@ -275,7 +275,8 @@ class User {
     virtual bool removeBook(Book b1) = 0;
     virtual void renewBook(Book* b1) = 0;
     virtual void payFine() = 0;
-    virtual void addUserToFile() =0;
+    virtual void addUserToFile() = 0;
+    virtual void addUserToFile(ofstream& filep) = 0;
     virtual void displayBooksBorrowed() = 0;
     virtual bool isBookBorrowed(string id) = 0;
 
@@ -318,6 +319,16 @@ class PremiumUser: public User {
         premiumFile << totalFines << endl;
         // after this, the file will store 1 user in 14 lines.
         premiumFile.close();
+    }
+
+    void addUserToFile(ofstream& filep) override {
+        filep << userID << endl;
+        filep << name << endl;
+        filep << contactNum << endl;
+        for (int i=0; i<10; i++) {
+            filep << borrowedBooks[i] << endl;
+        }
+        filep << totalFines << endl;
     }
 
     bool isBookBorrowedByUser(string idToBorrow) {
@@ -447,7 +458,11 @@ class NormalUser: public User {
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0) {}
 
     //constructor to create object after reading data from file
-    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {}
+    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {
+        for (int  i = 0; i < 3; i++) {
+            borrowedBooks[i] = arr[i];
+        }
+    }
 
     void addUserToFile() override {
         ofstream normalFile("textFiles/normalUsers.txt", ios::app);
@@ -466,6 +481,16 @@ class NormalUser: public User {
         normalFile.close();
     }
 
+    void addUserToFile(ofstream& filep) override {
+        filep << userID << endl;
+        filep << name << endl;
+        filep << contactNum << endl;
+        for (int i=0; i<3; i++) {
+            filep << borrowedBooks[i] << endl;
+        }
+        filep << totalFines << endl;
+    }
+
     bool isBookBorrowedByUser(string idToBorrow) {
         for (int i = 0; i<3; i++) {
             if (idToBorrow == borrowedBooks[i]) {
@@ -477,19 +502,15 @@ class NormalUser: public User {
     }
 
     void borrowBook(string idToBorrow) override { // in system class, take input for id to borrow, find book from all books vector. first check if user has not already borrowed book. if not, call borrow book for book object, if it returns true, then call this function 
-    cout << "\n oke so the borrow function in user is khul gayua" << endl;
         if (borrowedBooks[2] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
             return;
         }
-        cout << "user has jagah to borrow books yaay" << endl;
         bool flag = isBookBorrowedByUser(idToBorrow);
         if (flag == false) {
             for (int i = 0; i<3; i++) {
                 if (borrowedBooks[i] == "x") {
                     borrowedBooks[i] = idToBorrow;
-                    cout << "book stored in user array" << endl;
-                    cout << "oke byebye function hello menu" << endl;
                     return;
 
                 }
@@ -558,10 +579,15 @@ class NormalUser: public User {
     }
 
     void displayBooksBorrowed() override { 
-    //     cout << "List of Borrowed Books: " << endl; //um idk maybe change the wordings here
-    //         for (int i = 0; i < currentBooksBorrowed; i++) {
-    //             cout << i << ") " << borrowedBooks[i];
-    //         }
+        int j = 0;
+        for (int i = 0; i < 3; i++) {
+            if (borrowedBooks[i] == "x") 
+                continue;
+            cout << ++j << ") " << borrowedBooks[i] << endl; 
+        }
+        if (j == 0) {
+            cout << "no books borrowed" <<endl;
+        }
     }
 
     friend ostream& operator<< (ostream& out, NormalUser n1) {
@@ -604,6 +630,13 @@ class Librarian : public User {
         librariansFile << monthlySalary << endl;
         // after this, the file will store 1 user in 4 lines. 
         librariansFile.close();
+    }
+
+    void addUserToFile(ofstream& filep) override {
+        filep << userID << endl;
+        filep << name << endl;
+        filep << contactNum << endl;
+        filep << monthlySalary << endl;
     }
 
     void borrowBook(string idToBorrow) override {
