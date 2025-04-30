@@ -13,7 +13,6 @@ class System {
     private:
     vector<User*> allUsers;
     vector<Book> allBooks;
-    // User* loginedUser;
     LoginSystem loginSystem;
 
     public:
@@ -945,6 +944,7 @@ class System {
             }
 
             case 4: { //return book
+                returnBook(userID);
                 break;
             }
 
