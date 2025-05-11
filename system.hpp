@@ -826,14 +826,24 @@ class System {
             }
 
             case 8: {
-                bool flag = true;
+                bool finePaid = true, booksReturned = true;
                 int indexOfUser = loginedUserIndex(userID);
                 if (allUsers[indexOfUser]->getTotalFines() > 0) {
                     cout << "Outstanding fine: " << allUsers[indexOfUser]->getTotalFines() << endl;
-                    cout << "Pay fine to delete account!" << endl;
-                    flag = false;
+                    cout << "pay fine to delete account!" << endl;
+                    finePaid = false;
                 }
-                if (flag == true) {
+                const string* borrowedBooks = allUsers[indexOfUser]->getBorrowedBooks();
+                for (int i = 0; i < allUsers[indexOfUser]->getMaxBooks(); i++) {
+                    if (borrowedBooks[i] != "x") {
+                        booksReturned = false;
+                    }
+                }
+                if (booksReturned == false) {
+                    cout << "return all books to delete account!" << endl << "books currently borrowed by you:" << endl;
+                    displayUserBorrowedBooks(userID);
+                }
+                if (finePaid == true && booksReturned == true) {
                     deleteYourAccount();
                     saveUsers();
                     saveBooks();
