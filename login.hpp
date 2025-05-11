@@ -8,6 +8,7 @@ class LoginSystem {
     private:
     char userType = 'X';
     bool loginStatus = 0;
+    string loginedID = "X000";
 
     public:
 
