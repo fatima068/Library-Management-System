@@ -25,6 +25,15 @@ class System {
         return true;
     }
 
+    bool isBookIDunique(string id) {
+        for (int i = 0; i<allBooks.size(); i++) {
+            if (allBooks[i].bookID == id) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     void signUp() {
         char userType;
         cout << "Enter type of user to register: P(premium), N(normal), L(librarian): ";
@@ -361,7 +370,6 @@ class System {
     void saveUsers() {
         if (loginSystem.userType == 'L') {
             ofstream librariansFile("textFiles/librarians.txt", ios::trunc);
-            librariansFile.close();
             if (!librariansFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
@@ -375,7 +383,6 @@ class System {
         else if (loginSystem.userType == 'P') {
             // open the file in trunc mode just erase all existing data in it, then call add user to file for each array element 
             ofstream premiumUsersFile("textFiles/premiumUsers.txt", ios::trunc);
-            premiumUsersFile.close();
             if (!premiumUsersFile) {
                 cerr << "Error in opening all books file" << endl;
                 return;
@@ -549,194 +556,6 @@ class System {
         saveUsers();
     }
 
-    // void deleteUserAccount() {     
-    //     string idToRemove;
-    //     char userType;
-    //     bool flag = false;
-    //     cout << "enter user ID to remove: ";
-    //     cin.ignore();
-    //     getline(cin, idToRemove);
-    //     cout << "enter user type to remove: ";
-    //     cin >> userType;
-
-    //     if (userType == 'p'|| userType == 'P' ) {
-    //             ifstream premUsers("textFiles/premiumUsers.txt");
-    //             if (!premUsers) {
-    //                 cerr << "Error opening file: " << endl;
-    //                 return;
-    //             }
-
-    //             ofstream tempFile("temp.txt");
-    //             if (!tempFile) {
-    //                 cerr << "Error creating temporary file." << endl;
-    //                 premUsers.close();
-    //                 return;
-    //             }
-
-    //             string line;
-    //             bool found = false;
-    //             int linesToSkip = 0;
-
-    //             while (getline(premUsers, line)) {
-    //                 if (linesToSkip > 0) {
-    //                     linesToSkip--;
-    //                     continue;
-    //                 }
-
-    //                 if (line == idToRemove) {
-    //                     // Found the record to remove - skip next 13 lines
-    //                     found = true;
-    //                     linesToSkip = 13;
-    //                     continue;
-    //                 }
-
-    //                 tempFile << line << endl;
-    //             }
-
-    //             premUsers.close();
-    //             tempFile.close();
-
-    //             if (found) {
-    //             // Delete original file and rename temp file
-    //             if (remove("textFiles/premiumUsers.txt") != 0) {
-    //                 cerr << "Error deleting original file." << endl;
-    //                 return;
-    //             }
-    //             if (rename("temp.txt", "textFiles/premiumUsers.txt") != 0) {
-    //                 cerr << "Error renaming temporary file." << endl;
-    //                 return;
-    //             }
-    //             cout << "Record with ID " << idToRemove << " removed successfully." << endl;
-    //         } else {
-    //             cout << "Record with ID " << idToRemove << " not found." << endl;
-    //             remove("temp.txt"); // Clean up temp file
-    //         }
-    //     }
-
-    //     if (userType == 'n' || userType == 'N') {
-    //             ifstream normUsers("textFiles/normalUsers.txt");
-    //             if (!normUsers) {
-    //                 cerr << "Error opening file: " << endl;
-    //                 return;
-    //             }
-
-    //             ofstream tempFile("temp.txt");
-    //             if (!tempFile) {
-    //                 cerr << "Error creating temporary file." << endl;
-    //                 normUsers.close();
-    //                 return;
-    //             }
-
-    //             string line;
-    //             bool found = false;
-    //             int linesToSkip = 0;
-
-    //             while (getline(normUsers, line)) {
-    //                 if (linesToSkip > 0) {
-    //                     linesToSkip--;
-    //                     continue;
-    //                 }
-
-    //                 if (line == idToRemove) {
-    //                     // Found the record to remove - skip next 6 lines
-    //                     found = true;
-    //                     linesToSkip = 6;
-    //                     continue;
-    //                 }
-
-    //                 tempFile << line << endl;
-    //             }
-
-    //             normUsers.close();
-    //             tempFile.close();
-
-    //             if (found) {
-    //             // Delete original file and rename temp file
-    //             if (remove("textFiles/normalUsers.txt") != 0) {
-    //                 cerr << "Error deleting original file." << endl;
-    //                 return;
-    //             }
-    //             if (rename("temp.txt", "textFiles/normalUsers.txt") != 0) {
-    //                 cerr << "Error renaming temporary file." << endl;
-    //                 return;
-    //             }
-    //             cout << "Record with ID " << idToRemove << " removed successfully." << endl;
-    //         } else {
-    //             cout << "Record with ID " << idToRemove << " not found." << endl;
-    //             remove("temp.txt"); // Clean up temp file
-    //         }
-
-    //     }
-
-    //     if (userType == 'l' || userType == 'L') {
-    //         ifstream librarians("textFiles/librarians.txt");
-    //             if (!librarians) {
-    //                 cerr << "Error opening file: " << endl;
-    //                 return;
-    //             }
-
-    //             ofstream tempFile("temp.txt");
-    //             if (!tempFile) {
-    //                 cerr << "Error creating temporary file." << endl;
-    //                 librarians.close();
-    //                 return;
-    //             }
-
-    //             string line;
-    //             bool found = false;
-    //             int linesToSkip = 0;
-
-    //             while (getline(librarians, line)) {
-    //                 if (linesToSkip > 0) {
-    //                     linesToSkip--;
-    //                     continue;
-    //                 }
-
-    //                 if (line == idToRemove) {
-    //                     // Found the record to remove - skip next 3 lines
-    //                     found = true;
-    //                     linesToSkip = 3;
-    //                     continue;
-    //                 }
-
-    //                 tempFile << line << endl;
-    //             }
-
-    //             librarians.close();
-    //             tempFile.close();
-
-    //             if (found) {
-    //             // Delete original file and rename temp file
-    //             if (remove("textFiles/librarians.txt") != 0) {
-    //                 cerr << "Error deleting original file." << endl;
-    //                 return;
-    //             }
-    //             if (rename("temp.txt", "textFiles/librarians.txt") != 0) {
-    //                 cerr << "Error renaming temporary file." << endl;
-    //                 return;
-    //             }
-    //             cout << "Record with ID " << idToRemove << " removed successfully." << endl;
-    //         } else {
-    //             cout << "Record with ID " << idToRemove << " not found." << endl;
-    //             remove("temp.txt"); // Clean up temp file
-    //         }
-    //     }
-
-    //     for (int i = 0; i < allUsers.size(); i++) {
-    //         if (allUsers[i]->userID == idToRemove) {
-    //             delete allUsers[i];
-    //             allUsers.erase(allUsers.begin() + i);
-    //             cout << "user " << idToRemove << " removed successfully" << endl;
-    //             flag = true;
-    //             break;
-    //         }
-    //     }
-
-    //     if (!flag) {
-    //         cout << "User not found" << endl;
-    //     }
-    // }
-
     void deleteYourAccount() {
         bool flag = false;
         for (int i = 0; i < allUsers.size(); i++) {
@@ -884,8 +703,8 @@ class System {
 
     void userMenu(string userID) {
         int choice = -1;
-        while(choice != 8) {
-            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. logout\nenter your choice: ";
+        while(choice != 9) {
+            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. delete your account\n9. logout\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {
@@ -962,8 +781,25 @@ class System {
                 displayUserBorrowedBooks(userID);
                 break;
             }
-            
+
             case 8: {
+                bool flag = true;
+                int indexOfUser = loginedUserIndex(userID);
+                if (allUsers[indexOfUser]->getTotalFines() > 0) {
+                    cout << "Outstanding fine: " << allUsers[indexOfUser]->getTotalFines() << endl;
+                    cout << "Pay fine to delete account!" << endl;
+                    flag = false;
+                }
+                if (flag == true) {
+                    deleteYourAccount();
+                    saveUsers();
+                    saveBooks();
+                    loginSystem.logout();
+                }
+                break;
+            }
+            
+            case 9: {
                 saveBooks();
                 saveUsers();
                 loginSystem.logout();
@@ -983,5 +819,4 @@ class System {
         }
     }
 };
-
 #endif

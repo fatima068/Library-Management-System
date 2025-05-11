@@ -241,6 +241,7 @@ class User {
     virtual void displayBooksBorrowed() = 0; 
     virtual bool isBookBorrowedByUser(string id) = 0;
     virtual void calculateFine(int daysOverDue) = 0;
+    virtual float getTotalFines() = 0;
     virtual ~User() = default;
 
     friend class System;
@@ -264,6 +265,8 @@ class PremiumUser: public User {
             borrowedBooks[i] = arr[i];
         }
     }
+
+    float getTotalFines() override {return totalFines;}
 
     void addUserToFile(ofstream& filep) override {
         filep << userID << endl;
@@ -389,6 +392,8 @@ class NormalUser: public User {
         }
     }
 
+    float getTotalFines() override {return totalFines;}
+
     void addUserToFile(ofstream& filep) override {
         filep << userID << endl;
         filep << name << endl;
@@ -512,7 +517,9 @@ class Librarian : public User {
         filep << name << endl;
         filep << contactNum << endl;
         filep << monthlySalary << endl;
-    }
+    } 
+
+    float getTotalFines() override {}
 
     void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
 
