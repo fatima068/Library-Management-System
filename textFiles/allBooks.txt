@@ -3,10 +3,10 @@ B001
 Sample Book
 Test Author
 Fiction
-true
-26
-5
-2025
+false
+0
+0
+0
 1
 B002
 9785555484100

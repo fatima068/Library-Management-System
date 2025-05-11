@@ -641,9 +641,13 @@ class System {
                 case 3: { // add new book to library
                     string id, isbn, title, author, genre;
                     cout << "Enter book details of book to add" << endl;
-                    cout << "Book ID: "; // check if it is unique // MAKE A FUNCTION IS BOOK ID UNIQUE
+                    cout << "Book ID: ";
                     cin.ignore();
                     getline(cin, id);
+                    while (!isBookIDunique(id)) {
+                        cout << "enter a unique book id: ";
+                        getline(cin, id);
+                    }
                     cout << "ISBN: ";
                     getline(cin, isbn);
                     cout << "Title: ";
@@ -814,9 +818,7 @@ class System {
     }
 
     ~System() {
-        for (User* user : allUsers) {
-            delete user;
-        }
+        for (User* user : allUsers) { delete user; }
     }
 };
 #endif

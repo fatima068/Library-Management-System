@@ -519,7 +519,7 @@ class Librarian : public User {
         filep << monthlySalary << endl;
     } 
 
-    float getTotalFines() override {}
+    float getTotalFines() override { return 0.0; }
 
     void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
 
