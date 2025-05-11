@@ -211,42 +211,6 @@ class System {
             cout << "no book found" << endl << endl;
         }
     }
-    
-    void searchUserName() {
-        string nameToSearch;
-        cout << "enter user name to search: ";
-        getline(cin, nameToSearch);
-        cout << endl;
-        int numUsers = allUsers.size(); 
-        bool flag = false;
-        for (int i = 0; i < numUsers; i++) {
-            if (allUsers[i]->name == nameToSearch) {
-                cout << allUsers[i] << endl;
-                flag = true;
-            }
-        }
-        if (!flag) {
-            cout << "no user found" << endl << endl;
-        } 
-    }
-    
-    void searchUserId() {
-        string idToSearch;
-        cout << "enter user id to search: ";
-        getline(cin, idToSearch);
-        cout << endl;
-        int numUsers = allUsers.size(); 
-        bool flag = false;
-        for (int i = 0; i < numUsers; i++) {
-            if (allUsers[i]->userID == idToSearch) {
-                cout << allUsers[i] << endl;
-                flag = true;
-            }
-        }
-        if (!flag) {
-            cout << "no user found" << endl << endl;
-        } 
-    }
 
     void loadBooks() {
         ifstream allBooksFile("textFiles/allBooks.txt");
@@ -781,7 +745,7 @@ class System {
     void LibrarianMenu(string userID) {
         int choice = -1;
         while(choice != 7) {
-            cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n7. logout\nenter your choice: ";
+            cout << "1. search book\n2. delete a user account\n3. view book list\n4. add new book to library\n5. remove a book\n6. logout\nenter your choice: ";
             cin >> choice;
             switch (choice) {
                 case 1: {
@@ -815,35 +779,11 @@ class System {
                 }
 
                 case 2: {
-                    int choice2; 
-                    cout << "1. by user name\n2. by user id\nenter your choice: ";
-                    cin >> choice2;
-                    switch (choice2) {
-                        case 1: {
-                            cin.ignore();
-                            searchUserName(); 
-                            break;
-                        }
-
-                        case 2: {
-                            cin.ignore();
-                            searchUserId();
-                            break;
-                        }
-
-                        default:
-                            cout << "wrong choice" << endl; 
-                            break;
-                    }
-                    break;
-                }
-
-                case 3: {
                     deleteUserAccount();
                     break;
                 }
 
-                case 4: { // view book list
+                case 3: { // view book list
                     int choice3; 
                     cout << "1. view all books\n2. view borrowed books\n3. view available books\nenter your choice: ";
                     cin >> choice3; 
@@ -868,7 +808,7 @@ class System {
                     break;
                 }
 
-                case 5: { // add new book to library
+                case 4: { // add new book to library
                     string id, isbn, title, author, genre;
                     cout << "Enter book details of book to add" << endl;
                     cout << "Book ID: "; // check if it is unique // MAKE A FUNCTION IS BOOK ID UNIQUE
@@ -888,7 +828,7 @@ class System {
                     break;
                 }
 
-                case 6: { // remove a book
+                case 5: { // remove a book
                     string idToRemove;
                     bool flag = false;
                     cout << "enter book id of book to remove: ";
@@ -909,7 +849,7 @@ class System {
                     break;
                 }
 
-                case 7: {
+                case 6: {
                     saveBooks();
                     saveUsers();
                     loginSystem.logout();
