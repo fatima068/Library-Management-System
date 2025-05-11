@@ -611,7 +611,17 @@ class System {
 
     void displayUserBorrowedBooks(string userID) {
         int index = loginedUserIndex(userID);
-        
+        int numBooks = 0;
+        const string* borrowedBooks = allUsers[index]->getBorrowedBooks();
+        for (int i = 0; i < allUsers[index]->getMaxBooks(); i++) {
+            if (borrowedBooks[i] != "x") {
+                searchBookId(borrowedBooks[i]);
+                numBooks++;
+            }
+        }
+        if (numBooks == 0) {
+            cout << "No Books Borrowed!" << endl;
+        }
         // allUsers[index]->displayBooksBorrowed();
     }
 

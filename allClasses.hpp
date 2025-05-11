@@ -241,6 +241,8 @@ class User {
     virtual bool isBookBorrowedByUser(string id) = 0;
     virtual void calculateFine(int daysOverDue) = 0;
     virtual float getTotalFines() = 0;
+    virtual const string* getBorrowedBooks() const = 0;
+    virtual int getMaxBooks() = 0;
     virtual ~User() = default;
 
     friend class System;
@@ -366,6 +368,10 @@ class PremiumUser: public User {
         cout << "fine of rs " << fine << ", new total fines are: rs " << totalFines << endl;
     }
 
+    const string* getBorrowedBooks() const override { return borrowedBooks; }
+
+    int getMaxBooks() override { return maxBooks; }
+
     friend class System;
 };
 
@@ -443,6 +449,10 @@ class NormalUser: public User {
         cout << "fine of rs " << fine << ", new total fines: " << totalFines << endl;
     }
 
+    const string* getBorrowedBooks() const override { return borrowedBooks; }
+
+    int getMaxBooks() override { return maxBooks; }
+
     void payFine() override {
         if (totalFines > 0) {
             char choice;
@@ -511,7 +521,20 @@ class Librarian : public User {
         filep << monthlySalary << endl;
     }
 
-    float getTotalFines() override { return 0.0; }
+    float getTotalFines() override { 
+        cout << "not a valid librarian function " << endl;
+        return 0.0; 
+    }
+
+    const string* getBorrowedBooks() const override {
+        cout << "not a valid librarian function " << endl;
+        return nullptr;
+    }
+
+    int getMaxBooks() override { 
+        cout << "not a valid librarian function " << endl;
+        return 0; 
+    }
 
     void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
 
