@@ -126,7 +126,7 @@ class System {
                 string line = userID + " " + password;
                 loginFile << line << endl;
                 loginFile.close();
-                ofstream librarianFile("textFiles/librarian.txt", ios::app);
+                ofstream librarianFile("textFiles/librarians.txt", ios::app);
                 u1->addUserToFile(librarianFile);
                 cout << "librarian " << userID << " added successfully" << endl;
                 librarianFile.close();
