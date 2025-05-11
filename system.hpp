@@ -558,7 +558,7 @@ class System {
             return;
         }
 
-        int timesRenewed = allBooks[bookIndex].getTimesRenewed();
+        int timesRenewed = allBooks[bookIndex].timesRenewed;
         if (userType == 'n' || userType == 'N') {
             if (timesRenewed == 1) {
                 cout << "book has been renewed maximum times and cannot be renewed again" <<endl;
@@ -574,7 +574,7 @@ class System {
         }
 
         allBooks[bookIndex].renew(); 
-        // allUsers[userIndex]->renewBook(idToRenew);
+        // allUsers[userIndex]->renewBook(idToRenew); WHATTTT
         saveBooks();
         saveUsers();
     }
@@ -756,7 +756,6 @@ class System {
                 cout << "Record with ID " << idToRemove << " not found." << endl;
                 remove("temp.txt"); // Clean up temp file
             }
-
         }
 
         for (int i = 0; i < allUsers.size(); i++) {
@@ -777,7 +776,6 @@ class System {
     void displayUserBorrowedBooks(string userID) {
         int index = loginedUserIndex(userID);
         allUsers[index]->displayBooksBorrowed();
-        
     }
 
     void LibrarianMenu(string userID) {
@@ -786,7 +784,7 @@ class System {
             cout << "1. search book\n2. search user\n3. delete a user account\n4. view book list\n5. add new book to library\n6. remove a book\n7. logout\nenter your choice: ";
             cin >> choice;
             switch (choice) {
-                case 1: { // search book
+                case 1: {
                     int choice1; 
                     cout << "1. by book name\n2. by author name\n3. by book id\nenter your choice: ";
                     cin >> choice1;
@@ -816,7 +814,7 @@ class System {
                     break;
                 }
 
-                case 2: { // search user
+                case 2: {
                     int choice2; 
                     cout << "1. by user name\n2. by user id\nenter your choice: ";
                     cin >> choice2;
@@ -840,7 +838,7 @@ class System {
                     break;
                 }
 
-                case 3: { // delete user account
+                case 3: {
                     deleteUserAccount();
                     break;
                 }
@@ -873,7 +871,7 @@ class System {
                 case 5: { // add new book to library
                     string id, isbn, title, author, genre;
                     cout << "Enter book details of book to add" << endl;
-                    cout << "Book ID: "; // check if it is unique
+                    cout << "Book ID: "; // check if it is unique // MAKE A FUNCTION IS BOOK ID UNIQUE
                     cin.ignore();
                     getline(cin, id);
                     cout << "ISBN: ";
@@ -884,7 +882,7 @@ class System {
                     getline(cin, author);
                     cout << "Genre: ";
                     getline(cin, genre);
-                    Book b1 = Book(id, isbn, title, author, genre, false, 0, 0, 0);
+                    Book b1 = Book(id, isbn, title, author, genre);
                     allBooks.push_back(b1);
                     saveBooks();
                     break;
@@ -925,16 +923,14 @@ class System {
         }
     }
 
-    
-
     void userMenu(string userID) {
         int choice = -1;
-        while(choice != 8) { // case 4 5 6 left
+        while(choice != 8) {
             cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. logout\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {
-            case 1: { // search book
+            case 1: { 
                     int choice1; 
                     cout << "1. by book name\n2. by author name\n3. exit\nenter your choice: ";
                     cin >> choice1;
@@ -962,7 +958,7 @@ class System {
                     break;
             }
 
-            case 2: { // view book list
+            case 2: {
                     int choice3; 
                     cout << "1. view all books\n2. view available books\nenter your choice: ";
                     cin >> choice3; 
@@ -982,28 +978,28 @@ class System {
                     break;
             }
 
-            case 3: { //borrow book
+            case 3: {
                 borrowBook(userID);
                 break;
             }
 
-            case 4: { //return book
+            case 4: {
                 returnBook(userID);
                 break;
             }
 
-            case 5: { //pay fine
+            case 5: {
                 cin.ignore();
                 payFine(userID);
                 break;
             }
 
-            case 6: { //renew book
+            case 6: {
                 renewBook(userID);
                 break;
             }
 
-            case 7: { // display borrowed books
+            case 7: {
                 displayUserBorrowedBooks(userID);
                 break;
             }
@@ -1022,12 +1018,10 @@ class System {
         }
     }
 
-
     ~System() {
         for (User* user : allUsers) {
             delete user;
         }
-        // delete loginedUser;
     }
 };
 

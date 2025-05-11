@@ -16,12 +16,11 @@ struct Date {
     Date() : dd(0), mm(0), yy(0) {}
 };
 
-Date dateTodayFunc() {
+Date dateTodayFunc() { // returns current date
     time_t timeInSecondsToday = time(nullptr);
     tm* now = localtime(&timeInSecondsToday);
     return Date(now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
-} // this will return the date today
- // in system class, store todays date in a variable until program ends 
+} // call this function and store current date in a global variable until program ends 
 
 Date dateTodayVar = dateTodayFunc(); 
 int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -44,11 +43,11 @@ class Book {
     int timesRenewed;
 
     public:
-    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {}
+    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {} //default constructor
 
-    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year, int timesRenewed) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(timesRenewed) {}
+    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year, int timesRenewed) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(timesRenewed) {} // create an object of book after reading data from file
 
-    Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(0) {}
+    Book(string bookID, string ISBN, string title, string author, string genre) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(false), dueDate(), timesRenewed(0) {} // paramterized constructor to create a new book object 
 
     void addBookToFile() {
         ofstream allBooksFile("textFiles/allBooks.txt", ios::app);
@@ -71,35 +70,18 @@ class Book {
     }
 
     int getDaysOverdue() { 
-        // first compare year
-        // then month
-        // then day of the month
-        if (dueDate.yy > dateTodayVar.yy) {
+         if (dueDate.yy > dateTodayVar.yy || (dueDate.yy == dateTodayVar.yy && dueDate.mm > dateTodayVar.mm) || (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd >= dateTodayVar.dd)) { 
             return 0;
-        }
-        if (dueDate.yy == dateTodayVar.yy && dueDate.mm > dateTodayVar.mm) {
-            return 0;
-        }
+        }  // all the cases where book has been returned on/before the due date have been checked. Calculate days overdue now
     
-        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd > dateTodayVar.dd) {
-            return 0;
-        }
+        int daysOverdue=0, daysInDueMonth;
     
-        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm && dueDate.dd == dateTodayVar.dd) {
-            return 0; 
-        }
-        // now all the cases have been covered where book has been returned on or before the due date
-        // this means now we need to check ke book kitne din overdue hogai hai
-    
-        int daysOverdue, daysInDueMonth;
-    
-        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm) {
+        if (dueDate.yy == dateTodayVar.yy && dueDate.mm == dateTodayVar.mm) { // current year & month and year & month of due date is same
             daysOverdue = dateTodayVar.dd - dueDate.dd;
             return daysOverdue;
         }
     
-        // next condition will be when year is same but month is different
-        if (dueDate.yy == dateTodayVar.yy) { 
+        if (dueDate.yy == dateTodayVar.yy) { // year is same, month is different
             daysInDueMonth = daysInMonth[dueDate.mm - 1];
             if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) { 
                 daysInDueMonth = 29;
@@ -118,8 +100,7 @@ class Book {
             return daysOverdue;
         }
     
-        // now check when year is different too 
-        // year is different 
+        // if year is different
         // Part A: Days remaining in due month
         daysInDueMonth = daysInMonth[dueDate.mm - 1];
         if (dueDate.mm == 2 && isLeapYear(dueDate.yy)) {
@@ -154,11 +135,9 @@ class Book {
     
         // Part E: Days in current month
         daysOverdue += dateTodayVar.dd;
-        // if due date hasnt passed return 0, else return how many days have passed since due date, then in some other function apply fine according to user type
         return daysOverdue;
     }
     
-    // wehn user is returning bok u find that book from system class vector, call return book for both book and user, and get fine overdue for book, then calculate according to users subscription
     bool returnBook() {
         if (isBorrowed) {
             isBorrowed = false; 
@@ -168,7 +147,7 @@ class Book {
             return true;
         }
         cout << "book is not borrowed" << endl; 
-        return false; // fine will be calculated in user class ka return book 
+        return false; // fine will be calculated in user or system class function
     } 
 
     void borrowBook() {
@@ -183,7 +162,6 @@ class Book {
             cout << "book " << bookID << " borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
             return;
         }
-
         if (dueDay > daysThisMonth) {
             dueDay = dueDay - daysThisMonth;
             dueMonth++;
@@ -192,7 +170,6 @@ class Book {
             dueMonth = 1;
             dueYear++;
         }
-
         dueDate = Date(dueDay, dueMonth, dueYear);
         cout << "book borrowed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
         return;
@@ -203,7 +180,6 @@ class Book {
             cout << "book is not borrowed" << endl; 
             return false;
         }
-
         if (getDaysOverdue() > 0) {
             cout << "book can not be renewed after passing of due date" << endl;
             return false;
@@ -222,27 +198,21 @@ class Book {
             dueMonth = 1;
             dueYear++;
         }
-
         dueDate = Date(dueDay, dueMonth, dueYear);
         timesRenewed++;
-        // save data to file
         cout << "book renewed with due date: " << dueDay << "." << dueMonth << "." << dueYear << endl; 
         return true;
     }
 
-    int getTimesRenewed() {
-        return timesRenewed;
-    }
-
     friend ostream& operator<< (ostream& out, Book &b1) {
-        out << "Book ID: " << b1.bookID << endl << "Book title: " << b1.title << endl << "Author: " << b1.author << endl << "Genre: " << b1.genre << "ISBN: " << b1.ISBN << endl;
+        out << "Book ID: " << b1.bookID << ", Book title: " << b1.title << ", Author: " << b1.author << ", Genre: " << b1.genre << ", ISBN: " << b1.ISBN;
         if (b1.isBorrowed) {
-            out << "Status: Unavailable" << endl;
-            out << "Due Date: " << b1.dueDate.dd << "." << b1.dueDate.mm << "." << b1.dueDate.yy << endl;
-            out << "Times Renewed: " << b1.timesRenewed << endl;
+            out << ", Status: Unavailable";
+            out << ", Due Date: " << b1.dueDate.dd << "." << b1.dueDate.mm << "." << b1.dueDate.yy;
+            out << ", Times Renewed: " << b1.timesRenewed << endl;
         } 
         else {
-            out << "Status: Available" << endl;
+            out << ", Status: Available" << endl;
         }
         return out;
     }
@@ -251,8 +221,6 @@ class Book {
     friend class NormalUser;
     friend class System;
 };
-
-// instead of making display function here, do operator<< overloading to display book in system class
 
 class User {
     protected:
@@ -316,7 +284,6 @@ class PremiumUser: public User {
         return false;
     }
 
-    // check book.borrow book in systen class, if book can be borrowed then claa this function 
     void borrowBook(string idToBorrow) override {
         if (borrowedBooks[9] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
@@ -328,7 +295,7 @@ class PremiumUser: public User {
                 return;
             }
         }
-}
+    }
 
     void payFine() override {
         if (totalFines > 0) {
@@ -342,13 +309,12 @@ class PremiumUser: public User {
                 return;
             }
             if (choice == 'n' || choice == 'N') {
-                cout << "returning to User Menu" << endl;
+                cout << "returning to User Menu.." << endl;
                 return;
             }
             cout << "Invalid input! returning to User Menu" << endl;
             return;
         }
-        cout << "All fines have been paid" << endl;
     } 
 
     void displayBooksBorrowed() override { 
@@ -370,7 +336,6 @@ class PremiumUser: public User {
     //         out << "List of Borrowed Books: " << endl;
     //         for (int i = 0; i < p1.borrowedBooks.size(); i++) {
     //             out << i << ") " << p1.borrowedBooks[i];
-    //             // ya to we do upar wali fing or i was finking ke yahan pe maybe lets only output the index number and the book name worr do u say
     //         }
     //     }
     //     return out;
@@ -549,34 +514,21 @@ class Librarian : public User {
         filep << monthlySalary << endl;
     }
 
-    void borrowBook(string idToBorrow) override {
-        cout << "librarian cant borrow/return books" << endl;
-    }
+    void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
 
-    void returnBook(string idToReturn) override {
-        cout << "librarian cant borrow/return books" << endl;         
-    }
+    void returnBook(string idToReturn) override { cout << "librarian cant borrow/return books" << endl;}
 
-    void payFine() override {
-        cout << "not a valid librarian function " << endl;
-    }
+    void payFine() override { cout << "not a valid librarian function " << endl; }
 
-    void renewBook(string idToRenew) override {
-        cout << "not a valid librarian function " << endl;
-    }
+    void renewBook(string idToRenew) override { cout << "not a valid librarian function " << endl; }
 
-    void displayBooksBorrowed() override {
-        cout << "not a valid librarian function " << endl;
-    }
+    void displayBooksBorrowed() override { cout << "not a valid librarian function " << endl; }
 
     bool isBookBorrowedByUser(string id) override {
         cout << "not a valid librarian function " << endl;
         return false;
     }
 
-    void calculateFine(int daysOverDue) override {
-        cout << "not a valid librarian function " << endl;    
-    }
+    void calculateFine(int daysOverDue) override { cout << "not a valid librarian function " << endl; }
 };
-
 #endif
