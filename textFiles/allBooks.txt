@@ -7,7 +7,7 @@ false
 0
 0
 0
-1
+0
 B002
 9785555484100
 Sample Book2
