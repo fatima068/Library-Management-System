@@ -1,40 +1,60 @@
 B001
-9783161484100
-Sample Book
-Test Author
-Fiction
+7864536287654
+book 1
+author 1
+mystery
+true
+25
+5
+2025
+0
+B002
+9878987654543
+book 2
+author 2
+mystery
 false
 0
 0
 0
 0
-B002
-9785555484100
-Sample Book2
-Test Author
-Fiction
-true
-14
-5
-2025
-0
 B003
-24345676
-balloon
-ickrash
-mystery
+6354738298365
+book 3
+author 1
+fiction
 true
-14
+25
 5
 2025
 0
 B004
-2348374982
-doraemon
-shinsuki
+6574657465748
+book 4
+author 1
 sci-fi
 true
-14
+25
 5
 2025
+0
+B005
+65748392034756
+book 2
+author 2
+mystery
+false
+0
+0
+0
+0
+B006
+7658475638302
+book 6
+author 5
+autobiography
+false
+0
+0
+0
 0

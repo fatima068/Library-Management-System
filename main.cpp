@@ -6,7 +6,7 @@ int main() {
     System librarySystem;
     int choice;
     string userID;
-    cout << "1. LOGIN\t2. SIGN UP" <<  endl;
+    cout << "1. LOGIN\t2. SIGN UP" <<  endl << "your choice: ";
     cin >> choice ;
     switch (choice) {
         case 1:

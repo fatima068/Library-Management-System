@@ -1,8 +1,22 @@
 P001
-fatima
-0330
-B001
-B002
+premium user 1
+03332119898
+B003
+B004
+x
+x
+x
+x
+x
+x
+x
+x
+30
+P002
+premium user 2
+03338776565
+x
+x
 x
 x
 x
@@ -12,9 +26,9 @@ x
 x
 x
 0
-P200
-fatima waseem
-4233242
+P003
+premium user 3
+03338887878
 x
 x
 x
@@ -25,18 +39,4 @@ x
 x
 x
 x
-0
-P000
-fatimawaseem
-21312321
-x
-x
-x
-x
-x
-x
-x
-x
-x
-x
-50
+20

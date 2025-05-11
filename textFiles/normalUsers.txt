@@ -1,20 +1,20 @@
 N001
-fatima waseem
-3242432423
+normal user 1
+03329889098
 B001
-B002
-B003
-0
+x
+x
+20
 N002
-ikrash
-345363672
-B004
+normal user 2
+03321221234
+x
 x
 x
 0
-N998
-ikki
-0987
+N003
+normal user 3
+03326564756
 x
 x
 x
