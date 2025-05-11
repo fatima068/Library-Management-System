@@ -203,15 +203,11 @@ class System {
         }
     }
 
-    void searchBookId() {
-        string bookIDtoSearch;
-        cout << "enter book id to search: "; 
-        getline(cin, bookIDtoSearch);
-        cout << endl;
+    void searchBookId(string id) {
         int numBooks = allBooks.size(); 
         bool flag = false;
         for (int i = 0; i < numBooks; i++) {
-            if (allBooks[i].bookID == bookIDtoSearch) {
+            if (allBooks[i].bookID == id) {
                 cout << allBooks[i] << endl;
                 flag = true;
             }
@@ -574,7 +570,8 @@ class System {
 
     void displayUserBorrowedBooks(string userID) {
         int index = loginedUserIndex(userID);
-        allUsers[index]->displayBooksBorrowed();
+        
+        // allUsers[index]->displayBooksBorrowed();
     }
 
     void LibrarianMenu(string userID) {
@@ -602,7 +599,11 @@ class System {
                         
                         case 3: { 
                             cin.ignore();
-                            searchBookId();
+                            string bookIDtoSearch;
+                            cout << "enter book id to search: "; 
+                            getline(cin, bookIDtoSearch);
+                            // cout << endl;
+                            searchBookId(bookIDtoSearch);
                             break;
                         }
                         

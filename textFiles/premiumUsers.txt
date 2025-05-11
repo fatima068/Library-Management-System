@@ -1,8 +1,8 @@
 P001
 fatima
 0330
-x
-x
+B001
+B002
 x
 x
 x

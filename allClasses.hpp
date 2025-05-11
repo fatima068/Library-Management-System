@@ -235,10 +235,9 @@ class User {
 
     virtual void borrowBook(string idToBorrow) = 0;
     virtual void returnBook(string idToReturn) = 0;
-    virtual void renewBook(string idToRenew) = 0;
     virtual void payFine() = 0;
     virtual void addUserToFile(ofstream& filep) = 0; 
-    virtual void displayBooksBorrowed() = 0; 
+    // virtual void displayBooksBorrowed() = 0; 
     virtual bool isBookBorrowedByUser(string id) = 0;
     virtual void calculateFine(int daysOverDue) = 0;
     virtual float getTotalFines() = 0;
@@ -318,19 +317,20 @@ class PremiumUser: public User {
             cout << "Invalid input! returning to User Menu" << endl;
             return;
         }
+        else cout << "total fine = 0" << endl;
     } 
 
-    void displayBooksBorrowed() override { 
-        int j = 0;
-        for (int i = 0; i < 10; i++) {
-            if (borrowedBooks[i] == "x") 
-                continue;
-            cout << ++j << ". " << borrowedBooks[i] << endl; 
-        }
-        if (j == 0) {
-            cout << "no books borrowed" <<endl;
-        }
-    }
+    // void displayBooksBorrowed() override { 
+    //     int j = 0;
+    //     for (int i = 0; i < 10; i++) {
+    //         if (borrowedBooks[i] == "x") 
+    //             continue;
+    //         cout << ++j << ". " << borrowedBooks[i] << endl; 
+    //     }
+    //     if (j == 0) {
+    //         cout << "no books borrowed" <<endl;
+    //     }
+    // }
 
     // friend ostream& operator<< (ostream& out, PremiumUser p1) {
     //     out << "User Type: Premium User" << endl; 
@@ -364,10 +364,6 @@ class PremiumUser: public User {
         }
         totalFines += fine;
         cout << "fine of rs " << fine << ", new total fines are: rs " << totalFines << endl;
-    }
-
-    void renewBook(string idToRenew) {
-        
     }
 
     friend class System;
@@ -440,10 +436,6 @@ class NormalUser: public User {
         borrowedBooks[2] = "x";
     }
 
-    void renewBook(string idToRenew) override {
-
-    } 
-
     void calculateFine(int daysOverDue) override {
         float fine = 0;
         fine = daysOverDue * finePerDay;
@@ -472,17 +464,17 @@ class NormalUser: public User {
         cout << "All fines have been paid" << endl;
     }
 
-    void displayBooksBorrowed() override { 
-        int j = 0;
-        for (int i = 0; i < 3; i++) {
-            if (borrowedBooks[i] == "x") 
-                continue;
-            cout << ++j << ". " << borrowedBooks[i] << endl; 
-        }
-        if (j == 0) {
-            cout << "no books borrowed" <<endl;
-        }
-    }
+    // void displayBooksBorrowed() override { 
+    //     int j = 0;
+    //     for (int i = 0; i < 3; i++) {
+    //         if (borrowedBooks[i] == "x") 
+    //             continue;
+    //         cout << ++j << ". " << borrowedBooks[i] << endl; 
+    //     }
+    //     if (j == 0) {
+    //         cout << "no books borrowed" <<endl;
+    //     }
+    // }
 
     friend ostream& operator<< (ostream& out, NormalUser n1) {
         out << "User Type: Normal User" << endl; 
@@ -517,7 +509,7 @@ class Librarian : public User {
         filep << name << endl;
         filep << contactNum << endl;
         filep << monthlySalary << endl;
-    } 
+    }
 
     float getTotalFines() override { return 0.0; }
 
@@ -527,9 +519,7 @@ class Librarian : public User {
 
     void payFine() override { cout << "not a valid librarian function " << endl; }
 
-    void renewBook(string idToRenew) override { cout << "not a valid librarian function " << endl; }
-
-    void displayBooksBorrowed() override { cout << "not a valid librarian function " << endl; }
+    // void displayBooksBorrowed() override { cout << "not a valid librarian function " << endl; }
 
     bool isBookBorrowedByUser(string id) override {
         cout << "not a valid librarian function " << endl;
