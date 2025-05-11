@@ -16,7 +16,7 @@ struct Date {
     Date() : dd(0), mm(0), yy(0) {}
 };
 
-Date dateTodayFunc() { // returns current date
+Date dateTodayFunc() { // this function returns current date
     time_t timeInSecondsToday = time(nullptr);
     tm* now = localtime(&timeInSecondsToday);
     return Date(now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
@@ -43,7 +43,7 @@ class Book {
     int timesRenewed;
 
     public:
-    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {} //default constructor
+    Book() : bookID(""), ISBN(""), title(""), author(""), genre(""), isBorrowed(false), dueDate(), timesRenewed(0) {}
 
     Book(string bookID, string ISBN, string title, string author, string genre, bool isBorrowed, int day, int month, int year, int timesRenewed) : bookID(bookID), ISBN(ISBN), title(title), author(author), genre(genre), isBorrowed(isBorrowed), dueDate(day, month, year), timesRenewed(timesRenewed) {} // create an object of book after reading data from file
 

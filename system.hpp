@@ -217,9 +217,8 @@ class System {
             cerr << "Error in opening all books file" << endl;
             return;
         }
-    
+
         string bookData[10]; 
-        
         while (getline(allBooksFile, bookData[0])) {  // Read bookID
             // Read the remaining 7 fields
             for (int i = 1; i < 10; i++) {
@@ -229,12 +228,12 @@ class System {
                 }
             }
     
-            bool borrow = (bookData[5] == "true"); // convert string to bool
+            bool borrow = (bookData[5] == "true");
             int dd = stoi(bookData[6]);
             int mm = stoi(bookData[7]); 
             int yy = stoi(bookData[8]); 
             
-            int timesRenewed = stoi(bookData[9]);  // convert string to int
+            int timesRenewed = stoi(bookData[9]);
     
             // Create and store the book
             Book temp(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4], borrow, dd, mm, yy, timesRenewed);
@@ -270,8 +269,7 @@ class System {
         string userData[16]; // userID, name, contactNum, maxbooks, borrowedBooks(), fineperday, totalFines, 
         string line; 
 
-        while (getline(premiumFile, userData[0])) { // Read userID (first field)
-            // Read the remaining basic fields
+        while (getline(premiumFile, userData[0])) { 
             for (int i = 1; i < 14; i++) {
                 if (!getline(premiumFile, userData[i])) {
                     cerr << "Incomplete user record" << endl;
@@ -304,7 +302,7 @@ class System {
         }
         string userData[7]; // userID, name, contactNum, borrowedBooks(), totalFines, 
         string line;
-        while (getline(normalFile, userData[0])) { // Read userID (first field)
+        while (getline(normalFile, userData[0])) {
             // Read the remaining basic fields
             for (int i = 1; i < 7; i++) {
                 if (!getline(normalFile, userData[i])) {
@@ -340,7 +338,7 @@ class System {
         string userData[4]; // userID, name, contactNum, monthlySalary
         string line;
 
-         while (getline(librariansFile, userData[0])) { // Read userID (first field)
+         while (getline(librariansFile, userData[0])) { 
             // Read the remaining basic fields
             for (int i = 1; i < 4; i++) {
                 if (!getline(librariansFile, userData[i])) {
@@ -425,7 +423,6 @@ class System {
                 available++;
             }
         }
-
         if (available == 0)
             cout << "No books available" << endl;
     }
@@ -575,7 +572,6 @@ class System {
                         outFile << currentId << " " << password << endl;
                     }
                 }
-
                 inFile.close();
                 outFile.close();
 
@@ -620,7 +616,7 @@ class System {
     void LibrarianMenu(string userID) {
         int choice = -1;
         while(choice != 6) {
-            cout << "1. search book\n2. view book list\n3. add new book to library\n4. remove a book\n5. delete your account\n6. logout\nenter your choice: ";
+            cout << "\n1. search book\n2. view book list\n3. add new book to library\n4. remove a book\n5. delete your account\n6. logout\nenter your choice: ";
             cin >> choice;
             switch (choice) {
                 case 1: {
@@ -645,7 +641,6 @@ class System {
                             string bookIDtoSearch;
                             cout << "enter book id to search: "; 
                             getline(cin, bookIDtoSearch);
-                            // cout << endl;
                             searchBookId(bookIDtoSearch);
                             break;
                         }
@@ -752,7 +747,7 @@ class System {
     void userMenu(string userID) {
         int choice = -1;
         while(choice != 9) {
-            cout << "1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. delete your account\n9. logout\nenter your choice: ";
+            cout << "\n1. search book\n2. view book list\n3. borrow book\n4. return book\n5. pay fine\n6. renew book \n7. display books borrowed by you\n8. delete your account\n9. logout\nenter your choice: ";
             cin >> choice;
 
             switch (choice) {
