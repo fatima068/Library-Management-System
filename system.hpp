@@ -158,13 +158,8 @@ class System {
         return -1;
     }
 
-    char getCurrentUserType() {
-        return loginSystem.userType;
-    }
-
-    bool loginUser(string id) {
-        return loginSystem.login(id);
-    }
+    char getCurrentUserType() { return loginSystem.userType; }
+    bool loginUser(string id) { return loginSystem.login(id); }
 
     void searchBookName() {
         string nameToSearch;
@@ -541,7 +536,6 @@ class System {
         }
 
         allBooks[bookIndex].renew(); 
-        // allUsers[userIndex]->renewBook(idToRenew); WHATTTT
         saveBooks();
         saveUsers();
     }
@@ -622,7 +616,6 @@ class System {
         if (numBooks == 0) {
             cout << "No Books Borrowed!" << endl;
         }
-        // allUsers[index]->displayBooksBorrowed();
     }
 
     void LibrarianMenu(string userID) {

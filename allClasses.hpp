@@ -147,7 +147,7 @@ class Book {
             return true;
         }
         cout << "book is not borrowed" << endl; 
-        return false; // fine will be calculated in user or system class function
+        return false;
     } 
 
     void borrowBook() {
@@ -211,9 +211,7 @@ class Book {
             out << ", Due Date: " << b1.dueDate.dd << "." << b1.dueDate.mm << "." << b1.dueDate.yy;
             out << ", Times Renewed: " << b1.timesRenewed << endl;
         } 
-        else {
-            out << ", Status: Available" << endl;
-        }
+        else { out << ", Status: Available" << endl; }
         return out;
     }
 
@@ -237,7 +235,6 @@ class User {
     virtual void returnBook(string idToReturn) = 0;
     virtual void payFine() = 0;
     virtual void addUserToFile(ofstream& filep) = 0; 
-    // virtual void displayBooksBorrowed() = 0; 
     virtual bool isBookBorrowedByUser(string id) = 0;
     virtual void calculateFine(int daysOverDue) = 0;
     virtual float getTotalFines() = 0;
@@ -322,29 +319,6 @@ class PremiumUser: public User {
         else cout << "total fine = 0" << endl;
     } 
 
-    // void displayBooksBorrowed() override { 
-    //     int j = 0;
-    //     for (int i = 0; i < 10; i++) {
-    //         if (borrowedBooks[i] == "x") 
-    //             continue;
-    //         cout << ++j << ". " << borrowedBooks[i] << endl; 
-    //     }
-    //     if (j == 0) {
-    //         cout << "no books borrowed" <<endl;
-    //     }
-    // }
-
-    // friend ostream& operator<< (ostream& out, PremiumUser p1) {
-    //     out << "User Type: Premium User" << endl; 
-    //     out << "User ID: " << p1.userID<< endl << "Name: " << p1.name << endl << "Contact Number: " << p1.contactNum << endl << "Total Fine: " << p1.totalFines << endl << "Number of Books Currently Borrowed: " << p1.borrowedBooks.size() << endl;
-    //     if (p1.borrowedBooks.size() > 0) {
-    //         out << "List of Borrowed Books: " << endl;
-    //         for (int i = 0; i < p1.borrowedBooks.size(); i++) {
-    //             out << i << ") " << p1.borrowedBooks[i];
-    //         }
-    //     }
-    //     return out;
-
     void returnBook(string idToReturn) { 
        int index = -1;
        for (int i = 0; i<10; i++) {
@@ -369,7 +343,6 @@ class PremiumUser: public User {
     }
 
     const string* getBorrowedBooks() const override { return borrowedBooks; }
-
     int getMaxBooks() override { return maxBooks; }
 
     friend class System;
@@ -387,8 +360,7 @@ class NormalUser: public User {
 
     NormalUser(string userID, string name, string contactNum) : User(userID, name, contactNum), totalFines(0.0) {}
 
-    //constructor to create object after reading data from file
-    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) {
+    NormalUser(string userID, string name, string contactNum, string arr[3], float totalFines) : User(userID, name, contactNum), maxBooks(3), finePerDay(0.5), totalFines(totalFines) { //constructor to create object after reading data from file
         for (int  i = 0; i < 3; i++) {
             borrowedBooks[i] = arr[i];
         }
@@ -437,7 +409,7 @@ class NormalUser: public User {
             }
         }
         for (int i = index; i < 2; i++) {
-            borrowedBooks[i] = borrowedBooks[i + 1]; //wahtapp
+            borrowedBooks[i] = borrowedBooks[i + 1];
         }
         borrowedBooks[2] = "x";
     }
@@ -474,18 +446,6 @@ class NormalUser: public User {
         cout << "All fines have been paid" << endl;
     }
 
-    // void displayBooksBorrowed() override { 
-    //     int j = 0;
-    //     for (int i = 0; i < 3; i++) {
-    //         if (borrowedBooks[i] == "x") 
-    //             continue;
-    //         cout << ++j << ". " << borrowedBooks[i] << endl; 
-    //     }
-    //     if (j == 0) {
-    //         cout << "no books borrowed" <<endl;
-    //     }
-    // }
-
     friend ostream& operator<< (ostream& out, NormalUser n1) {
         out << "User Type: Normal User" << endl; 
         out << "User ID: " << n1.userID<< endl << "Name: " << n1.name << endl << "Contact Number: " << n1.contactNum << endl << "Total Fine: " << n1.totalFines << endl;
@@ -493,7 +453,7 @@ class NormalUser: public User {
             out << "List of Borrowed Books: " << endl;
             for (int i = 0; i < 3; i++) {
                 if (n1.borrowedBooks[0] != "x") {
-                    out << i << ". " << n1.borrowedBooks[i]; // maybe only output due date and book name here (is book id needed ? ) right now it will output only the book id. Make a function get book or something to search book from allbooks vector using the given bookid
+                    out << i << ". " << n1.borrowedBooks[i];
                 }
             }
         }
@@ -531,18 +491,13 @@ class Librarian : public User {
         return nullptr;
     }
 
-    int getMaxBooks() override { 
-        cout << "not a valid librarian function " << endl;
-        return 0; 
-    }
+    int getMaxBooks() override { return 0; }
 
     void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
 
     void returnBook(string idToReturn) override { cout << "librarian cant borrow/return books" << endl;}
 
     void payFine() override { cout << "not a valid librarian function " << endl; }
-
-    // void displayBooksBorrowed() override { cout << "not a valid librarian function " << endl; }
 
     bool isBookBorrowedByUser(string id) override {
         cout << "not a valid librarian function " << endl;
