@@ -107,7 +107,7 @@ class System {
                 getline(cin, userID);
                 // load premium users to check that id user entered is unique
                 loadLibrarian();
-                while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'P') {
+                while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'L') {
                     cout << "user id taken or invalid format! Enter new id(L000, L001, etc): ";
                     getline(cin, userID);
                 }
