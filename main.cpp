@@ -36,6 +36,10 @@ int main() {
 
         case 2:
             librarySystem.signUp();
-            break;    
+            break;  
+
+        default:
+            cout << "Invalid input. Exiting..." << endl; 
+            break;  
     }
 }
