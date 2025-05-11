@@ -11,14 +11,6 @@ class LoginSystem {
     string loginedID = "X000";
 
     public:
-
-    char getUserType() const {
-        return userType;
-    }
-    bool getLoginStatus() const {
-        return loginStatus;
-    }
-
     string getPassword() {
         string password;
         char ch;
@@ -41,7 +33,6 @@ class LoginSystem {
     }
     
     void encode(string& password) {
-        // string encoded = "";
         for (int i=0; i<password.length(); i++){
             if (password.at(i) >= 65 && password.at(i) <= 89){
                 password.at(i)++;
@@ -76,6 +67,7 @@ class LoginSystem {
                 encode(password);
                 if (filePassword == password) {
                     cout << "login successful! " << endl;
+                    loginedID = fileID;
                     userType = id.at(0);
                     return 1;
                 }
@@ -83,8 +75,6 @@ class LoginSystem {
         }
         cout << "login details invalid! " << endl;
         loginFile.close();
-        
-        // if passwords match, give appropriate access to users (add functionality in main function menu)
         return 0;
     }
     

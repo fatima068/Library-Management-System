@@ -106,7 +106,7 @@ class System {
                 cout << "user id(eg. L001, L333 ....): ";
                 getline(cin, userID);
                 // load premium users to check that id user entered is unique
-                loadPremiumUsers();
+                loadLibrarian();
                 while (!isUserIDunique(userID) || userID.length() != 4 || userID.at(0) != 'P') {
                     cout << "user id taken or invalid format! Enter new id(L000, L001, etc): ";
                     getline(cin, userID);
@@ -150,7 +150,7 @@ class System {
     }
 
     char getCurrentUserType() {
-        return loginSystem.getUserType();
+        return loginSystem.userType;
     }
 
     bool loginUser(string id) {
@@ -359,7 +359,7 @@ class System {
     }
 
     void saveUsers() {
-        if (loginSystem.getUserType() == 'L') {
+        if (loginSystem.userType == 'L') {
             ofstream librariansFile("textFiles/librarians.txt", ios::trunc);
             librariansFile.close();
             if (!librariansFile) {
@@ -372,7 +372,7 @@ class System {
             librariansFile.close();
         }
 
-        else if (loginSystem.getUserType() == 'P') {
+        else if (loginSystem.userType == 'P') {
             // open the file in trunc mode just erase all existing data in it, then call add user to file for each array element 
             ofstream premiumUsersFile("textFiles/premiumUsers.txt", ios::trunc);
             premiumUsersFile.close();
@@ -387,7 +387,7 @@ class System {
             premiumUsersFile.close();
         }
 
-        else if (loginSystem.getUserType() == 'N') {
+        else if (loginSystem.userType == 'N') {
             ofstream normalUserFile("textFiles/normalUsers.txt", ios::trunc);
             if (!normalUserFile) {
                 cerr << "Error in opening all books file" << endl;
