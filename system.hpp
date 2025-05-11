@@ -558,12 +558,53 @@ class System {
 
     void deleteYourAccount() {
         bool flag = false;
+        string userIdToRemove = loginSystem.loginedID;
         for (int i = 0; i < allUsers.size(); i++) {
-            if (allUsers[i]->userID == loginSystem.loginedID) {
+            if (allUsers[i]->userID == userIdToRemove) {
                 delete allUsers[i];
                 allUsers.erase(allUsers.begin() + i);
                 flag = true;
-                cout << "Account deleted successfully" << endl;
+                ifstream inFile("textFiles/login.txt");
+                ofstream outFile("textFiles/temp.txt");
+                if (!inFile) {
+                    cerr << "Error in opening login file" << endl;
+                    return;
+                }
+                if (!outFile) {
+                    cerr << "Error in opening temp file" << endl;
+                    return;
+                }
+                string currentId;
+                string password;
+                bool removed = false;
+
+                while (inFile >> currentId >> password) {
+                    if (currentId == userIdToRemove) {
+                        removed = true;
+                    } 
+                    else {
+                        outFile << currentId << " " << password << endl;
+                    }
+                }
+
+                inFile.close();
+                outFile.close();
+
+                if (removed) {
+                    if (remove("textFiles/login.txt") != 0) {
+                        cerr << "Error deleting original file." << endl;
+                        return;
+                    }
+                    if (rename("textFiles/temp.txt", "textFiles/login.txt") != 0) {
+                        cerr << "Error renaming temporary file." << endl;
+                        return;
+                    }
+                    cout << "User " << userIdToRemove << " successfully removed." << endl;
+                } 
+                else {
+                    remove("textFiles/temp.txt");
+                    cout << "User " << userIdToRemove << " not found in the file." << endl;
+                }
                 break;
             }
         }
