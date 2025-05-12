@@ -81,6 +81,7 @@ class LoginSystem {
     void logout() {
         userType = 'X';
         loginStatus = 0;
+        loginedID = "X000";
         cout << "logging out and exiting....";
         exit(0);
     }

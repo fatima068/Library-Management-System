@@ -1,13 +1,29 @@
 #include <iostream>
+#include <exception>
 #include "system.hpp"
 using namespace std;
+
+class invalidLoginInputException : public exception {
+    public:
+    const char* what() const noexcept override {
+        return "error: enter 1 or 2!";
+    }
+};
 
 int main() { 
     System librarySystem;
     int choice;
     string userID;
-    cout << "1. LOGIN\t2. SIGN UP" <<  endl << "your choice: ";
-    cin >> choice ;
+    try
+    {
+        cout << "1. LOGIN\t2. SIGN UP" <<  endl << "your choice: ";
+        cin >> choice ; 
+        if (!(choice == 1 || choice == 2)) { throw invalidLoginInputException(); }
+    }
+    catch(const invalidLoginInputException& e)
+    {
+        cerr << e.what() << endl;;
+    }
     switch (choice) {
         case 1:
         cin.ignore();
@@ -36,10 +52,6 @@ int main() {
 
         case 2:
             librarySystem.signUp();
-            break;  
-
-        default:
-            cout << "Invalid input. Exiting..." << endl; 
             break;  
     }
 }
