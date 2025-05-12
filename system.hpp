@@ -480,12 +480,10 @@ class System {
             cout << "book is not borrowed" << endl;
             return;
         }
-        
         if (allUsers[userIndex]->isBookBorrowedByUser(idToReturn) == false) {
             cout << "this book is not borrowed by you!" << endl;
             return;
         }
-
         int daysOverDue = allBooks[bookIndex].getDaysOverdue();
         allUsers[userIndex]->calculateFine(daysOverDue);
 
@@ -507,17 +505,14 @@ class System {
             cout << "invalid book id" << endl;
             return;
         }
-
         if (allBooks[bookIndex].isBorrowed == false) {
             cout << "book is not borrowed" << endl;
             return;
         }
-        
         if (allUsers[userIndex]->isBookBorrowedByUser(idToRenew) == false) {
             cout << "this book is not borrowed by you!" << endl;
             return;
         }
-
         int timesRenewed = allBooks[bookIndex].timesRenewed;
         if (userType == 'n' || userType == 'N') {
             if (timesRenewed == 1) {

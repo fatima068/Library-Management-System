@@ -264,9 +264,9 @@ class PremiumUser: public User {
         }
     }
 
-    float getTotalFines() override {return totalFines;}
+    float getTotalFines()override { return totalFines;}
 
-    void addUserToFile(ofstream& filep) override {
+    void addUserToFile(ofstream& filep) override{
         filep << userID << endl;
         filep << name << endl;
         filep << contactNum << endl;
@@ -446,21 +446,6 @@ class NormalUser: public User {
             return;
         }
         cout << "All fines have been paid" << endl;
-    }
-
-    friend ostream& operator<< (ostream& out, NormalUser n1) {
-        out << "User Type: Normal User" << endl; 
-        out << "User ID: " << n1.userID<< endl << "Name: " << n1.name << endl << "Contact Number: " << n1.contactNum << endl << "Total Fine: " << n1.totalFines << endl;
-        if (n1.borrowedBooks[0] != "x") {
-            out << "List of Borrowed Books: " << endl;
-            for (int i = 0; i < 3; i++) {
-                if (n1.borrowedBooks[0] != "x") {
-                    out << i << ". " << n1.borrowedBooks[i];
-                }
-            }
-        }
-        else cout << "no books currently borrowed by user"<< endl;
-        return out;
     }
 
     friend class System;
