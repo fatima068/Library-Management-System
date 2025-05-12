@@ -457,10 +457,12 @@ class System {
             return;
         }
 
-        allBooks[bookIndex].borrowBook();
-        allUsers[userIndex]->borrowBook(idToBorrow);  
-        saveBooks();
-        saveUsers();
+        bool flag = allUsers[userIndex]->borrowBook(idToBorrow);  
+        if (flag == true) {
+            allBooks[bookIndex].borrowBook();
+            saveBooks();
+            saveUsers();
+        }
     }
 
     void returnBook(string idOfUser) {

@@ -231,7 +231,7 @@ class User {
 
     User(string userID, string name, string contactNum) : userID(userID), name(name), contactNum(contactNum) {}
 
-    virtual void borrowBook(string idToBorrow) = 0;
+    virtual bool borrowBook(string idToBorrow) = 0;
     virtual void returnBook(string idToReturn) = 0;
     virtual void payFine() = 0;
     virtual void addUserToFile(ofstream& filep) = 0; 
@@ -285,17 +285,18 @@ class PremiumUser: public User {
         return false;
     }
 
-    void borrowBook(string idToBorrow) override {
+    bool borrowBook(string idToBorrow) override {
         if (borrowedBooks[9] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
-            return;
+            return false;
         }
         for (int i = 0; i<10; i++) {
             if (borrowedBooks[i] == "x") {
                 borrowedBooks[i] = idToBorrow;
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     void payFine() override {
@@ -387,17 +388,18 @@ class NormalUser: public User {
         return false;
     }
 
-    void borrowBook(string idToBorrow) override { // in system class, take input for id to borrow, find book from all books vector. first check if user has not already borrowed book. if not, call borrow book for book object, if it returns true, then call this function 
+    bool borrowBook(string idToBorrow) override { // in system class, take input for id to borrow, find book from all books vector. first check if user has not already borrowed book. if not, call borrow book for book object, if it returns true, then call this function 
         if (borrowedBooks[2] != "x") {
             cout << "cannot borrow more books. limit reached" << endl;
-            return;
+            return false;
         }
         for (int i = 0; i<3; i++) {
             if (borrowedBooks[i] == "x") {
                 borrowedBooks[i] = idToBorrow;
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     void returnBook(string idToReturn) override {
@@ -493,7 +495,7 @@ class Librarian : public User {
 
     int getMaxBooks() override { return 0; }
 
-    void borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; }
+    bool borrowBook(string idToBorrow) override { cout << "librarian cant borrow/return books" << endl; return false; }
 
     void returnBook(string idToReturn) override { cout << "librarian cant borrow/return books" << endl;}
 
